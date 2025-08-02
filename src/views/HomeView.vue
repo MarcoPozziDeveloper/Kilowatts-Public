@@ -4,10 +4,15 @@ import { supabase } from "../lib/supabaseClient";
 import CarouselComponent from "../components/CarouselComponent.vue";
 
 const images = ref([])
-
+const landingImages = ref([
+  "../img/li1.png",
+  "../img/li2.png",
+  "../img/li3.png"
+  
+]);
 onMounted(async () => {
   const { data: files, error } = await supabase.storage
-    .from('landingimages')
+    .from('posters')
     .list('', { limit: 100 })
 
   if (error) {
@@ -17,7 +22,7 @@ onMounted(async () => {
 
   images.value = files.map((file) => {
     const { data } = supabase.storage
-      .from('landingimages')
+      .from('posters')
       .getPublicUrl(file.name)
     return data.publicUrl
   })
@@ -62,7 +67,47 @@ onMounted(async () => {
   <div class="separator">
     <label class="separator-text">I nostri lavori</label>
   </div>
-    <CarouselComponent :images="images" />
+  <CarouselComponent :images="landingImages" />
+    <div class="separator">
+    <label class="separator-text">Prossimi eventi</label>
+  </div>
+  <div class="sez-a">
+    <div class="card">
+      <div class="image-container">
+        <img src="../images/audio.jpg" alt="Audio" />
+      </div>
+
+      <div class="card-text-container">
+        <h2 class="card-title">Preparazione</h2>
+        <p class="card-description">Impianti audio</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="image-container">
+        <img src="../images/light.jpg" alt="Audio" />
+      </div>
+
+      <div class="card-text-container">
+        <h2 class="card-title">Installazione</h2>
+        <p class="card-description">Illuminazioni abitacolo</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="image-container">
+        <img src="../images/radio.jpg" alt="Audio" />
+      </div>
+
+      <div class="card-text-container">
+        <h2 class="card-title">Montaggio</h2>
+        <p class="card-description">Radio Aftermarket</p>
+      </div>
+    </div>
+  </div>
+  <CarouselComponent :images="images" />
+
+
 </template>
 <style scoped>
 .sez-a {
@@ -74,6 +119,7 @@ onMounted(async () => {
 
   padding: 20px;
 }
+
 .card {
   background-color: var(--color-container);
   border: 1px solid var(--color-container-border);
@@ -115,7 +161,8 @@ onMounted(async () => {
   padding: 40px;
   position: absolute;
   bottom: 0;
-  z-index: 2; /* sopra il gradiente */
+  z-index: 2;
+  /* sopra il gradiente */
 }
 
 .card-title {
@@ -143,6 +190,7 @@ onMounted(async () => {
   flex: 1;
   border-bottom: 1px solid var(--color-container-border);
 }
+
 .separator-text {
   padding: 0 20px;
   font-size: 16px;

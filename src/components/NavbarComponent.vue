@@ -34,6 +34,7 @@
   justify-content: space-between;
   width: 100%;
   background-color: var(--color-bg);
+  padding: 0 20px;
 }
 .sub-navbar {
   display: flex;
