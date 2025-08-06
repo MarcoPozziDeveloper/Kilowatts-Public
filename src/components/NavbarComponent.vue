@@ -1,5 +1,6 @@
 <script setup></script>
 <template>
+  <div class="spacer"></div>
   <div class="navbar">
     <a href="/">
       <img
@@ -28,7 +29,13 @@
   </div>
 </template>
 <style scoped>
+.spacer {
+  height: 90px;
+}
 .navbar {
+  position: fixed;
+  top:0;
+  z-index: 99;
   display: flex;
   align-items: center;
   justify-content: space-between;
