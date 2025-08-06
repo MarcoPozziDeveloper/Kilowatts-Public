@@ -8,7 +8,7 @@ const landingImages = ref([
   "../img/li1.png",
   "../img/li2.png",
   "../img/li3.png"
-  
+
 ]);
 onMounted(async () => {
   const { data: files, error } = await supabase.storage
@@ -68,42 +68,35 @@ onMounted(async () => {
     <label class="separator-text">I nostri lavori</label>
   </div>
   <CarouselComponent :images="landingImages" />
-    <div class="separator">
-    <label class="separator-text">Prossimi eventi</label>
+
+  <div class="separator">
+    <label class="separator-text">Chi siamo</label>
   </div>
   <div class="sez-a">
-    <div class="card">
-      <div class="image-container">
-        <img src="../images/audio.jpg" alt="Audio" />
-      </div>
-
-      <div class="card-text-container">
-        <h2 class="card-title">Preparazione</h2>
-        <p class="card-description">Impianti audio</p>
+    <div class="card-b">
+      <div class="card-b-text-container">
+        <h2 class="card-b-title">La mission</h2>
+        <p class="card-b-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce fringilla eleifend
+          nisi, vitae dapibus nisi tristique vitae. Integer sed vehicula sem. Praesent volutpat, ipsum vitae lacinia
+          mattis, sapien ex cursus velit, ac ullamcorper enim justo ac lacus. Maecenas porta diam. </p>
       </div>
     </div>
 
-    <div class="card">
-      <div class="image-container">
-        <img src="../images/light.jpg" alt="Audio" />
-      </div>
+    <div class="card-b">
 
-      <div class="card-text-container">
-        <h2 class="card-title">Installazione</h2>
-        <p class="card-description">Illuminazioni abitacolo</p>
+      <div class="card-b-text-container">
+        <h2 class="card-b-title">Riconoscimenti</h2>
+        <p class="card-b-description">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce fringilla eleifend nisi, vitae dapibus nisi
+          tristique vitae. Integer sed vehicula sem. Praesent volutpat, ipsum vitae lacinia mattis, sapien ex cursus
+          velit, ac ullamcorper enim justo ac lacus. Maecenas porta diam. </p>
       </div>
     </div>
 
-    <div class="card">
-      <div class="image-container">
-        <img src="../images/radio.jpg" alt="Audio" />
-      </div>
 
-      <div class="card-text-container">
-        <h2 class="card-title">Montaggio</h2>
-        <p class="card-description">Radio Aftermarket</p>
-      </div>
-    </div>
+  </div>
+  <div class="separator">
+    <label class="separator-text">Prossimi eventi</label>
   </div>
   <CarouselComponent :images="images" />
 
@@ -116,7 +109,7 @@ onMounted(async () => {
   justify-content: space-between;
   gap: 20px;
   width: 100%;
-
+  max-width: 1200px;
   padding: 20px;
 }
 
@@ -131,6 +124,39 @@ onMounted(async () => {
   position: relative;
   flex: 1;
 }
+
+.card-b {
+  background-color: var(--color-container);
+  border: 1px solid var(--color-container-border);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  max-height: 400px;
+}
+
+.card-b-text-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 40px;
+  bottom: 0;
+  z-index: 2;
+  /* sopra il gradiente */
+}
+
+.card-b-title {
+  color: var(--color-primary);
+  font-size: 32px;
+  font-weight: 600;
+}
+
+.card-b-description {
+  color: var(--color-text);
+  font-size: 24px;
+}
+
 
 .image-container {
   position: relative;
