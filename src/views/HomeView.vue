@@ -30,6 +30,21 @@ onMounted(async () => {
 </script>
 
 <template>
+  <div class="hero">
+    <div class="hero-left">
+      <img src="../images/hero.png" alt="Meccanico che installa impianto stereo">
+    </div>
+    <div class="hero-right">
+      <h1>IMPIANTI STEREO MODIFICATI</h1>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce fringilla eleifend nisi, vitae dapibus nisi
+        tristique vitae.</p>
+      <a href="#servizi" class="btn">Scopri di più</a>
+    </div>
+  </div>
+  <div class="separator" id="servizi">
+    <label class="separator-text">Cosa offriamo</label>
+  </div>
+
   <div class="sez-a">
     <div class="card">
       <div class="image-container">
@@ -68,7 +83,6 @@ onMounted(async () => {
     <label class="separator-text">I nostri lavori</label>
   </div>
   <CarouselComponent :images="landingImages" />
-
   <div class="separator">
     <label class="separator-text">Chi siamo</label>
   </div>
@@ -98,11 +112,8 @@ onMounted(async () => {
   <div class="separator">
     <label class="separator-text">Prossimi eventi</label>
   </div>
-  <CarouselComponent :images="images" />
+  <CarouselComponent :images="images" id="eventi"/>
 
-  <div class="separator">
-    <label class="separator-text"></label>
-  </div>
   <div class="footer">
     <div class="footer-element">
       <label class="footer-title"> Come ci trovi</label>
@@ -136,13 +147,82 @@ onMounted(async () => {
 
 </template>
 <style scoped>
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 50px;
+  padding: 80px 50px;
+}
+
+.hero-left {
+  animation: slideInLeft 1s ease-out forwards;
+}
+
+.hero-right {
+  animation: slideInRight 1s ease-out forwards;
+}
+
+.hero-left img {
+  width: 100%;
+  border-radius: 12px;
+  object-fit: cover;
+  max-height: 500px;
+}
+
+.hero-right {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  max-width: 500px;
+}
+
+.hero h1 {
+  color: var(--color-text);
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.hero p {
+  color: #cccccc;
+  font-size: 18px;
+  line-height: 1.5;
+}
+
+.hero .btn {
+
+  background-color: #007bff;
+  color: white;
+  padding: 15px 30px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 2px solid transparent;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  width: fit-content;
+}
+
+.hero .btn:hover {
+  background-color: transparent;
+  border: 2px solid #007bff;
+  color: #007bff;
+}
+
 .sez-a {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 20px;
   width: 100%;
-  /*max-width: 1200px;*/  
+  /*max-width: 1200px;*/
   padding: 20px;
 }
 
@@ -180,7 +260,7 @@ onMounted(async () => {
 }
 
 .card-b-title {
-  color: var(--color-primary);
+  color: var(--color-primary-light);
   font-size: 32px;
   font-weight: 600;
 }
@@ -224,7 +304,7 @@ onMounted(async () => {
 }
 
 .card-title {
-  color: var(--color-primary);
+  color: var(--color-primary-light);
   font-size: 32px;
   font-weight: 600;
 }
@@ -261,11 +341,15 @@ onMounted(async () => {
 }
 
 .footer {
+  margin-top: 30px;
+  border-top: 1px solid var(--color-container-border);
   display: flex;
-  justify-content: space-between;
-  padding: 20px;
+  justify-content: space-around;
+  align-items: center;
+  padding: 30px 20px;
   background-color: var(--color-bg);
   width: 100%;
+  
 }
 
 .footer-element {
@@ -276,7 +360,7 @@ onMounted(async () => {
 
 .footer-title {
   font-size: 24px;
-  color: var(--color-primary);
+  color: var(--color-primary-light);
 }
 
 .footer-list {
@@ -298,8 +382,33 @@ onMounted(async () => {
 .footer-row label {
   cursor: pointer;
 }
+
 .footer-row img,
 .footer-row label:hover {
   text-decoration: underline;
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 </style>

@@ -1,3 +1,8 @@
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 .sez-a {
   display: flex;
   align-items: center;
@@ -52,7 +57,7 @@
 }
 
 .card-title {
-  color: var(--color-primary);
+  color: var(--color-primary-light);
   font-size: 32px;
   font-weight: 600;
 }
@@ -74,7 +79,7 @@
 .separator::after {
   content: "";
   flex: 1;
-  border-bottom: 1px solid var(--color-primary);
+  border-bottom: 1px solid var(--color-primary-light);
 }
 
 .separator-text {
@@ -133,4 +138,7 @@
 
 .carousel-btn.right {
   right: 0px;
+}
+html {
+  scroll-behavior: smooth;
 }

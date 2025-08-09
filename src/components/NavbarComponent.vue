@@ -13,6 +13,7 @@
       <div class="links-sub-navbar">
         <a href="index.html">Catalogo</a>
         <a href="about.html">Classifiche</a>
+          <a href="#eventi">Eventi</a>
       </div>
       <img src="../icons/vert_separator.svg" alt="Separatore" />
       <div class="icons-sub-navbar">
@@ -41,7 +42,7 @@
   justify-content: space-between;
   width: 100%;
   background-color: var(--color-bg);
-  padding: 0 20px;
+  padding: 0 50px;
 }
 .sub-navbar {
   display: flex;
