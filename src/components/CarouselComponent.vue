@@ -85,11 +85,6 @@ watch(() => props.images, () => {
       <img :src="images[nextIndex()]" :alt="`Image ${nextIndex() + 1}`" />
     </div>
 
-    <!-- Indicatori (opzionali) -->
-    <div class="carousel-indicators" v-if="images.length > 1">
-      <button v-for="(img, i) in images" :key="i" class="indicator" :class="{ active: i === currentIndex }"
-        @click="goToSlide(i)"></button>
-    </div>
   </div>
 </template>
 
