@@ -1,114 +1,278 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
+
 const props = defineProps({
   images: {
     type: Array,
     default: () => []
   }
 });
+
 const currentIndex = ref(0);
 const track = ref(null);
+
 const update = () => {
   if (track.value && props.images.length > 0) {
-    // Impostiamo la variabile CSS per il numero di immagini
-    track.value.style.setProperty('--image-count', props.images.length);
-    // Il track deve essere largo quanto tutte le immagini affiancate
-    track.value.style.width = `${props.images.length * 100}%`;
-    // Ogni step sposta di una larghezza completa del contenitore
-    track.value.style.transform = `translateX(-${currentIndex.value * (100 / props.images.length)}%)`;
+    // Centra l'immagine corrente
+    const translateX = -currentIndex.value * 100;
+    track.value.style.transform = `translateX(${translateX}%)`;
   }
 };
+
 const prev = () => {
-  currentIndex.value =
-    (currentIndex.value - 1 + props.images.length) % props.images.length;
+  currentIndex.value = (currentIndex.value - 1 + props.images.length) % props.images.length;
   update();
 };
+
 const next = () => {
   currentIndex.value = (currentIndex.value + 1) % props.images.length;
   update();
 };
+
+const goToSlide = (index) => {
+  currentIndex.value = index;
+  update();
+};
+
+// Calcola l'indice dell'immagine precedente
+const prevIndex = () => (currentIndex.value - 1 + props.images.length) % props.images.length;
+
+// Calcola l'indice dell'immagine successiva  
+const nextIndex = () => (currentIndex.value + 1) % props.images.length;
+
 onMounted(() => {
   update();
 });
+
+watch(() => props.images, () => {
+  update();
+}, { deep: true });
 </script>
+
 <template>
   <div class="carousel">
-    <button class="carousel-btn left" @click="prev" v-if="images.length > 1">
-      <img src="../icons/angle_left.svg" alt="Prev" />
-    </button>
-   
-    <div class="carousel-track-container">
-      <div class="carousel-track" ref="track">
-        <img
-          v-for="(img, i) in images"
-          :key="i"
-          :src="img"
-          :alt="`Image ${i + 1}`"
-          class="carousel-image"
-        />
-      </div>
+    <!-- Immagine precedente (sinistra) -->
+    <div class="side-image left-image" v-if="images.length > 1" @click="prev">
+      <img :src="images[prevIndex()]" :alt="`Image ${prevIndex() + 1}`" />
     </div>
-   
-    <button class="carousel-btn right" @click="next" v-if="images.length > 1">
-      <img src="../icons/angle_right.svg" alt="Next" />
-    </button>
+
+    <!-- Contenitore principale -->
+    <div class="carousel-main">
+      <button class="carousel-btn left" @click="prev" v-if="images.length > 1">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" />
+        </svg>
+      </button>
+
+      <div class="carousel-track-container">
+        <div class="carousel-track" ref="track">
+          <img v-for="(img, i) in images" :key="i" :src="img" :alt="`Image ${i + 1}`" class="carousel-image"
+            :class="{ active: i === currentIndex }" />
+        </div>
+      </div>
+
+      <button class="carousel-btn right" @click="next" v-if="images.length > 1">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Immagine successiva (destra) -->
+    <div class="side-image right-image" v-if="images.length > 1" @click="next">
+      <img :src="images[nextIndex()]" :alt="`Image ${nextIndex() + 1}`" />
+    </div>
+
+    <!-- Indicatori (opzionali) -->
+    <div class="carousel-indicators" v-if="images.length > 1">
+      <button v-for="(img, i) in images" :key="i" class="indicator" :class="{ active: i === currentIndex }"
+        @click="goToSlide(i)"></button>
+    </div>
   </div>
 </template>
+
 <style scoped>
 .carousel {
   position: relative;
   width: 100%;
-  max-width: 800px;
+  max-width: 1000px;
   margin: auto;
-  overflow: hidden;
-  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
 }
+
+.carousel-main {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
 .carousel-track-container {
   overflow: hidden;
   width: 100%;
+  border-radius: 12px;
 }
+
 .carousel-track {
   display: flex;
-  transition: transform 0.5s ease-in-out;
-  /* La larghezza viene impostata dinamicamente via JavaScript */
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 100%;
 }
+
 .carousel-image {
-  /* Ogni immagine deve occupare una frazione della larghezza totale del track */
-  width: calc(100% / var(--image-count, 1));
+  width: 100%;
   height: 400px;
   object-fit: contain;
   flex-shrink: 0;
-  flex-grow: 0;
 }
-/* Posizionamento dei bottoni */
+
+/* Immagini laterali */
+.side-image {
+  width: 120px;
+  height: 200px;
+  cursor: pointer;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  opacity: 0.7;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.side-image:hover {
+  opacity: 1;
+  transform: scale(1.05);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
+}
+
+.side-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.left-image {
+  order: -1;
+}
+
+.right-image {
+  order: 1;
+}
+
+/* Bottoni di navigazione */
 .carousel-btn {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background-color: rgba(0, 0, 0, 0.5);
-  cursor: pointer;
-  z-index: 2;
+  background-color: rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
   border: none;
   border-radius: 50%;
-  width: 64px;
-  height: 64px;
+  width: 48px;
+  height: 48px;
+  cursor: pointer;
+  z-index: 10;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
+  color: #333;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 }
+
+.carousel-btn svg {
+  filter: brightness(20);
+}
+
 .carousel-btn:hover {
-  background-color: rgba(0, 0, 0, 0.8);
+  /*  background: var(--color-text);*/
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
 }
-.carousel-btn img {
-  width: 32px;
-  height: 32px;
-  filter: invert(1); /* Rende le icone bianche */
-}
+
 .carousel-btn.left {
-  left: 10px;
+  left: 15px;
 }
+
 .carousel-btn.right {
-  right: 10px;
+  right: 15px;
+}
+
+/* Indicatori */
+.carousel-indicators {
+  position: absolute;
+  bottom: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+}
+
+.indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: none;
+  /*  background: rgba(255, 255, 255, 0.5);*/
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.indicator.active {
+  /*background: var(--color-primary);*/
+  transform: scale(1.2);
+}
+
+.indicator:hover {
+  background: rgba(255, 255, 255, 0.8);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .carousel {
+    gap: 10px;
+  }
+
+  .side-image {
+    width: 80px;
+    height: 120px;
+  }
+
+  .carousel-main {
+    flex: 1;
+  }
+
+  .carousel-image {
+    height: 250px;
+  }
+
+  .carousel-btn {
+    width: 40px;
+    height: 40px;
+  }
+
+  .carousel-btn.left {
+    left: 10px;
+  }
+
+  .carousel-btn.right {
+    right: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .side-image {
+    width: 60px;
+    height: 100px;
+  }
+
+  .carousel-image {
+    height: 200px;
+  }
 }
 </style>
