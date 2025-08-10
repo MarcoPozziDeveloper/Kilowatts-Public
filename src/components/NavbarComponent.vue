@@ -7,6 +7,7 @@
     </a>
     <div class="sub-navbar">
       <div class="links-sub-navbar">
+           <a href="/">Home</a>
         <a href="index.html">Catalogo</a>
         <a href="about.html">Classifiche</a>
         <a href="/#eventi">Eventi</a>
