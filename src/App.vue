@@ -15,4 +15,5 @@ import NavbarComponent from "./components/NavbarComponent.vue";
 
 <style >
 @import url("./styles/themes.css");
+@import url("./styles/index.css");
 </style>

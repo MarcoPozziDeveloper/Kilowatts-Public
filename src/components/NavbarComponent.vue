@@ -8,7 +8,7 @@
     <div class="sub-navbar">
       <div class="links-sub-navbar">
            <a href="/">Home</a>
-        <a href="index.html">Catalogo</a>
+        <router-link to="catalogo">Catalogo </router-link>
         <a href="about.html">Classifiche</a>
         <a href="/#eventi">Eventi</a>
       </div>
@@ -36,8 +36,8 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  background-color: var(--color-bg);
-  padding: 0 50px;
+  background-color: var(--color-input-background);
+  padding: 0 26px;
 }
 
 .sub-navbar {
