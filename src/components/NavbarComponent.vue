@@ -7,8 +7,8 @@
     </a>
     <div class="sub-navbar">
       <div class="links-sub-navbar">
-           <a href="/">Home</a>
-        <router-link to="catalogo">Catalogo </router-link>
+             <router-link to="/">Home </router-link>
+        <router-link to="/catalogo">Catalogo </router-link>
         <a href="about.html">Classifiche</a>
         <a href="/#eventi">Eventi</a>
       </div>

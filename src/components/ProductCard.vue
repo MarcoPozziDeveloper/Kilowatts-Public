@@ -1,6 +1,6 @@
 <script setup>
 defineProps({
- name: String,
+  name: String,
   price: {
     type: Number,
     default: 0
@@ -11,7 +11,7 @@ defineProps({
     type: String,
     default: './img/no-image.png'
   }
-  
+
 })
 </script>
 
@@ -21,12 +21,12 @@ defineProps({
     <div class="product-details">
       <h2 class="product-name">{{ name }}</h2>
 
-      <p class="product-price">{{ price>0? '€'+price.toFixed(2) : 'Prezzo: ??'}}</p>
-              
-      <p class="product-description">{{ description.length>90? description.substring(0, 90) + '...' : description }}</p>
+      <p class="product-price">{{ price > 0 ? '€' + price.toFixed(2) : 'Prezzo: ??' }}</p>
+
+      <p class="product-description">{{ description.length > 90 ? description.substring(0, 90) + '...' : description }}</p>
 
       <p class="product-category">{{ category }}</p>
-      
+
     </div>
   </div>
 </template>
@@ -44,7 +44,9 @@ defineProps({
   max-width: 300px;
   transition: transform 0.2s ease;
   width: var(--left-pannel-width);
+  border: 1px solid var(--color-container-border)
 }
+
 .product-card:hover {
   cursor: pointer;
   box-shadow: 0px 6px 15px color-mix(in srgb, var(--color-primary) 40%, transparent);
@@ -79,8 +81,10 @@ defineProps({
 
 .product-description {
   color: #ccc;
+  white-space: pre-wrap;
 }
-.product-category{
+
+.product-category {
   font-weight: 600;
 }
 </style>
