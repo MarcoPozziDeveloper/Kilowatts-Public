@@ -2,12 +2,12 @@
 <template>
   <div class="spacer"></div>
   <div class="navbar">
-    <a href="/">
+    <router-link to="/">
       <img src="../images/KW_logo.png" alt="Kilowatts Industries Logo" class="logo" />
-    </a>
+    </router-link>
     <div class="sub-navbar">
       <div class="links-sub-navbar">
-             <router-link to="/">Home </router-link>
+        <router-link to="/">Home </router-link>
         <router-link to="/catalogo">Catalogo </router-link>
         <a href="about.html">Classifiche</a>
         <a href="/#eventi">Eventi</a>

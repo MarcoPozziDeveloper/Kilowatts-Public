@@ -2,7 +2,10 @@
 import { ref, onMounted } from "vue";
 import { supabase } from "../lib/supabaseClient";
 import CarouselComponent from "../components/CarouselComponent.vue";
-
+import ProductCard from "@/components/ProductCard.vue";
+import { useRouter } from "vue-router";
+const router = useRouter();
+const newProducts = ref([]);
 const images = ref([])
 const landingImages = ref([
   "../img/li1.png",
@@ -26,7 +29,68 @@ onMounted(async () => {
       .getPublicUrl(file.name)
     return data.publicUrl
   })
+  const rawProducts = await getProducts();
+  newProducts.value = await Promise.all(
+    rawProducts.map(async (product) => {
+      const images = await getImagesForProduct(product.oid);
+      return { ...product, images };
+    })
+  );
 })
+
+const getProducts = async () => {
+  const { data, error } = await supabase
+    .from('Products')
+    .select(`
+      oid,
+      name,
+      description,
+      price,
+      datetime,
+      category_id,
+      manufacturer_id,
+      Categories(name),
+      Manufacturers(name),
+      id
+    `)
+    .order('datetime', { ascending: false })
+    .limit(3)
+  if (error) {
+    console.error(`Errore nel caricamento da dati:`, error);
+    alert("Si e' verficato un errore. Fai una foto a questo messaggio e inviala allo sviluppatore.\n\nHomeView/getProducts\n" + error.details);
+    return [];
+  }
+  return data;
+};
+
+const getImagesForProduct = async (productOid) => {
+  const { data, error } = await supabase.storage
+    .from("productimages")
+    .list(productOid, {
+      limit: 100,
+      offset: 0,
+      sortBy: { column: "name", order: "asc" },
+    });
+
+  if (error) {
+    console.error(`Errore caricando immagini per ${productOid}:`, error);
+    alert(
+      "Si e' verficato un errore. Fai una foto a questo messaggio e inviala allo sviluppatore. " +
+      error
+    );
+    return [];
+  }
+
+  return data.map(
+    (file) =>
+      supabase.storage
+        .from("productimages")
+        .getPublicUrl(`${productOid}/${file.name}`).data.publicUrl
+  );
+};
+const openDetails = (id) => {
+  router.push({ name: "prodotto", params: { id } });
+};
 </script>
 
 <template>
@@ -106,11 +170,26 @@ onMounted(async () => {
     </div>
   </div>
   <div class="separator">
+    <label class="separator-text">Novità</label>
+  </div>
+  <div class="news">
+    <ProductCard v-for="product in newProducts" :key="product.oid"
+      :name="product.Manufacturers.name + ' - ' + product.name" :price="product.price > 0 ? product.price : 0"
+      :description="product.description" :category="product.Categories.name"
+      :image="product.images[0] || './img/no-image.png'" @click="openDetails(product.id)" />
+  </div>
+  <div class="separator">
     <label class="separator-text">Prossimi eventi</label>
   </div>
   <CarouselComponent :images="images" id="eventi" />
 </template>
 <style scoped>
+.news {
+  display: flex;
+  gap: 20px;
+
+}
+
 .hero {
   display: flex;
   align-items: center;
