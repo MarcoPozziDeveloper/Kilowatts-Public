@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, computed, watch } from "vue";
 import { supabase } from "../lib/supabaseClient";
 import { useRouter } from "vue-router";
 import ProductCard from "@/components/ProductCard.vue";
@@ -12,6 +12,9 @@ const products = ref([]);
 const refreshToken = ref(0);
 const search = ref("");
 const sortBy = ref("0");
+const total = ref(0);
+const page = ref(1);
+const pageSize = 12;
 const productData = ref({
   name: "",
   description: "",
@@ -39,8 +42,11 @@ const loadData = async () => {
 
 
 const getProducts = async () => {
-  const { data, error } = await supabase
-    .from('Products')
+  const from = (page.value - 1) * pageSize;
+  const to = from + pageSize - 1;
+
+  let query = supabase
+    .from("Products")
     .select(`
       oid,
       name,
@@ -50,20 +56,34 @@ const getProducts = async () => {
       category_id,
       manufacturer_id,
       Categories(name),
-      Manufacturers(name),
-      id
-    `)
-    .order('datetime', { ascending: false });
-  if (error) {
-    console.error(`Errore nel caricamento da dati:`, error);
-    alert(
-      "Si e' verficato un errore. Fai una foto a questo messaggio e inviala allo sviluppatore. " +
-      error
+      Manufacturers(name)
+    `, { count: "exact" })
+    .order("datetime", { ascending: false });
+
+  if (search.value) {
+    query = query.or(
+      `name.ilike.%${search.value}%,description.ilike.%${search.value}%`
     );
-    return [];
   }
+
+  if (productData.value.price) {
+    query = query.lte("price", productData.value.price);
+  }
+
+  if (productData.value.category_id) {
+    query = query.eq("category_id", productData.value.category_id);
+  }
+
+  if (productData.value.manufacturer_id) {
+    query = query.eq("manufacturer_id", productData.value.manufacturer_id);
+  }
+
+  const { data, error, count } = await query.range(from, to);
+
+  if (error) return [];
+  total.value = count;
   return data;
-};
+}
 
 const getImagesForProduct = async (productOid) => {
   const { data, error } = await supabase.storage
@@ -91,65 +111,21 @@ const getImagesForProduct = async (productOid) => {
   );
 };
 
-// Computed property per filtrare e ordinare i prodotti
-const filteredProducts = computed(() => {
-  let result = [...products.value];
-
-  // Filtro per ricerca testuale
-  if (search.value) {
-    const searchLower = search.value.toLowerCase();
-    result = result.filter(
-      (product) =>
-        product.name.toLowerCase().includes(searchLower) ||
-        product.description.toLowerCase().includes(searchLower) ||
-        product.manufacturer_name.toLowerCase().includes(searchLower)
-    );
-  }
-
-  // Filtro per prezzo massimo
-  if (productData.value.price !== null && productData.value.price !== "") {
-    result = result.filter((product) => product.price <= productData.value.price);
-  }
-
-  // Filtro per manufacturer
-  if (productData.value.manufacturer_id) {
-    result = result.filter(
-      (product) => product.manufacturer_id === productData.value.manufacturer_id
-    );
-  }
-
-  // Filtro per categoria
-  if (productData.value.category_id) {
-    result = result.filter(
-      (product) => product.category_id === productData.value.category_id
-    );
-  }
-
-  // Ordinamento
-  switch (sortBy.value) {
-    case "0": // Nome
-      result.sort((a, b) => a.name.localeCompare(b.name));
-      break;
-    case "1": // Prezzo Decrescente
-      result.sort((a, b) => b.price - a.price);
-      break;
-    case "2": // Prezzo Crescente
-      result.sort((a, b) => a.price - b.price);
-      break;
-    case "3": // Categoria
-      result.sort((a, b) => a.category_name.localeCompare(b.category_name));
-      break;
-    case "4": // Produttore
-      result.sort((a, b) => a.manufacturer_name.localeCompare(b.manufacturer_name));
-      break;
-  }
-
-  return result;
-});
 
 const openDetails = (id) => {
   router.push({ name: "prodotto", params: { id } });
 };
+watch(
+  [search, () => productData.value.price, () => productData.value.category_id, () => productData.value.manufacturer_id],
+  () => {
+    page.value = 1;
+    loadData();
+  }
+);
+const totalPages = computed(() =>
+  Math.ceil(total.value / pageSize)
+);
+watch(page, loadData);
 
 onMounted(loadData);
 </script>
@@ -194,15 +170,47 @@ onMounted(loadData);
     </div>
   </form>
 
+
   <div class="products">
-    <ProductCard v-for="product in filteredProducts" :key="product.oid"
+    <ProductCard v-for="product in products" :key="product.oid"
       :name="product.Manufacturers.name + ' - ' + product.name" :price="product.price > 0 ? product.price : 0"
       :description="product.description" :category="product.Categories.name"
       :image="product.images[0] || './img/no-image.png'" @click="openDetails(product.id)" />
   </div>
+  <div class="navigator">
+    <button class="navbutton" @click="page--" :disabled="page === 1"><img src="../icons/angle_left.svg"></img> </button>
+    <label>Pagina {{ page }}</label>
+    <button class="navbutton" @click="page++" :disabled="page >= totalPages"><img src="../icons/angle_right.svg"></img></button>
+  </div>
 </template>
 
 <style scoped>
+.navigator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.navbutton {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+}
+
+.navbutton:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  display: hidden;
+}
+
+.navbutton img {
+  width: 24px;
+  height: 24px;
+}
+
 .input-sub-group {
   display: flex;
   position: relative;
