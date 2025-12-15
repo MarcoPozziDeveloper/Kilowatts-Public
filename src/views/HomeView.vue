@@ -42,17 +42,18 @@ const getProducts = async () => {
   const { data, error } = await supabase
     .from('Products')
     .select(`
-      oid,
-      name,
-      description,
-      price,
-      datetime,
-      category_id,
-      manufacturer_id,
-      Categories(name),
-      Manufacturers(name),
-      id
-    `)
+        oid,
+        name,
+        description,
+        price,
+        datetime,
+        category_id,
+        manufacturer_id,
+        Categories(name),
+        Manufacturers(name),
+        id,
+        available 
+      `)
     .order('datetime', { ascending: false })
     .limit(3)
   if (error) {
@@ -99,7 +100,7 @@ const openDetails = (id) => {
       <img src="../images/hero.png" alt="Meccanico che installa impianto stereo">
     </div>
     <div class="hero-right">
-      <h1>IMPIANTI STEREO MODIFICATI</h1>
+      <h1>IMPIANTI STEREO AD HOC</h1>
       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce fringilla eleifend nisi, vitae dapibus nisi
         tristique vitae.</p>
       <a href="#servizi" class="btn">Scopri di più</a>
@@ -176,6 +177,7 @@ const openDetails = (id) => {
     <ProductCard v-for="product in newProducts" :key="product.oid"
       :name="product.Manufacturers.name + ' - ' + product.name" :price="product.price > 0 ? product.price : 0"
       :description="product.description" :category="product.Categories.name"
+      :available="product.available"
       :image="product.images[0] || './img/no-image.png'" @click="openDetails(product.id)" />
   </div>
   <div class="separator">
@@ -184,6 +186,88 @@ const openDetails = (id) => {
   <CarouselComponent :images="images" id="eventi" />
 </template>
 <style scoped>
+@media (max-width: 480px) {
+  .news {
+    flex-direction: column;
+
+  }
+
+  .hero-left {
+    display: none;
+  }
+
+  .card-b {
+    background-color: var(--color-container);
+    border: 1px solid var(--color-container-border);
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    max-height: auto;
+  }
+
+
+  .card-b-text-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 30px;
+    bottom: 0;
+    z-index: 2;
+    text-align: justify;
+    text-justify: inter-word;
+
+    /* sopra il gradiente */
+  }
+
+  .card-b-title {
+    color: var(--color-primary-light);
+    font-size: 28px;
+    font-weight: 600;
+  }
+
+  .card-b-description {
+    color: var(--color-text);
+    font-size: 20px;
+  }
+
+}
+
+@media (min-width: 481px) {
+  .card-b {
+    background-color: var(--color-container);
+    border: 1px solid var(--color-container-border);
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    max-height: 400px;
+  }
+
+  .card-b-text-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 40px;
+    bottom: 0;
+    z-index: 2;
+    /* sopra il gradiente */
+  }
+
+  .card-b-title {
+    color: var(--color-primary-light);
+    font-size: 32px;
+    font-weight: 600;
+  }
+
+  .card-b-description {
+    color: var(--color-text);
+    font-size: 24px;
+  }
+}
+
 .news {
   display: flex;
   gap: 20px;
@@ -280,37 +364,7 @@ const openDetails = (id) => {
   flex: 1;
 }
 
-.card-b {
-  background-color: var(--color-container);
-  border: 1px solid var(--color-container-border);
-  border-radius: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  width: 100%;
-  max-height: 400px;
-}
 
-.card-b-text-container {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 40px;
-  bottom: 0;
-  z-index: 2;
-  /* sopra il gradiente */
-}
-
-.card-b-title {
-  color: var(--color-primary-light);
-  font-size: 32px;
-  font-weight: 600;
-}
-
-.card-b-description {
-  color: var(--color-text);
-  font-size: 24px;
-}
 
 .image-container {
   position: relative;

@@ -185,7 +185,6 @@ watch(() => props.images, () => {
 }
 
 .carousel-btn:hover {
-  /*  background: var(--color-text);*/
   transform: translateY(-50%) scale(1.1);
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
 }
@@ -213,13 +212,11 @@ watch(() => props.images, () => {
   height: 10px;
   border-radius: 50%;
   border: none;
-  /*  background: rgba(255, 255, 255, 0.5);*/
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .indicator.active {
-  /*background: var(--color-primary);*/
   transform: scale(1.2);
 }
 
@@ -227,23 +224,30 @@ watch(() => props.images, () => {
   background: rgba(255, 255, 255, 0.8);
 }
 
-/* Responsive */
+/* Responsive - Tablet */
 @media (max-width: 768px) {
   .carousel {
     gap: 10px;
+    max-width: 100%;
+    padding: 0 10px;
   }
 
   .side-image {
     width: 80px;
-    height: 120px;
+    height: 140px;
   }
 
   .carousel-main {
     flex: 1;
+    border-radius: 8px;
+  }
+
+  .carousel-track-container {
+    border-radius: 8px;
   }
 
   .carousel-image {
-    height: 250px;
+    height: 300px;
   }
 
   .carousel-btn {
@@ -251,23 +255,79 @@ watch(() => props.images, () => {
     height: 40px;
   }
 
+  .carousel-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+
   .carousel-btn.left {
-    left: 10px;
+    left: 8px;
   }
 
   .carousel-btn.right {
-    right: 10px;
+    right: 8px;
   }
 }
 
+/* Responsive - Mobile */
 @media (max-width: 480px) {
+  .carousel {
+    gap: 5px;
+    padding: 0 5px;
+  }
+
+  /* Nascondi le immagini laterali su mobile molto piccoli */
   .side-image {
-    width: 60px;
-    height: 100px;
+    display: none;
+  }
+
+  .carousel-main {
+    width: 100%;
+    border-radius: 8px;
   }
 
   .carousel-image {
+    height: 250px;
+  }
+
+  .carousel-btn {
+    width: 36px;
+    height: 36px;
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+
+  .carousel-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .carousel-btn.left {
+    left: 5px;
+  }
+
+  .carousel-btn.right {
+    right: 5px;
+  }
+
+  .carousel-btn:hover {
+    transform: translateY(-50%) scale(1.05);
+  }
+}
+
+/* Responsive - Mobile molto piccoli */
+@media (max-width: 360px) {
+  .carousel-image {
     height: 200px;
+  }
+
+  .carousel-btn {
+    width: 32px;
+    height: 32px;
+  }
+
+  .carousel-btn svg {
+    width: 16px;
+    height: 16px;
   }
 }
 </style>

@@ -1,5 +1,6 @@
 <script setup>
 </script>
+
 <template>
     <div class="footer">
         <div class="footer-element">
@@ -22,16 +23,15 @@
                     <img src="../icons/phone.svg" alt="Telefono" />
                     <label class="footer-text">+39 342 126 3387</label>
                 </a>
-
-                <a class="footer-row" href="mailto:kilowatts.industries@gmail.com ">
+                <a class="footer-row" href="mailto:kilowatts.industries@gmail.com">
                     <img src="../icons/mail.svg" alt="Mail" />
                     <label class="footer-text"> kilowatts.industries@gmail.com </label>
                 </a>
-
             </div>
         </div>
     </div>
 </template>
+
 <style scoped>
 .footer {
     margin-top: 30px;
@@ -74,8 +74,65 @@
     cursor: pointer;
 }
 
-.footer-row img,
-.footer-row label:hover {
+.footer-row:hover label {
     text-decoration: underline;
+}
+
+/* Media Query per Tablet */
+@media (max-width: 768px) {
+    .footer {
+        flex-direction: column;
+        gap: 30px;
+        padding: 30px 16px;
+        align-items: flex-start;
+    }
+
+    .footer-element {
+        width: 100%;
+        gap: 15px;
+    }
+
+    .footer-title {
+        font-size: 22px;
+    }
+
+    .footer-list {
+        gap: 12px;
+    }
+
+    .footer-text {
+        font-size: 16px;
+    }
+}
+
+/* Media Query per Smartphone */
+@media (max-width: 480px) {
+    .footer {
+        padding: 20px 16px;
+        gap: 25px;
+    }
+
+    .footer-element {
+        gap: 12px;
+    }
+
+    .footer-title {
+        font-size: 20px;
+    }
+
+    .footer-text {
+        font-size: 14px;
+        word-break: break-word;
+    }
+
+    .footer-row {
+        gap: 8px;
+    }
+
+    .footer-row img {
+        width: 20px;
+        height: 20px;
+        flex-shrink: 0;
+    }
 }
 </style>
