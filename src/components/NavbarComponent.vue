@@ -61,9 +61,14 @@ const toggleMenu = () => {
   align-items: center;
   justify-content: right;
   gap: 40px;
-  width: 100%;
+ 
 }
-
+@media (min-width: 769px) {
+  .sub-navbar {
+    position: static;
+    display: flex;
+  }
+}
 .links-sub-navbar,
 .icons-sub-navbar {
   display: flex;
@@ -127,62 +132,7 @@ const toggleMenu = () => {
 }
 
 /* Media Query per Tablet e Mobile */
-@media (max-width: 768px) {
-  .spacer {
-    height: 70px;
-  }
 
-  .navbar {
-    padding: 0 16px;
-  }
-
-  .logo {
-    max-width: 180px;
-  }
-
-  .hamburger {
-    display: flex;
-  }
-
-  .sub-navbar {
-    position: fixed;
-    top: 70px;
-    left: 0;
-    right: 0;
-    flex-direction: column;
-    background-color: var(--color-input-background);
-    padding: 20px;
-    gap: 30px;
-    max-height: 0;
-    overflow: hidden;
-    opacity: 0;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-
-  .sub-navbar.open {
-    max-height: 500px;
-    opacity: 1;
-  }
-
-  .links-sub-navbar {
-    flex-direction: column;
-    gap: 20px;
-    width: 100%;
-  }
-
-  .links-sub-navbar a {
-    font-size: 18px;
-  }
-
-  .separator {
-    display: none;
-  }
-
-  .icons-sub-navbar {
-    gap: 25px;
-  }
-}
 
 /* Media Query per Smartphone Piccoli */
 @media (max-width: 480px) {
@@ -197,6 +147,24 @@ const toggleMenu = () => {
   .icons-sub-navbar img {
     width: 24px;
     height: 24px;
+  }
+}
+@media (max-width: 768px) {
+  .hamburger {
+    display: flex;
+  }
+
+  .sub-navbar {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    flex-direction: column;
+    display: none;
+    background: var(--color-input-background);
+  }
+
+  .sub-navbar.open {
+    display: flex;
   }
 }
 </style>
