@@ -56,7 +56,9 @@ const getProducts = async () => {
       category_id,
       manufacturer_id,
       Categories(name),
-      Manufacturers(name)
+      Manufacturers(name),
+      id,
+      available
     `, { count: "exact" })
     .order("datetime", { ascending: false });
 
@@ -175,7 +177,9 @@ onMounted(loadData);
     <ProductCard v-for="product in products" :key="product.oid"
       :name="product.Manufacturers.name + ' - ' + product.name" :price="product.price > 0 ? product.price : 0"
       :description="product.description" :category="product.Categories.name"
-      :image="product.images[0] || './img/no-image.png'" @click="openDetails(product.id)" />
+      :image="product.images[0] || './img/no-image.png'" @click="openDetails(product.id)" 
+      :available="product.available"
+      />
   </div>
   <div class="navigator">
     <button class="navbutton" @click="page--" :disabled="page === 1"><img src="../icons/angle_left.svg"></img> </button>

@@ -10,6 +10,10 @@ defineProps({
   image: {
     type: String,
     default: './img/no-image.png'
+  },
+  available: {
+    type: Boolean,
+    default: false
   }
 
 })
@@ -26,7 +30,8 @@ defineProps({
       <p class="product-description">{{ description.length > 90 ? description.substring(0, 90) + '...' : description }}</p>
 
       <p class="product-category">{{ category }}</p>
-
+      <p class="product-availability" :style="{ color: available ? 'var(--color-green)' : 'var(--color-red)' }">
+        {{ available ? 'Disponibile' : 'Non Disponibile' }}</p> 
     </div>
   </div>
 </template>

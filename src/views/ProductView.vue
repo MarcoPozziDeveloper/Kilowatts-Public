@@ -9,7 +9,20 @@ import MessageBoxComponent from "@/components/MessageBoxComponent.vue";
 import CarouselComponent from "@/components/CarouselComponent.vue";
 const route = useRoute();
 const id = route.params.id;
-const productData = ref({});
+const productData = ref({
+  oid: "",
+  name: "",
+  description: "",
+  price: "",
+  datetime: "",
+  Categories: {
+    name: ""
+  },
+  Manufacturers: {
+    name: ""
+  },
+  available: false
+});
 const images = ref([]);
 const router = useRouter();
 onMounted(async () => {
@@ -20,18 +33,33 @@ const uploading = ref(false);
 
 const getProduct = async (id) => {
   const { data, error } = await supabase
-    .from("vw_products")
-    .select("*")
+    .from("Products")
+    .select(
+      `
+      oid,
+      name,
+      description,
+      price,
+      datetime,
+      category_id,
+      manufacturer_id,
+      Categories(name),
+      Manufacturers(name),
+      id,
+      available
+    `
+    )
     .eq("id", id)
     .single();
   if (error) {
     console.error("Errore nel caricamento del prodotto:", error);
-    alert("Si e' verficato un errore. Fai una foto a questo messaggio e inviala allo sviluppatore. " + error.message);
 
     return {};
   }
+
   return data;
 };
+
 const getImagesForProduct = async (productOid) => {
   const { data, error } = await supabase.storage
     .from("productimages")
@@ -56,54 +84,6 @@ const getImagesForProduct = async (productOid) => {
   );
 };
 
-
-
-
-const reduceImageSize = (canvas, ctx, originalImg, maxSizeKB, resolve, fileName) => {
-  const currentWidth = canvas.width;
-  const currentHeight = canvas.height;
-
-  // Riduci le dimensioni del 20% ad ogni iterazione
-  const newWidth = Math.floor(currentWidth * 0.8);
-  const newHeight = Math.floor(currentHeight * 0.8);
-
-  // Dimensioni minime per evitare immagini troppo piccole
-  if (newWidth < 100 || newHeight < 100) {
-    console.log("Dimensioni minime raggiunte, accetto la dimensione attuale");
-    canvas.toBlob((blob) => {
-      const compressedFile = new File([blob], fileName.replace(/\.(png|jpe?g|bmp|tiff?)$/i, '.webp'), {
-        type: 'image/webp',
-        lastModified: Date.now(),
-      });
-      resolve(compressedFile);
-    }, 'image/webp', 0.1);
-    return;
-  }
-
-  canvas.width = newWidth;
-  canvas.height = newHeight;
-
-  ctx.imageSmoothingEnabled = true;
-  ctx.imageSmoothingQuality = 'high';
-  ctx.drawImage(originalImg, 0, 0, newWidth, newHeight);
-
-  canvas.toBlob((blob) => {
-    const sizeKB = blob.size / 1024;
-    console.log(`Ridimensionamento: ${newWidth}x${newHeight}, dimensione: ${sizeKB.toFixed(2)}KB`);
-
-    if (sizeKB <= maxSizeKB) {
-      const compressedFile = new File([blob], fileName.replace(/\.(png|jpe?g|bmp|tiff?)$/i, '.webp'), {
-        type: 'image/webp',
-        lastModified: Date.now(),
-      });
-      resolve(compressedFile);
-    } else {
-      // Continua a ridurre
-      reduceImageSize(canvas, ctx, originalImg, maxSizeKB, resolve, fileName);
-    }
-  }, 'image/webp', 0.3);
-};
-
 </script>
 
 <template>
@@ -115,12 +95,13 @@ const reduceImageSize = (canvas, ctx, originalImg, maxSizeKB, resolve, fileName)
     <CarouselComponent :images="images" id="Foto" />
 
     <div class="product-details">
-      <h2 class="product-name">{{ productData.manufacturer_name }} - {{ productData.name }}</h2>
-      <p class="product-category">Categoria: {{ productData.category_name }}</p>
+      <h2 class="product-name">{{ productData.Manufacturers.name }} - {{ productData.name }}</h2>
+      <p class="product-category">Categoria: {{ productData.Categories.name }}</p>
       <p class="product-price">{{ productData.price > 0 ? '€' + productData.price.toFixed(2) : 'Prezzo: ??' }}</p>
       <p class="product-description">{{ productData.description }}</p>
       <p class="product-category"></p>
-
+      <p class="product-availability" :style="{ color: productData.available ? 'var(--color-green)' : 'var(--color-red)' }">
+        {{ productData.available ? 'Disponibile' : 'Non Disponibile' }}</p>
     </div>
   </div>
 </template>
@@ -175,7 +156,7 @@ const reduceImageSize = (canvas, ctx, originalImg, maxSizeKB, resolve, fileName)
 
 .product-price {
   font-size: 1.1rem;
-
+  font-weight: 600;
 }
 
 .product-description {

@@ -3,6 +3,8 @@
     --color-bg: hsl(0, 0%, 8%);
     --color-text: hsl(0, 0%, 76%);
     --color-primary: #006dda;
+    --color-red: #d9534f;
+    --color-green: #5cb85c;
     --color-primary-light: #6ea3d8;
     --color-container: hsl(0, 0%, 7%);
     --color-container-border: hsl(0, 0%, 15%);
