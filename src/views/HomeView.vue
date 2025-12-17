@@ -234,7 +234,6 @@ const openDetails = (id) => {
   .hero {
     padding: 0;
     flex-direction: column;
-    padding: 0;
     background-image: url('../images/hero.png');
     background-size: cover;
     background-position: center;
@@ -261,8 +260,6 @@ const openDetails = (id) => {
   .hero-right {
     position: relative;
     z-index: 2;
-    padding: 40px 30px;
-    max-width: 100%;
   }
 }
 

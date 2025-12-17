@@ -47,7 +47,7 @@ const toggleMenu = () => {
   width: 100%;
   background-color: var(--color-input-background);
   padding: 0 26px;
-  height: 90px;
+  height: 70px;
 }
 
 .sub-navbar {
@@ -126,7 +126,7 @@ const toggleMenu = () => {
   
   .sub-navbar {
     position: fixed;
-    top: 90px;
+    top: 70px;
     right: 0;
     left: 0;
     flex-direction: column;

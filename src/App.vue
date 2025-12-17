@@ -22,6 +22,6 @@ import FooterComponent from "./components/FooterComponent.vue";
 @import url("./styles/themes.css");
 @import url("./styles/index.css");
 .main-app{
-  padding-top: 90px;
+  padding-top: 70px;
 }
 </style>

@@ -39,8 +39,6 @@ const loadData = async () => {
   products.value = productsWithImages;
 };
 
-
-
 const getProducts = async () => {
   const from = (page.value - 1) * pageSize;
   const to = from + pageSize - 1;
@@ -59,8 +57,7 @@ const getProducts = async () => {
       Manufacturers(name),
       id,
       available
-    `, { count: "exact" })
-    .order("datetime", { ascending: false });
+    `, { count: "exact" });
 
   if (search.value) {
     query = query.or(
@@ -78,6 +75,27 @@ const getProducts = async () => {
 
   if (productData.value.manufacturer_id) {
     query = query.eq("manufacturer_id", productData.value.manufacturer_id);
+  }
+
+  // Applica l'ordinamento in base a sortBy
+  switch (sortBy.value) {
+    case "0": // Nome
+      query = query.order("name", { ascending: true });
+      break;
+    case "1": // Prezzo Decrescente
+      query = query.order("price", { ascending: false });
+      break;
+    case "2": // Prezzo Crescente
+      query = query.order("price", { ascending: true });
+      break;
+    case "3": // Categoria
+      query = query.order("category_id", { ascending: true });
+      break;
+    case "4": // Produttore
+      query = query.order("manufacturer_id", { ascending: true });
+      break;
+    default:
+      query = query.order("datetime", { ascending: false });
   }
 
   const { data, error, count } = await query.range(from, to);
@@ -113,106 +131,223 @@ const getImagesForProduct = async (productOid) => {
   );
 };
 
-
 const openDetails = (id) => {
   router.push({ name: "prodotto", params: { id } });
 };
+
 watch(
-  [search, () => productData.value.price, () => productData.value.category_id, () => productData.value.manufacturer_id],
+  [search, sortBy, () => productData.value.price, () => productData.value.category_id, () => productData.value.manufacturer_id],
   () => {
     page.value = 1;
-    loadData();
+    loadData(); 
   }
 );
+
 const totalPages = computed(() =>
   Math.ceil(total.value / pageSize)
 );
+
 watch(page, loadData);
 
 onMounted(loadData);
 </script>
 
 <template>
-  <form @submit.prevent="submitProduct" class="left-pannel">
-    <div class="input-group">
-      <label>Cerca parole chiave</label>
-      <div class="input-sub-group">
-        <input class="generic-input" type="text" v-model="search" placeholder="Cerca..." />
-        <img class="search-icon" src="../images/lens.svg" alt="Search" />
+  <div class="page-container">
+    <!-- Mobile Filter Toggle Button -->
+    <button class="mobile-filter-toggle" @click="showFilters = !showFilters">
+      <img src="../icons/filter.svg" alt="Filtri" v-if="!showFilters" />
+      <span v-if="!showFilters">Filtri</span>
+      <span v-else>✕ Chiudi</span>
+    </button>
+
+    <!-- Overlay for mobile -->
+    <div class="overlay" v-if="showFilters" @click="showFilters = false"></div>
+
+    <!-- Filter Panel -->
+    <form @submit.prevent="submitProduct" class="left-pannel" :class="{ 'show': showFilters }">
+      <div class="filter-header">
+        <h3>Filtri</h3>
+        <button type="button" class="close-filters" @click="showFilters = false">✕</button>
+      </div>
+
+      <div class="input-group">
+        <label>Cerca parole chiave</label>
+        <div class="input-sub-group">
+          <input class="generic-input" type="text" v-model="search" placeholder="Cerca..." />
+          <img class="search-icon" src="../images/lens.svg" alt="Search" />
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label>Ordina per</label>
+        <select class="generic-input" v-model="sortBy">
+          <option value="0">Nome</option>
+          <option value="1">Prezzo Decrescente</option>
+          <option value="2">Prezzo Crescente</option>
+          <option value="3">Categoria</option>
+          <option value="4">Produttore</option>
+        </select>
+      </div>
+
+      <div class="input-group">
+        <label>Prezzo massimo</label>
+        <input class="generic-input" v-model.number="productData.price" type="number" step="0.01" min="0"
+          placeholder="Max" />
+      </div>
+
+      <div class="input-group">
+        <label>Fornitore</label>
+        <SelectComponent tableName="Manufacturers" label="Produttore" :refreshToken="refreshToken"
+          @selected="productData.manufacturer_id = $event" />
+      </div>
+
+      <div class="input-group">
+        <label>Categoria</label>
+        <SelectComponent tableName="Categories" label="Categorie" :refreshToken="refreshToken"
+          @selected="productData.category_id = $event" />
+      </div>
+
+      <button type="button" class="apply-filters-mobile" @click="showFilters = false">
+        Applica Filtri
+      </button>
+    </form>
+
+    <!-- Products Grid -->
+    <div class="content-area">
+      <div class="products">
+        <ProductCard v-for="product in products" :key="product.oid"
+          :name="product.Manufacturers.name + ' - ' + product.name" :price="product.price > 0 ? product.price : 0"
+          :description="product.description" :category="product.Categories.name"
+          :image="product.images[0] || './img/no-image.png'" @click="openDetails(product.id)"
+          :available="product.available" />
+      </div>
+
+      <div class="navigator">
+        <button class="navbutton" @click="page--" :disabled="page === 1">
+          <img src="../icons/angle_left.svg" alt="Precedente" />
+        </button>
+        <label>Pagina {{ page }}</label>
+        <button class="navbutton" @click="page++" :disabled="page >= totalPages">
+          <img src="../icons/angle_right.svg" alt="Successiva" />
+        </button>
       </div>
     </div>
-
-    <div class="input-group">
-      <label>Ordina per</label>
-      <select class="generic-input" v-model="sortBy">
-        <option value="0">Nome</option>
-        <option value="1">Prezzo Decrescente</option>
-        <option value="2">Prezzo Crescente</option>
-        <option value="3">Categoria</option>
-        <option value="4">Produttore</option>
-      </select>
-    </div>
-
-    <div class="input-group">
-      <label>Prezzo massimo</label>
-      <input class="generic-input" v-model.number="productData.price" type="number" step="0.01" min="0"
-        placeholder="Max" />
-    </div>
-
-    <div class="input-group">
-      <label>Fornitore</label>
-      <SelectComponent tableName="Manufacturers" label="Produttore" :refreshToken="refreshToken"
-        @selected="productData.manufacturer_id = $event" />
-    </div>
-
-    <div class="input-group">
-      <label>Categoria</label>
-      <SelectComponent tableName="Categories" label="Categorie" :refreshToken="refreshToken"
-        @selected="productData.category_id = $event" />
-    </div>
-  </form>
-
-
-  <div class="products">
-    <ProductCard v-for="product in products" :key="product.oid"
-      :name="product.Manufacturers.name + ' - ' + product.name" :price="product.price > 0 ? product.price : 0"
-      :description="product.description" :category="product.Categories.name"
-      :image="product.images[0] || './img/no-image.png'" @click="openDetails(product.id)" 
-      :available="product.available"
-      />
-  </div>
-  <div class="navigator">
-    <button class="navbutton" @click="page--" :disabled="page === 1"><img src="../icons/angle_left.svg"></img> </button>
-    <label>Pagina {{ page }}</label>
-    <button class="navbutton" @click="page++" :disabled="page >= totalPages"><img src="../icons/angle_right.svg"></img></button>
   </div>
 </template>
 
+<script>
+export default {
+  data() {
+    return {
+      showFilters: false,
+      search: '',
+      sortBy: '0',
+      page: 1,
+      totalPages: 10,
+      productData: {
+        price: null,
+        manufacturer_id: null,
+        category_id: null
+      },
+      refreshToken: 0,
+      products: []
+    }
+  },
+  methods: {
+    submitProduct() {
+      // Your submit logic
+    },
+    openDetails(id) {
+      // Your navigation logic
+    }
+  }
+}
+</script>
+
 <style scoped>
-.navigator {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
-  margin-top: 20px;
+.page-container {
+  position: relative;
+  min-height: 100vh;
 }
 
-.navbutton {
-  background-color: transparent;
+.mobile-filter-toggle {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: var(--color-primary);
+  color: white;
   border: none;
+  border-radius: 50px;
+  padding: 12px 20px;
+  font-size: 16px;
+  font-weight: 600;
   cursor: pointer;
-  padding: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: transform 0.2s;
 }
 
-.navbutton:disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
-  display: hidden;
+.mobile-filter-toggle:active {
+  transform: scale(0.95);
 }
 
-.navbutton img {
-  width: 24px;
-  height: 24px;
+.mobile-filter-toggle img {
+  width: 20px;
+  height: 20px;
+  filter: brightness(0) invert(1);
+}
+
+.overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 998;
+}
+
+.filter-header {
+  display: none;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.filter-header h3 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.close-filters {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: var(--color-text);
+  padding: 0;
+  width: 30px;
+  height: 30px;
+}
+
+.apply-filters-mobile {
+  display: none;
+  width: 100%;
+  padding: 12px;
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 20px;
 }
 
 .input-sub-group {
@@ -232,8 +367,6 @@ onMounted(loadData);
   background-color: var(--color-input-background);
   font-size: 16px;
   padding: 6px 32px 6px 6px;
-
-  /* spazio extra a destra per l’icona */
   color: var(--color-text);
   width: 100%;
 }
@@ -255,22 +388,28 @@ onMounted(loadData);
 
 .input-group label {
   padding-left: 6px;
+  font-weight: 500;
 }
 
 .left-pannel {
   position: fixed;
-  top: var(--top-appbar-height);
+  top: 70px;
   left: 0;
   bottom: 0;
-  height: calc(100vh - var(--footer-height));
+  height: calc(100vh - var(--top-appbar-height));
   width: var(--left-pannel-width);
-
   padding: 50px 20px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 40px;
-  margin-bottom: 100px;
+  background-color: var(--color-container);
+  z-index: 100;
+}
+
+.content-area {
+  margin-left: var(--left-pannel-width);
+  width: calc(100% - var(--left-pannel-width));
 }
 
 .products {
@@ -279,8 +418,151 @@ onMounted(loadData);
   justify-content: center;
   gap: 20px;
   padding: 20px;
-  margin-left: var(--left-pannel-width);
-  width: calc(100% - (var(--left-pannel-width)));
-  /* Spazio per il form */
+}
+
+.navigator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  margin: 20px 0;
+  padding: 20px;
+}
+
+.navbutton {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  transition: opacity 0.2s;
+}
+
+.navbutton:disabled {
+  cursor: not-allowed;
+  opacity: 0.3;
+}
+
+.navbutton:not(:disabled):hover {
+  opacity: 0.7;
+}
+
+.navbutton img {
+  width: 24px;
+  height: 24px;
+}
+
+/* Responsive Styles */
+@media (min-width: 601px) {
+  .left-pannel {
+    width: 280px;
+  }
+
+  .content-area {
+    margin-left: 280px;
+    width: calc(100% - 280px);
+  }
+
+  .products {
+    gap: 15px;
+    padding: 15px;
+  }
+
+  .mobile-filter-toggle {
+    display: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .mobile-filter-toggle {
+    display: flex;
+  }
+
+  .overlay {
+    display: block;
+  }
+
+  .filter-header {
+    display: flex;
+  }
+
+  .apply-filters-mobile {
+    display: block;
+  }
+
+  .left-pannel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 85%;
+    max-width: 350px;
+    height: 100vh;
+    padding: 20px;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+    z-index: 1000;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .left-pannel.show {
+    transform: translateX(0);
+  }
+
+  .content-area {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .products {
+    gap: 15px;
+    padding: 0 20px;
+  }
+
+  .navigator {
+    gap: 15px;
+    padding: 15px 10px;
+  }
+
+  .navigator label {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .left-pannel {
+    width: 90%;
+    padding: 15px;
+    gap: 30px;
+  }
+
+  .input-group {
+    gap: 8px;
+  }
+
+  .generic-input {
+    font-size: 14px;
+    padding: 8px 32px 8px 8px;
+  }
+
+  .products {
+    padding: 10px 5px;
+    gap: 10px;
+  }
+
+  .mobile-filter-toggle {
+    bottom: 15px;
+    right: 15px;
+    padding: 10px 16px;
+    font-size: 14px;
+  }
+
+  .navigator {
+    gap: 10px;
+  }
+
+  .navbutton img {
+    width: 20px;
+    height: 20px;
+  }
 }
 </style>

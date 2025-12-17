@@ -1,12 +1,9 @@
 <script setup>
 import { useRoute } from "vue-router";
-import { ref, onMounted, handleError } from "vue";
-
+import { ref, onMounted } from "vue";
 import { supabase } from "../lib/supabaseClient";
-import { useRouter } from "vue-router";
-import SelectComponent from "@/components/SelectComponent.vue";
-import MessageBoxComponent from "@/components/MessageBoxComponent.vue";
 import CarouselComponent from "@/components/CarouselComponent.vue";
+
 const route = useRoute();
 const id = route.params.id;
 const productData = ref({
@@ -24,12 +21,11 @@ const productData = ref({
   available: false
 });
 const images = ref([]);
-const router = useRouter();
+
 onMounted(async () => {
   productData.value = await getProduct(id);
   images.value = await getImagesForProduct(productData.value.oid);
 });
-const uploading = ref(false);
 
 const getProduct = async (id) => {
   const { data, error } = await supabase
@@ -87,20 +83,17 @@ const getImagesForProduct = async (productOid) => {
 </script>
 
 <template>
-  <MessageBoxComponent :active="uploading" message="Caricamento in corso, attendere prego..." />
-
-
   <div class="main-container">
 
     <CarouselComponent :images="images" id="Foto" />
-
     <div class="product-details">
       <h2 class="product-name">{{ productData.Manufacturers.name }} - {{ productData.name }}</h2>
       <p class="product-category">Categoria: {{ productData.Categories.name }}</p>
       <p class="product-price">{{ productData.price > 0 ? '€' + productData.price.toFixed(2) : 'Prezzo: ??' }}</p>
       <p class="product-description">{{ productData.description }}</p>
       <p class="product-category"></p>
-      <p class="product-availability" :style="{ color: productData.available ? 'var(--color-green)' : 'var(--color-red)' }">
+      <p class="product-availability"
+        :style="{ color: productData.available ? 'var(--color-green)' : 'var(--color-red)' }">
         {{ productData.available ? 'Disponibile' : 'Non Disponibile' }}</p>
     </div>
   </div>
