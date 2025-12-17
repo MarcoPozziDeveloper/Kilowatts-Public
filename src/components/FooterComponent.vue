@@ -12,7 +12,7 @@
                 </div>
                 <a href="https://maps.app.goo.gl/2vtuVn9tbHBYb1tY8" class="footer-row">
                     <img src="../icons/location.svg" alt="Posizione" />
-                    <label class="footer-text">Via Cadorna 55 Buscate VA</label>
+                    <label class="footer-text">Via Cadorna 55 Buscate Mi</label>
                 </a>
             </div>
         </div>
