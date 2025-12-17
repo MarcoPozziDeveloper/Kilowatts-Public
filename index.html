@@ -3,11 +3,24 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="preload"
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap"
+      as="style"
+      onload="this.rel='stylesheet'"
+    />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap"
       rel="stylesheet"
+      crossorigin="anonymous"
     />
     <title>Kilowatts Industries</title>
     <style>
@@ -18,14 +31,12 @@
         margin: 0;
         padding: 0;
         box-sizing: border-box;
+        font-family: "Outfit", sans-serif;
       }
       body {
         background-color: var(--color-bg);
-
         color: var(--color-text);
 
-        font-family: "Outfit", sans-serif;
-        padding: 0 50px;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -38,6 +49,20 @@
         flex-direction: column;
         align-items: center;
         width: 100%;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+
+      @media (max-width: 970px) {
+        body {
+          padding: 0 10px;
+        }
+      }
+      @media (min-width: 971px) {
+        body {
+          padding: 0 50px;
+        }
       }
     </style>
   </head>

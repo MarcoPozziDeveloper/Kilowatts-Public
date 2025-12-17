@@ -2,29 +2,6 @@
   --left-pannel-width: 300px;
   --top-appbar-height: 80px;
 }
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-@media (max-width: 480px) {
-  .sez-a {
-    flex-direction: column;
-
-  }
-}
-
-.sez-a {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  width: 100%;
-
-}
-
 .card {
   background-color: var(--color-container);
   border: 1px solid var(--color-container-border);
@@ -35,6 +12,7 @@
   gap: 20px;
   position: relative;
   flex: 1;
+  width: 100%;
 }
 
 .image-container {
@@ -101,57 +79,8 @@
   color: var(--color-text);
 }
 
-.carousel {
-  position: relative;
-  width: 100%;
-  max-width: 800px;
-  margin: auto;
-  overflow: hidden;
-}
 
-.carousel-track-container {
-  overflow: hidden;
-  width: 100%;
-}
 
-.carousel-track {
-  display: flex;
-  transition: transform 0.5s ease-in-out;
-}
-
-.carousel-track img {
-  width: 100%;
-  flex-shrink: 0;
-  object-fit: cover;
-}
-
-/* --- Posizionamento dei bottoni sul carosello --- */
-.carousel-btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background-color: transparent;
-
-  cursor: pointer;
-  z-index: 2;
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.carousel-btn img {
-  width: 64px;
-  height: 64px;
-}
-
-.carousel-btn.left {
-  left: 0px;
-}
-
-.carousel-btn.right {
-  right: 0px;
-}
 html {
   scroll-behavior: smooth;
 }

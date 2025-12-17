@@ -23,15 +23,22 @@ defineProps({
   <div class="product-card">
     <img :src="image" :alt="name" class="product-image" />
     <div class="product-details">
-      <h2 class="product-name">{{ name }}</h2>
+      <div class="info">
+        <h2 class="product-name">{{ name }}</h2>
 
-      <p class="product-price">{{ price > 0 ? '€' + price.toFixed(2) : 'Prezzo: ??' }}</p>
+        <p class="product-price">{{ price > 0 ? '€' + price.toFixed(2) : 'Prezzo: ??' }}</p>
 
-      <p class="product-description">{{ description.length > 90 ? description.substring(0, 90) + '...' : description }}</p>
+        <p class="product-description">{{ description.length > 90 ? description.substring(0, 90) + '...' : description
+        }}
+        </p>
+      </div>
 
-      <p class="product-category">{{ category }}</p>
-      <p class="product-availability" :style="{ color: available ? 'var(--color-green)' : 'var(--color-red)' }">
-        {{ available ? 'Disponibile' : 'Non Disponibile' }}</p> 
+      <div class="info">
+        <p class="product-category">{{ category }}</p>
+        <p class="product-availability" :style="{ color: available ? 'var(--color-green)' : 'var(--color-red)' }">
+          {{ available ? 'Disponibile' : 'Non Disponibile' }}</p>
+      </div>
+
     </div>
   </div>
 </template>
@@ -46,10 +53,10 @@ defineProps({
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
   color: var(--text-color);
   width: 100%;
-  max-width: 300px;
   transition: transform 0.2s ease;
   width: var(--left-pannel-width);
-  border: 1px solid var(--color-container-border)
+  border: 1px solid var(--color-container-border);
+  height: 470px;
 }
 
 .product-card:hover {
@@ -69,6 +76,13 @@ defineProps({
 
 .product-details {
   padding: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: calc(470px - 200px); /* altezza card meno immagine */
+}
+
+.info {
   gap: 10px;
   display: flex;
   flex-direction: column;

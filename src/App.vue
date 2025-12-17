@@ -7,8 +7,11 @@ import FooterComponent from "./components/FooterComponent.vue";
 <template>
   <div class="main">
     <NavbarComponent />
-    <RouterView />
-    <FooterComponent />
+    <div class="main-app">
+      <RouterView />
+      <FooterComponent />
+    </div>
+
   </div>
 
 
@@ -18,4 +21,7 @@ import FooterComponent from "./components/FooterComponent.vue";
 <style>
 @import url("./styles/themes.css");
 @import url("./styles/index.css");
+.main-app{
+  padding-top: 90px;
+}
 </style>

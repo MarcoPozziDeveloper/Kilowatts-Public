@@ -1,29 +1,25 @@
 <script setup>
 import { ref } from "vue";
 const isMenuOpen = ref(false);
-
 const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value;
 };
-
 </script>
+
 <template>
-  <div class="spacer"></div>
   <div class="navbar">
     <router-link to="/">
       <img src="../images/KW_logo.png" alt="Kilowatts Industries Logo" class="logo" />
     </router-link>
-
     <button class="hamburger" @click="toggleMenu" :class="{ active: isMenuOpen }">
       <span></span>
       <span></span>
       <span></span>
     </button>
-
     <div class="sub-navbar" :class="{ open: isMenuOpen }">
       <div class="links-sub-navbar">
-        <router-link to="/" @click="isMenuOpen = false">Home </router-link>
-        <router-link to="/catalogo" @click="isMenuOpen = false">Catalogo </router-link>
+        <router-link to="/" @click="isMenuOpen = false">Home</router-link>
+        <router-link to="/catalogo" @click="isMenuOpen = false">Catalogo</router-link>
         <a href="about.html" @click="isMenuOpen = false">Classifiche</a>
         <a href="/#eventi" @click="isMenuOpen = false">Eventi</a>
       </div>
@@ -39,11 +35,8 @@ const toggleMenu = () => {
     </div>
   </div>
 </template>
-<style scoped>
-.spacer {
-  height: 90px;
-}
 
+<style scoped>
 .navbar {
   position: fixed;
   top: 0;
@@ -54,6 +47,7 @@ const toggleMenu = () => {
   width: 100%;
   background-color: var(--color-input-background);
   padding: 0 26px;
+  height: 90px;
 }
 
 .sub-navbar {
@@ -61,14 +55,8 @@ const toggleMenu = () => {
   align-items: center;
   justify-content: right;
   gap: 40px;
- 
 }
-@media (min-width: 769px) {
-  .sub-navbar {
-    position: static;
-    display: flex;
-  }
-}
+
 .links-sub-navbar,
 .icons-sub-navbar {
   display: flex;
@@ -131,40 +119,58 @@ const toggleMenu = () => {
   transform: rotate(-45deg) translate(7px, -7px);
 }
 
-/* Media Query per Tablet e Mobile */
-
-
-/* Media Query per Smartphone Piccoli */
-@media (max-width: 480px) {
-  .logo {
-    max-width: 150px;
-  }
-
-  .links-sub-navbar a {
-    font-size: 16px;
-  }
-
-  .icons-sub-navbar img {
-    width: 24px;
-    height: 24px;
-  }
-}
-@media (max-width: 768px) {
+@media (max-width: 970px) {
   .hamburger {
     display: flex;
   }
-
+  
   .sub-navbar {
-    position: absolute;
-    top: 100%;
+    position: fixed;
+    top: 90px;
     right: 0;
+    left: 0;
     flex-direction: column;
-    display: none;
     background: var(--color-input-background);
+    padding: 20px;
+    gap: 20px;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
-
+  
   .sub-navbar.open {
-    display: flex;
+    transform: translateX(0);
+  }
+  
+  .links-sub-navbar {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .links-sub-navbar a {
+    width: 100%;
+    text-align: center;
+    padding: 10px 0;
+  }
+  
+  .separator {
+    display: none;
+  }
+  
+  .icons-sub-navbar {
+   display: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .logo {
+    max-width: 200px;
+  }
+  .navbar {
+    padding: 0 15px;
+  }
+  .links-sub-navbar{
+    gap: 10px;
   }
 }
 </style>

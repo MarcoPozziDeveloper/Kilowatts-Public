@@ -128,8 +128,8 @@ const openDetails = (id) => {
       </div>
 
       <div class="card-text-container">
-        <h2 class="card-title">Installazione</h2>
-        <p class="card-description">Illuminazioni abitacolo</p>
+        <h2 class="card-title">Illuminazione</h2>
+        <p class="card-description">Abitacolo e interni</p>
       </div>
     </div>
 
@@ -139,7 +139,7 @@ const openDetails = (id) => {
       </div>
 
       <div class="card-text-container">
-        <h2 class="card-title">Montaggio</h2>
+        <h2 class="card-title">Installazione</h2>
         <p class="card-description">Radio Aftermarket</p>
       </div>
     </div>
@@ -176,64 +176,18 @@ const openDetails = (id) => {
   <div class="news">
     <ProductCard v-for="product in newProducts" :key="product.oid"
       :name="product.Manufacturers.name + ' - ' + product.name" :price="product.price > 0 ? product.price : 0"
-      :description="product.description" :category="product.Categories.name"
-      :available="product.available"
+      :description="product.description" :category="product.Categories.name" :available="product.available"
       :image="product.images[0] || './img/no-image.png'" @click="openDetails(product.id)" />
   </div>
   <div class="separator">
     <label class="separator-text">Prossimi eventi</label>
   </div>
-  <CarouselComponent :images="images" id="eventi" />
+  <div class="sez-a">
+    <CarouselComponent :images="images" id="eventi" />
+  </div>
+
 </template>
 <style scoped>
-@media (max-width: 480px) {
-  .news {
-    flex-direction: column;
-
-  }
-
-  .hero-left {
-    display: none;
-  }
-
-  .card-b {
-    background-color: var(--color-container);
-    border: 1px solid var(--color-container-border);
-    border-radius: 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    width: 100%;
-    max-height: auto;
-  }
-
-
-  .card-b-text-container {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    padding: 30px;
-    bottom: 0;
-    z-index: 2;
-    text-align: justify;
-    text-justify: inter-word;
-
-    /* sopra il gradiente */
-  }
-
-  .card-b-title {
-    color: var(--color-primary-light);
-    font-size: 28px;
-    font-weight: 600;
-  }
-
-  .card-b-description {
-    color: var(--color-text);
-    font-size: 20px;
-  }
-
-}
-
 @media (min-width: 481px) {
   .card-b {
     background-color: var(--color-container);
@@ -268,9 +222,121 @@ const openDetails = (id) => {
   }
 }
 
+
+
+@media (max-width: 970px) {
+
+  .sez-a {
+    flex-direction: column;
+
+  }
+
+  .hero {
+    padding: 0;
+    flex-direction: column;
+    padding: 0;
+    background-image: url('../images/hero.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    height: 75vh;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 1;
+  }
+
+  .hero-left {
+    display: none;
+  }
+
+  .hero-right {
+    position: relative;
+    z-index: 2;
+    padding: 40px 30px;
+    max-width: 100%;
+  }
+}
+
+
+@media (max-width: 970px) {
+  .card-b-title {
+    font-size: 28px;
+  }
+
+  .card-b-description {
+    font-size: 20px;
+  }
+
+  .news {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+
+  }
+
+  .sez-a {
+    padding: 0;
+    flex-direction: column;
+  }
+
+  .hero-left {
+    display: none;
+  }
+
+  .card-b {
+    background-color: var(--color-container);
+    border: 1px solid var(--color-container-border);
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    max-height: auto;
+  }
+
+
+  .card-b-text-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 30px;
+    bottom: 0;
+    z-index: 2;
+    text-align: justify;
+    text-justify: inter-word;
+
+  }
+
+  .card-b-title {
+    color: var(--color-primary-light);
+    font-size: 28px;
+    font-weight: 600;
+  }
+
+  .card-b-description {
+    color: var(--color-text);
+    font-size: 20px;
+  }
+
+}
+
+
+
 .news {
   display: flex;
   gap: 20px;
+  align-items: center;
+  justify-content: center;
 
 }
 

@@ -121,7 +121,7 @@ watch(() => props.images, () => {
 
 .carousel-image {
   width: 100%;
-  height: 400px;
+
   object-fit: contain;
   flex-shrink: 0;
 }
@@ -224,56 +224,15 @@ watch(() => props.images, () => {
   background: rgba(255, 255, 255, 0.8);
 }
 
-/* Responsive - Tablet */
-@media (max-width: 768px) {
-  .carousel {
-    gap: 10px;
-    max-width: 100%;
-    padding: 0 10px;
-  }
-
-  .side-image {
-    width: 80px;
-    height: 140px;
-  }
-
-  .carousel-main {
-    flex: 1;
-    border-radius: 8px;
-  }
-
-  .carousel-track-container {
-    border-radius: 8px;
-  }
-
-  .carousel-image {
-    height: 300px;
-  }
-
-  .carousel-btn {
-    width: 40px;
-    height: 40px;
-  }
-
-  .carousel-btn svg {
-    width: 20px;
-    height: 20px;
-  }
-
-  .carousel-btn.left {
-    left: 8px;
-  }
-
-  .carousel-btn.right {
-    right: 8px;
-  }
-}
 
 /* Responsive - Mobile */
-@media (max-width: 480px) {
+/* Responsive - Mobile */
+@media (max-width: 600px) {
   .carousel {
-    gap: 5px;
-    padding: 0 5px;
+    gap: 0;
+    padding: 0;
+    max-width: 100%;
+    flex-direction: column;
   }
 
   /* Nascondi le immagini laterali su mobile molto piccoli */
@@ -283,51 +242,52 @@ watch(() => props.images, () => {
 
   .carousel-main {
     width: 100%;
-    border-radius: 8px;
+    border-radius: 0;
+    position: relative;
+    padding-bottom: 60px;
+    box-shadow: none;
+  }
+
+  .carousel-track-container {
+    border-radius: 0;
+    width: 100%;
+  }
+
+  .carousel-track {
+    width: 100%;
   }
 
   .carousel-image {
-    height: 250px;
+  
+ 
   }
 
   .carousel-btn {
-    width: 36px;
-    height: 36px;
-    background-color: rgba(0, 0, 0, 0.2);
+    width: 44px;
+    height: 44px;
+    background-color: rgba(0, 0, 0, 0.3);
+    top: auto;
+    bottom: 8px;
+    transform: none;
   }
 
   .carousel-btn svg {
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
   }
 
   .carousel-btn.left {
-    left: 5px;
+    left: 50%;
+    margin-left: -54px;
   }
 
   .carousel-btn.right {
-    right: 5px;
+    right: 50%;
+    margin-right: -54px;
   }
 
   .carousel-btn:hover {
-    transform: translateY(-50%) scale(1.05);
-  }
-}
-
-/* Responsive - Mobile molto piccoli */
-@media (max-width: 360px) {
-  .carousel-image {
-    height: 200px;
-  }
-
-  .carousel-btn {
-    width: 32px;
-    height: 32px;
-  }
-
-  .carousel-btn svg {
-    width: 16px;
-    height: 16px;
+    transform: scale(1.05);
   }
 }
 </style>

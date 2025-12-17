@@ -5,20 +5,9 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-}
-body {
-  background-color: var(--color-bg);
-  color: var(--color-text);
-  font-family: Arial, sans-serif;
-
   font-family: "Outfit", sans-serif;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  transition: all 0.3s ease;
 }
+
 .main {
   max-width: 1920px;
   display: flex;
