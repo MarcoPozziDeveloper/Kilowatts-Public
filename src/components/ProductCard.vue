@@ -59,14 +59,18 @@ defineProps({
   height: 470px;
 }
 
-.product-card:hover {
-  cursor: pointer;
-  box-shadow: 0px 6px 15px color-mix(in srgb, var(--color-primary) 40%, transparent);
+@media (min-width: 601px) {
+  .product-card:hover {
+    cursor: pointer;
+    box-shadow: 0px 6px 15px color-mix(in srgb, var(--color-primary) 40%, transparent);
+  }
+
+  .product-card:hover {
+    transform: scale(1.03);
+  }
 }
 
-.product-card:hover {
-  transform: scale(1.03);
-}
+
 
 .product-image {
   width: 100%;
@@ -79,7 +83,8 @@ defineProps({
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: calc(470px - 200px); /* altezza card meno immagine */
+  height: calc(470px - 200px);
+  /* altezza card meno immagine */
 }
 
 .info {

@@ -139,7 +139,7 @@ watch(
   [search, sortBy, () => productData.value.price, () => productData.value.category_id, () => productData.value.manufacturer_id],
   () => {
     page.value = 1;
-    loadData(); 
+    loadData();
   }
 );
 
@@ -165,13 +165,13 @@ onMounted(loadData);
     <div class="overlay" v-if="showFilters" @click="showFilters = false"></div>
 
     <!-- Filter Panel -->
-    <form @submit.prevent="submitProduct" class="left-pannel" :class="{ 'show': showFilters }">
+    <form @submit.prevent class="left-pannel" :class="{ 'show': showFilters }">
       <div class="filter-header">
         <h3>Filtri</h3>
         <button type="button" class="close-filters" @click="showFilters = false">✕</button>
       </div>
 
-      <div class="input-group">
+      <div class="input-group desktop-only">
         <label>Cerca parole chiave</label>
         <div class="input-sub-group">
           <input class="generic-input" type="text" v-model="search" placeholder="Cerca..." />
@@ -214,8 +214,15 @@ onMounted(loadData);
     </form>
 
     <!-- Products Grid -->
+    <div class="search-bar mobile-only">
+      <div class="sub-search-bar">
+        <input type="text" v-model="search" placeholder="Cerca..." />
+        <img class="search-icon" src="../images/lens.svg" alt="Search" />
+      </div>
+    </div>
     <div class="content-area">
       <div class="products">
+
         <ProductCard v-for="product in products" :key="product.oid"
           :name="product.Manufacturers.name + ' - ' + product.name" :price="product.price > 0 ? product.price : 0"
           :description="product.description" :category="product.Categories.name"
@@ -254,18 +261,64 @@ export default {
       products: []
     }
   },
-  methods: {
-    submitProduct() {
-      // Your submit logic
-    },
-    openDetails(id) {
-      // Your navigation logic
-    }
-  }
 }
 </script>
 
 <style scoped>
+@media (min-width: 601px) {
+  .desktop-only {
+    display: block !important;
+  }
+
+  .mobile-only {
+    display: none !important;
+  }
+
+}
+
+@media (max-width: 600px) {
+  .mobile-only {
+    display: block !important;
+  }
+
+  .desktop-only {
+    display: none !important;
+  }
+}
+
+.search-bar {
+  display: flex;
+  flex-direction: column;
+  padding: 20px 20px;
+  background-color: var(--color-input-background);
+  width: 100%;
+}
+
+.sub-search-bar .search-icon {
+  width: 20px;
+  height: 20px; 
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 8px 34px 8px 12px;
+  font-size: 18px;
+  border: none;
+  border-radius: 50px;
+  background-color: transparent;
+  color: var(--color-text);
+  border: 1px solid var(--color-container-border);
+
+}
+.search-bar input::placeholder {
+  color: var(--color-text);
+}
+
+.search-bar input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
 .page-container {
   position: relative;
   min-height: 100vh;
@@ -350,7 +403,7 @@ export default {
   margin-top: 20px;
 }
 
-.input-sub-group {
+.input-sub-group, .sub-search-bar {
   display: flex;
   position: relative;
 }
@@ -371,15 +424,19 @@ export default {
   width: 100%;
 }
 
+.input-sub-group .search-icon {
+  width: 18px;
+  height: 18px; 
+}
+
 .search-icon {
   position: absolute;
   right: 12px;
   top: 50%;
   transform: translateY(-50%);
-  width: 18px;
-  height: 18px;
   pointer-events: none;
 }
+
 
 .generic-input:focus {
   outline: none;
