@@ -1,9 +1,37 @@
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import { supabase } from "../lib/supabaseClient";
+
+const bucket = 'pdf'
+const fileName = ref('')
+const exists = ref(false)
+
 const isMenuOpen = ref(false);
 const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value;
 };
+const loadFile = async () => {
+  const { data } = await supabase.storage.from(bucket).list('', { limit: 1 })
+  if (data && data.length > 0) {
+    fileName.value = data[0].name
+    exists.value = true
+  } else {
+    fileName.value = ''
+    exists.value = false
+  }
+}
+const openPdf = () => {
+  isMenuOpen.value = false
+  if (!exists.value) return
+  const { data } = supabase
+    .storage
+    .from(bucket)
+    .getPublicUrl(fileName.value)
+
+  window.open(data.publicUrl, '_blank')
+}
+
+onMounted(loadFile)
 </script>
 
 <template>
@@ -18,9 +46,9 @@ const toggleMenu = () => {
     </button>
     <div class="sub-navbar" :class="{ open: isMenuOpen }">
       <div class="links-sub-navbar">
-        <router-link to="/" @click="isMenuOpen = false">Home</router-link>
+        <router-link to="/"@click="isMenuOpen = false">Home</router-link>
         <router-link to="/catalogo" @click="isMenuOpen = false">Catalogo</router-link>
-        <a href="about.html" @click="isMenuOpen = false">Classifiche</a>
+        <a href="" v-if="exists" @click="openPdf">Classifiche</a>
         <a href="/#eventi" @click="isMenuOpen = false">Eventi</a>
       </div>
       <img src="../icons/vert_separator.svg" alt="Separatore" class="separator" />
