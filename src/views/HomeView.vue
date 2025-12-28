@@ -6,29 +6,26 @@ import ProductCard from "@/components/ProductCard.vue";
 import { useRouter } from "vue-router";
 const router = useRouter();
 const newProducts = ref([]);
-const images = ref([])
+const images = ref([]);
 const landingImages = ref([
   "../img/li1.png",
   "../img/li2.png",
-  "../img/li3.png"
-
+  "../img/li3.png",
 ]);
 onMounted(async () => {
   const { data: files, error } = await supabase.storage
-    .from('posters')
-    .list('', { limit: 100 })
+    .from("posters")
+    .list("", { limit: 100 });
 
   if (error) {
-    console.error('Errore caricamento immagini:', error)
-    return
+    console.error("Errore caricamento immagini:", error);
+    return;
   }
 
   images.value = files.map((file) => {
-    const { data } = supabase.storage
-      .from('posters')
-      .getPublicUrl(file.name)
-    return data.publicUrl
-  })
+    const { data } = supabase.storage.from("posters").getPublicUrl(file.name);
+    return data.publicUrl;
+  });
   const rawProducts = await getProducts();
   newProducts.value = await Promise.all(
     rawProducts.map(async (product) => {
@@ -36,12 +33,13 @@ onMounted(async () => {
       return { ...product, images };
     })
   );
-})
+});
 
 const getProducts = async () => {
   const { data, error } = await supabase
-    .from('Products')
-    .select(`
+    .from("Products")
+    .select(
+      `
         oid,
         name,
         description,
@@ -53,12 +51,16 @@ const getProducts = async () => {
         Manufacturers(name),
         id,
         available 
-      `)
-    .order('datetime', { ascending: false })
-    .limit(3)
+      `
+    )
+    .order("datetime", { ascending: false })
+    .limit(3);
   if (error) {
     console.error(`Errore nel caricamento da dati:`, error);
-    alert("Si e' verficato un errore. Fai una foto a questo messaggio e inviala allo sviluppatore.\n\nHomeView/getProducts\n" + error.details);
+    alert(
+      "Si e' verficato un errore. Fai una foto a questo messaggio e inviala allo sviluppatore.\n\nHomeView/getProducts\n" +
+        error.details
+    );
     return [];
   }
   return data;
@@ -77,7 +79,7 @@ const getImagesForProduct = async (productOid) => {
     console.error(`Errore caricando immagini per ${productOid}:`, error);
     alert(
       "Si e' verficato un errore. Fai una foto a questo messaggio e inviala allo sviluppatore. " +
-      error
+        error
     );
     return [];
   }
@@ -97,12 +99,17 @@ const openDetails = (id) => {
 <template>
   <div class="hero">
     <div class="hero-left">
-      <img src="../images/hero.png" alt="Meccanico che installa impianto stereo">
+      <img
+        src="../images/hero.png"
+        alt="Meccanico che installa impianto stereo"
+      />
     </div>
     <div class="hero-right">
       <h1>IMPIANTI STEREO AD HOC</h1>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce fringilla eleifend nisi, vitae dapibus nisi
-        tristique vitae.</p>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce fringilla
+        eleifend nisi, vitae dapibus nisi tristique vitae.
+      </p>
       <a href="#servizi" class="btn">Scopri di più</a>
     </div>
   </div>
@@ -113,7 +120,7 @@ const openDetails = (id) => {
   <div class="sez-a">
     <div class="card">
       <div class="image-container">
-        <img src="../images/audio.jpg" alt="Audio" />
+        <img src="../images/audio.webp" alt="Audio" />
       </div>
 
       <div class="card-text-container">
@@ -124,7 +131,7 @@ const openDetails = (id) => {
 
     <div class="card">
       <div class="image-container">
-        <img src="../images/light.jpg" alt="Audio" />
+        <img src="../images/light.webp" alt="Audio" />
       </div>
 
       <div class="card-text-container">
@@ -135,7 +142,7 @@ const openDetails = (id) => {
 
     <div class="card">
       <div class="image-container">
-        <img src="../images/radio.jpg" alt="Audio" />
+        <img src="../images/radio.webp" alt="Audio" />
       </div>
 
       <div class="card-text-container">
@@ -155,18 +162,25 @@ const openDetails = (id) => {
     <div class="card-b">
       <div class="card-b-text-container">
         <h2 class="card-b-title">La mission</h2>
-        <p class="card-b-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce fringilla eleifend
-          nisi, vitae dapibus nisi tristique vitae. Integer sed vehicula sem. Praesent volutpat, ipsum vitae lacinia
-          mattis, sapien ex cursus velit, ac ullamcorper enim justo ac lacus. Maecenas porta diam. </p>
+        <p class="card-b-description">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce
+          fringilla eleifend nisi, vitae dapibus nisi tristique vitae. Integer
+          sed vehicula sem. Praesent volutpat, ipsum vitae lacinia mattis,
+          sapien ex cursus velit, ac ullamcorper enim justo ac lacus. Maecenas
+          porta diam.
+        </p>
       </div>
     </div>
     <div class="card-b">
       <div class="card-b-text-container">
         <h2 class="card-b-title">Riconoscimenti</h2>
         <p class="card-b-description">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce fringilla eleifend nisi, vitae dapibus nisi
-          tristique vitae. Integer sed vehicula sem. Praesent volutpat, ipsum vitae lacinia mattis, sapien ex cursus
-          velit, ac ullamcorper enim justo ac lacus. Maecenas porta diam. </p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce
+          fringilla eleifend nisi, vitae dapibus nisi tristique vitae. Integer
+          sed vehicula sem. Praesent volutpat, ipsum vitae lacinia mattis,
+          sapien ex cursus velit, ac ullamcorper enim justo ac lacus. Maecenas
+          porta diam.
+        </p>
       </div>
     </div>
   </div>
@@ -174,21 +188,44 @@ const openDetails = (id) => {
     <label class="separator-text">Novità</label>
   </div>
   <div class="news">
-    <ProductCard v-for="product in newProducts" :key="product.oid"
-      :name="product.Manufacturers.name + ' - ' + product.name" :price="product.price > 0 ? product.price : 0"
-      :description="product.description" :category="product.Categories.name" :available="product.available"
-      :image="product.images[0] || './img/no-image.png'" @click="openDetails(product.id)" />
+    <ProductCard
+      v-for="product in newProducts"
+      :key="product.oid"
+      :name="product.Manufacturers.name + ' - ' + product.name"
+      :price="product.price > 0 ? product.price : 0"
+      :description="product.description"
+      :category="product.Categories.name"
+      :available="product.available"
+      :image="product.images[0] || './img/no-image.png'"
+      @click="openDetails(product.id)"
+    />
   </div>
   <div class="separator">
-    <label class="separator-text">Prossimi eventi</label>
+    <label class="separator-text" id="eventi">Prossimi eventi</label>
   </div>
   <div class="sez-a">
-    <CarouselComponent :images="images" id="eventi" />
+    <div class="not-found" v-if="images.length == 0">
+      <img src="../images/no-events.webp" alt="" />
+      <h2>Non ci sono eventi in programma</h2>
+    </div>
+    <CarouselComponent :images="images" v-else />
   </div>
-
 </template>
 <style scoped>
 @media (min-width: 481px) {
+  .not-found {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    width: 100%;
+    color: var(--color-text);
+  }
+  .not-found img {
+    width: 400px;
+    margin-bottom: 20px;
+  }
   .card-b {
     background-color: var(--color-container);
     border: 1px solid var(--color-container-border);
@@ -222,19 +259,28 @@ const openDetails = (id) => {
   }
 }
 
-
-
 @media (max-width: 970px) {
-
+  .not-found {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    width: 100%;
+    color: var(--color-text);
+  }
+  .not-found img {
+    width: 250px;
+    margin-bottom: 20px;
+  }
   .sez-a {
     flex-direction: column;
-
   }
 
   .hero {
     padding: 0;
     flex-direction: column;
-    background-image: url('../images/hero.png');
+    background-image: url("../images/hero.png");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -243,7 +289,7 @@ const openDetails = (id) => {
   }
 
   .hero::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
@@ -261,10 +307,6 @@ const openDetails = (id) => {
     position: relative;
     z-index: 2;
   }
-}
-
-
-@media (max-width: 970px) {
   .card-b-title {
     font-size: 28px;
   }
@@ -278,7 +320,6 @@ const openDetails = (id) => {
     align-items: center;
     flex-direction: column;
     justify-content: center;
-
   }
 
   .sez-a {
@@ -301,7 +342,6 @@ const openDetails = (id) => {
     max-height: auto;
   }
 
-
   .card-b-text-container {
     display: flex;
     flex-direction: column;
@@ -311,7 +351,6 @@ const openDetails = (id) => {
     z-index: 2;
     text-align: justify;
     text-justify: inter-word;
-
   }
 
   .card-b-title {
@@ -324,17 +363,13 @@ const openDetails = (id) => {
     color: var(--color-text);
     font-size: 20px;
   }
-
 }
-
-
 
 .news {
   display: flex;
   gap: 20px;
   align-items: center;
   justify-content: center;
-
 }
 
 .hero {
@@ -381,7 +416,6 @@ const openDetails = (id) => {
 }
 
 .hero .btn {
-
   background-color: #007bff;
   color: white;
   padding: 15px 30px;
@@ -426,8 +460,6 @@ const openDetails = (id) => {
   position: relative;
   flex: 1;
 }
-
-
 
 .image-container {
   position: relative;
@@ -498,8 +530,6 @@ const openDetails = (id) => {
   font-size: 16px;
   color: var(--color-text);
 }
-
-
 
 @keyframes slideInLeft {
   from {

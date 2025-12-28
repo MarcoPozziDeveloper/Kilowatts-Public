@@ -23,5 +23,6 @@ import FooterComponent from "./components/FooterComponent.vue";
 @import url("./styles/index.css");
 .main-app{
   padding-top: 70px;
+  width: 100%;
 }
 </style>

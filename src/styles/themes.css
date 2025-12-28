@@ -2,6 +2,7 @@
     /* Light Theme Colors */
     --color-bg: hsl(0, 0%, 8%);
     --color-text: hsl(0, 0%, 76%);
+    --color-on-primary: #ffffff;
     --color-primary: #006dda;
     --color-red: #d9534f;
     --color-green: #5cb85c;

@@ -43,9 +43,8 @@ const getProducts = async () => {
   const from = (page.value - 1) * pageSize;
   const to = from + pageSize - 1;
 
-  let query = supabase
-    .from("Products")
-    .select(`
+  let query = supabase.from("Products").select(
+    `
       oid,
       name,
       description,
@@ -57,7 +56,9 @@ const getProducts = async () => {
       Manufacturers(name),
       id,
       available
-    `, { count: "exact" });
+    `,
+    { count: "exact" }
+  );
 
   if (search.value) {
     query = query.or(
@@ -103,7 +104,7 @@ const getProducts = async () => {
   if (error) return [];
   total.value = count;
   return data;
-}
+};
 
 const getImagesForProduct = async (productOid) => {
   const { data, error } = await supabase.storage
@@ -118,7 +119,7 @@ const getImagesForProduct = async (productOid) => {
     console.error(`Errore caricando immagini per ${productOid}:`, error);
     alert(
       "Si e' verficato un errore. Fai una foto a questo messaggio e inviala allo sviluppatore. " +
-      error
+        error
     );
     return [];
   }
@@ -136,16 +137,20 @@ const openDetails = (id) => {
 };
 
 watch(
-  [search, sortBy, () => productData.value.price, () => productData.value.category_id, () => productData.value.manufacturer_id],
+  [
+    search,
+    sortBy,
+    () => productData.value.price,
+    () => productData.value.category_id,
+    () => productData.value.manufacturer_id,
+  ],
   () => {
     page.value = 1;
     loadData();
   }
 );
 
-const totalPages = computed(() =>
-  Math.ceil(total.value / pageSize)
-);
+const totalPages = computed(() => Math.ceil(total.value / pageSize));
 
 watch(page, loadData);
 
@@ -153,81 +158,113 @@ onMounted(loadData);
 </script>
 
 <template>
-  <div class="page-container">
-    <!-- Mobile Filter Toggle Button -->
-    <button class="mobile-filter-toggle" @click="showFilters = !showFilters">
-      <img src="../icons/filter.svg" alt="Filtri" v-if="!showFilters" />
-      <span v-if="!showFilters">Filtri</span>
-      <span v-else>✕ Chiudi</span>
-    </button>
+  <button class="mobile-filter-toggle" @click="showFilters = !showFilters">
+    <img src="../icons/filter.svg" alt="Filtri" v-if="!showFilters" />
+    <span v-if="!showFilters">Filtri</span>
+    <span v-else>✕ Chiudi</span>
+  </button>
+  <!-- Overlay for mobile -->
+  <div class="overlay" v-if="showFilters" @click="showFilters = false"></div>
 
-    <!-- Overlay for mobile -->
-    <div class="overlay" v-if="showFilters" @click="showFilters = false"></div>
-
-    <!-- Filter Panel -->
-    <form @submit.prevent class="left-pannel" :class="{ 'show': showFilters }">
-      <div class="filter-header">
-        <h3>Filtri</h3>
-        <button type="button" class="close-filters" @click="showFilters = false">✕</button>
-      </div>
-
-      <div class="input-group desktop-only">
-        <label>Cerca parole chiave</label>
-        <div class="input-sub-group">
-          <input class="generic-input" type="text" v-model="search" placeholder="Cerca..." />
-          <img class="search-icon" src="../images/lens.svg" alt="Search" />
-        </div>
-      </div>
-
-      <div class="input-group">
-        <label>Ordina per</label>
-        <select class="generic-input" v-model="sortBy">
-          <option value="0">Nome</option>
-          <option value="1">Prezzo Decrescente</option>
-          <option value="2">Prezzo Crescente</option>
-          <option value="3">Categoria</option>
-          <option value="4">Produttore</option>
-        </select>
-      </div>
-
-      <div class="input-group">
-        <label>Prezzo massimo</label>
-        <input class="generic-input" v-model.number="productData.price" type="number" step="0.01" min="0"
-          placeholder="Max" />
-      </div>
-
-      <div class="input-group">
-        <label>Fornitore</label>
-        <SelectComponent tableName="Manufacturers" label="Produttore" :refreshToken="refreshToken"
-          @selected="productData.manufacturer_id = $event" />
-      </div>
-
-      <div class="input-group">
-        <label>Categoria</label>
-        <SelectComponent tableName="Categories" label="Categorie" :refreshToken="refreshToken"
-          @selected="productData.category_id = $event" />
-      </div>
-
-      <button type="button" class="apply-filters-mobile" @click="showFilters = false">
-        Applica Filtri
+  <!-- Filter Panel -->
+  <form @submit.prevent class="left-pannel" :class="{ show: showFilters }">
+    <div class="filter-header">
+      <h3>Filtri</h3>
+      <button type="button" class="close-filters" @click="showFilters = false">
+        ✕
       </button>
-    </form>
+    </div>
 
-    <!-- Products Grid -->
-    <div class="search-bar mobile-only">
-      <div class="sub-search-bar">
-        <input type="text" v-model="search" placeholder="Cerca..." />
+    <div class="input-group desktop-only">
+      <label>Cerca parole chiave</label>
+      <div class="input-sub-group">
+        <input
+          class="generic-input"
+          type="text"
+          v-model="search"
+          placeholder="Cerca..."
+        />
         <img class="search-icon" src="../images/lens.svg" alt="Search" />
       </div>
     </div>
+
+    <div class="input-group">
+      <label>Ordina per</label>
+      <select class="generic-input" v-model="sortBy">
+        <option value="0">Nome</option>
+        <option value="1">Prezzo Decrescente</option>
+        <option value="2">Prezzo Crescente</option>
+        <option value="3">Categoria</option>
+        <option value="4">Produttore</option>
+      </select>
+    </div>
+
+    <div class="input-group">
+      <label>Prezzo massimo</label>
+      <input
+        class="generic-input"
+        v-model.number="productData.price"
+        type="number"
+        step="0.01"
+        min="0"
+        placeholder="Max"
+      />
+    </div>
+
+    <div class="input-group">
+      <label>Fornitore</label>
+      <SelectComponent
+        tableName="Manufacturers"
+        label="Produttore"
+        :refreshToken="refreshToken"
+        @selected="productData.manufacturer_id = $event"
+      />
+    </div>
+
+    <div class="input-group">
+      <label>Categoria</label>
+      <SelectComponent
+        tableName="Categories"
+        label="Categorie"
+        :refreshToken="refreshToken"
+        @selected="productData.category_id = $event"
+      />
+    </div>
+
+    <button
+      type="button"
+      class="apply-filters-mobile"
+      @click="showFilters = false"
+    >
+      Applica Filtri
+    </button>
+  </form>
+  <div class="search-bar mobile-only">
+    <div class="sub-search-bar">
+      <input type="text" v-model="search" placeholder="Cerca..." />
+      <img class="search-icon" src="../images/lens.svg" alt="Search" />
+    </div>
+  </div>
+  <div class="page-container">
+    <!-- Products Grid -->
+
     <div class="content-area">
       <div class="products">
-
-        <ProductCard v-for="product in products" :key="product.oid"
-          :name="product.Manufacturers.name + ' - ' + product.name" :price="product.price > 0 ? product.price : 0"
-          :description="product.description" :category="product.Categories.name"
-          :image="product.images[0] || './img/no-image.png'" @click="openDetails(product.id)"
-          :available="product.available" />
+        <div class="not-found" v-if="total == 0">
+          <img src="../images/no-found.webp" alt="" />
+          <h2>Nessun prodotto trovato</h2>
+        </div>
+        <ProductCard
+          v-for="product in products"
+          :key="product.oid"
+          :name="product.Manufacturers.name + ' - ' + product.name"
+          :price="product.price > 0 ? product.price : 0"
+          :description="product.description"
+          :category="product.Categories.name"
+          :image="product.images[0] || './img/no-image.png'"
+          @click="openDetails(product.id)"
+          :available="product.available"
+        />
       </div>
 
       <div class="navigator">
@@ -235,7 +272,11 @@ onMounted(loadData);
           <img src="../icons/angle_left.svg" alt="Precedente" />
         </button>
         <label>Pagina {{ page }}</label>
-        <button class="navbutton" @click="page++" :disabled="page >= totalPages">
+        <button
+          class="navbutton"
+          @click="page++"
+          :disabled="page >= totalPages"
+        >
           <img src="../icons/angle_right.svg" alt="Successiva" />
         </button>
       </div>
@@ -248,23 +289,31 @@ export default {
   data() {
     return {
       showFilters: false,
-      search: '',
-      sortBy: '0',
+      search: "",
+      sortBy: "0",
       page: 1,
       totalPages: 10,
       productData: {
         price: null,
         manufacturer_id: null,
-        category_id: null
+        category_id: null,
       },
       refreshToken: 0,
-      products: []
-    }
+      products: [],
+    };
   },
-}
+};
 </script>
 
 <style scoped>
+.not-found {
+  text-align: center;
+  color: var(--color-text);
+}
+.not-found img {
+  width: 400px;
+  margin-bottom: 20px;
+}
 @media (min-width: 601px) {
   .desktop-only {
     display: block !important;
@@ -273,7 +322,6 @@ export default {
   .mobile-only {
     display: none !important;
   }
-
 }
 
 @media (max-width: 600px) {
@@ -284,9 +332,20 @@ export default {
   .desktop-only {
     display: none !important;
   }
+  .not-found {
+    text-align: center;
+    color: var(--color-text);
+  }
+  .not-found img {
+    width: 100%;
+    margin-bottom: 20px;
+  }
 }
 
 .search-bar {
+
+  left: 0;
+  right: 0;
   display: flex;
   flex-direction: column;
   padding: 20px 20px;
@@ -296,7 +355,7 @@ export default {
 
 .sub-search-bar .search-icon {
   width: 20px;
-  height: 20px; 
+  height: 20px;
 }
 
 .search-bar input {
@@ -308,7 +367,6 @@ export default {
   background-color: transparent;
   color: var(--color-text);
   border: 1px solid var(--color-container-border);
-
 }
 .search-bar input::placeholder {
   color: var(--color-text);
@@ -321,7 +379,7 @@ export default {
 
 .page-container {
   position: relative;
-  min-height: 100vh;
+  width: 100%;
 }
 
 .mobile-filter-toggle {
@@ -403,7 +461,8 @@ export default {
   margin-top: 20px;
 }
 
-.input-sub-group, .sub-search-bar {
+.input-sub-group,
+.sub-search-bar {
   display: flex;
   position: relative;
 }
@@ -426,7 +485,7 @@ export default {
 
 .input-sub-group .search-icon {
   width: 18px;
-  height: 18px; 
+  height: 18px;
 }
 
 .search-icon {
@@ -436,7 +495,6 @@ export default {
   transform: translateY(-50%);
   pointer-events: none;
 }
-
 
 .generic-input:focus {
   outline: none;
