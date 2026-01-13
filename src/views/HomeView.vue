@@ -100,7 +100,7 @@ const openDetails = (id) => {
   <div class="hero">
     <div class="hero-left">
       <img
-        src="../images/hero.png"
+        src="../images/hero-desktop.webp"
         alt="Meccanico che installa impianto stereo"
       />
     </div>
@@ -280,7 +280,7 @@ const openDetails = (id) => {
   .hero {
     padding: 0;
     flex-direction: column;
-    background-image: url("../images/hero.png");
+    background-image: url("../images/hero.webp");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
