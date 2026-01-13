@@ -59,7 +59,7 @@ const getProducts = async () => {
     console.error(`Errore nel caricamento da dati:`, error);
     alert(
       "Si e' verficato un errore. Fai una foto a questo messaggio e inviala allo sviluppatore.\n\nHomeView/getProducts\n" +
-        error.details
+      error.details
     );
     return [];
   }
@@ -79,7 +79,7 @@ const getImagesForProduct = async (productOid) => {
     console.error(`Errore caricando immagini per ${productOid}:`, error);
     alert(
       "Si e' verficato un errore. Fai una foto a questo messaggio e inviala allo sviluppatore. " +
-        error
+      error
     );
     return [];
   }
@@ -99,10 +99,7 @@ const openDetails = (id) => {
 <template>
   <div class="hero">
     <div class="hero-left">
-      <img
-        src="../images/hero-desktop.webp"
-        alt="Meccanico che installa impianto stereo"
-      />
+      <img src="../images/hero-desktop.webp" alt="Meccanico che installa impianto stereo" />
     </div>
     <div class="hero-right">
       <h1>IMPIANTI STEREO AD HOC</h1>
@@ -188,17 +185,10 @@ const openDetails = (id) => {
     <label class="separator-text">Novità</label>
   </div>
   <div class="news">
-    <ProductCard
-      v-for="product in newProducts"
-      :key="product.oid"
-      :name="product.Manufacturers.name + ' - ' + product.name"
-      :price="product.price > 0 ? product.price : 0"
-      :description="product.description"
-      :category="product.Categories.name"
-      :available="product.available"
-      :image="product.images[0] || './img/no-image.png'"
-      @click="openDetails(product.id)"
-    />
+    <ProductCard v-for="product in newProducts" :key="product.oid"
+      :name="product.Manufacturers.name + ' - ' + product.name" :price="product.price > 0 ? product.price : 0"
+      :description="product.description" :category="product.Categories.name" :available="product.available"
+      :image="product.images[0] || './img/no-image.png'" @click="openDetails(product.id)" />
   </div>
   <div class="separator">
     <label class="separator-text" id="eventi">Prossimi eventi</label>
@@ -222,10 +212,12 @@ const openDetails = (id) => {
     width: 100%;
     color: var(--color-text);
   }
+
   .not-found img {
     width: 400px;
     margin-bottom: 20px;
   }
+
   .card-b {
     background-color: var(--color-container);
     border: 1px solid var(--color-container-border);
@@ -257,6 +249,22 @@ const openDetails = (id) => {
     color: var(--color-text);
     font-size: 24px;
   }
+
+  .card-title {
+    color: var(--color-primary-light);
+    font-size: 32px;
+    font-weight: 600;
+  }
+
+  .card:hover {
+    transform: scale(1.02);
+    transition: transform 0.3s ease;
+  }
+
+  .card-description {
+    color: var(--color-text);
+    font-size: 24px;
+  }
 }
 
 @media (max-width: 970px) {
@@ -269,10 +277,12 @@ const openDetails = (id) => {
     width: 100%;
     color: var(--color-text);
   }
+
   .not-found img {
     width: 250px;
     margin-bottom: 20px;
   }
+
   .sez-a {
     flex-direction: column;
   }
@@ -285,7 +295,7 @@ const openDetails = (id) => {
     background-position: center;
     background-repeat: no-repeat;
     position: relative;
-    height: 75vh;
+    height: calc(100vh - var(--top-appbar-height));
   }
 
   .hero::before {
@@ -307,12 +317,13 @@ const openDetails = (id) => {
     position: relative;
     z-index: 2;
   }
+
   .card-b-title {
-    font-size: 28px;
+    font-size: 24px;
   }
 
   .card-b-description {
-    font-size: 20px;
+    font-size: 18px;
   }
 
   .news {
@@ -360,6 +371,18 @@ const openDetails = (id) => {
   }
 
   .card-b-description {
+    color: var(--color-text);
+    font-size: 20px;
+  }
+
+  .card-title {
+    color: var(--color-primary-light);
+    font-size: 28px;
+    font-weight: 600;
+  }
+
+
+  .card-description {
     color: var(--color-text);
     font-size: 20px;
   }
@@ -494,21 +517,6 @@ const openDetails = (id) => {
   /* sopra il gradiente */
 }
 
-.card-title {
-  color: var(--color-primary-light);
-  font-size: 32px;
-  font-weight: 600;
-}
-
-.card:hover {
-  transform: scale(1.02);
-  transition: transform 0.3s ease;
-}
-
-.card-description {
-  color: var(--color-text);
-  font-size: 24px;
-}
 
 .separator {
   display: flex;
