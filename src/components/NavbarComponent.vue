@@ -39,7 +39,7 @@ onMounted(loadFile)
     <router-link to="/">
       <img src="../images/KW_logo.png" alt="Kilowatts Industries Logo" class="logo" />
     </router-link>
-    <button class="hamburger" @click="toggleMenu" :class="{ active: isMenuOpen }">
+    <button class="hamburger" @click="toggleMenu" :class="{ active: isMenuOpen }" aria-label="Menu">
       <span></span>
       <span></span>
       <span></span>
