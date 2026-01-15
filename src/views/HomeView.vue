@@ -8,9 +8,9 @@ const router = useRouter();
 const newProducts = ref([]);
 const images = ref([]);
 const landingImages = ref([
-  "../img/li1.png",
-  "../img/li2.png",
-  "../img/li3.png",
+  "../img/li1.webp",
+  "../img/li2.webp",
+  "../img/li3.webp",
 ]);
 onMounted(async () => {
   const { data: files, error } = await supabase.storage
