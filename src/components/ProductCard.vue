@@ -28,8 +28,7 @@ defineProps({
 
         <p class="product-price">{{ price > 0 ? '€' + price.toFixed(2) : 'Prezzo: ??' }}</p>
 
-        <p class="product-description">{{ description.length > 90 ? description.substring(0, 90) + '...' : description
-        }}
+        <p class="product-description">{{ description        }}
         </p>
       </div>
 
@@ -110,5 +109,11 @@ defineProps({
 
 .product-category {
   font-weight: 600;
+}
+.product-description {
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 </style>

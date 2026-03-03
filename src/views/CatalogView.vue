@@ -15,6 +15,7 @@ const sortBy = ref("0");
 const total = ref(0);
 const page = ref(1);
 const pageSize = 12;
+const macroName = ref("Audio");
 const productData = ref({
   name: "",
   description: "",
@@ -33,7 +34,7 @@ const loadData = async () => {
     rawProducts.map(async (product) => {
       const images = await getImagesForProduct(product.oid);
       return { ...product, images };
-    })
+    }),
   );
 
   products.value = productsWithImages;
@@ -54,15 +55,16 @@ const getProducts = async () => {
       manufacturer_id,
       Categories(name),
       Manufacturers(name),
+      Macrocategories!inner(name),
       id,
       available
     `,
-    { count: "exact" }
+    { count: "exact" },
   );
-
+  query = query.eq("Macrocategories.name", macroName.value);
   if (search.value) {
     query = query.or(
-      `name.ilike.%${search.value}%,description.ilike.%${search.value}%`
+      `name.ilike.%${search.value}%,description.ilike.%${search.value}%`,
     );
   }
 
@@ -119,7 +121,7 @@ const getImagesForProduct = async (productOid) => {
     console.error(`Errore caricando immagini per ${productOid}:`, error);
     alert(
       "Si e' verficato un errore. Fai una foto a questo messaggio e inviala allo sviluppatore. " +
-        error
+        error,
     );
     return [];
   }
@@ -128,7 +130,7 @@ const getImagesForProduct = async (productOid) => {
     (file) =>
       supabase.storage
         .from("productimages")
-        .getPublicUrl(`${productOid}/${file.name}`).data.publicUrl
+        .getPublicUrl(`${productOid}/${file.name}`).data.publicUrl,
   );
 };
 
@@ -147,7 +149,7 @@ watch(
   () => {
     page.value = 1;
     loadData();
-  }
+  },
 );
 
 const totalPages = computed(() => Math.ceil(total.value / pageSize));
@@ -195,7 +197,7 @@ onMounted(loadData);
         <option value="1">Prezzo Decrescente</option>
         <option value="2">Prezzo Crescente</option>
         <option value="3">Categoria</option>
-        <option value="4">Produttore</option>
+        <option value="4">Brand</option>
       </select>
     </div>
 
@@ -212,12 +214,13 @@ onMounted(loadData);
     </div>
 
     <div class="input-group">
-      <label>Fornitore</label>
+      <label>Brand</label>
       <SelectComponent
         tableName="Manufacturers"
         label="Produttore"
         :refreshToken="refreshToken"
         @selected="productData.manufacturer_id = $event"
+        :macroName="macroName"
       />
     </div>
 
@@ -227,6 +230,7 @@ onMounted(loadData);
         tableName="Categories"
         label="Categorie"
         :refreshToken="refreshToken"
+        :macroName="macroName"
         @selected="productData.category_id = $event"
       />
     </div>
@@ -343,7 +347,6 @@ export default {
 }
 
 .search-bar {
-
   left: 0;
   right: 0;
   display: flex;

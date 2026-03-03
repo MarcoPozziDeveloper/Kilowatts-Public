@@ -4,61 +4,80 @@ import { supabase } from "../lib/supabaseClient";
 
 const props = defineProps({
   tableName: String,
+  macroName: {
+    type: String,
+    default: null,
+  },
   defaultSelectedId: {
     type: String,
-    default: null
+    default: null,
   },
-  refreshToken: { 
+  refreshToken: {
     type: Number,
-    default: 0
-  }
+    default: 0,
+  },
 });
 
-const emit = defineEmits(['selected']);
+const emit = defineEmits(["selected"]);
 
 const elements = ref([]);
 const selectedElement = ref("");
-const loadData = async () => { 
-  elements.value = await getElements(props.tableName);
-
- 
+const loadData = async () => {
+  elements.value = await getEntitiesByMacro(props.tableName, props.macroName);
 };
 onMounted(loadData);
 
-const getElements = async (table) => {
-    
-  const { data, error } = await supabase.from(table).select("*");
+const getEntitiesByMacro = async (table, macroName = null) => {
+  let query = supabase
+    .from(table)
+    .select(`
+      oid,
+      name,
+      Products!inner (
+        macrocategory_id,
+        Macrocategories!inner (
+          name
+        )
+      )
+    `)
+    .order("name", { ascending: true });
+
+  if (macroName) {
+    query = query.eq("Products.Macrocategories.name", macroName);
+  }
+
+  const { data, error } = await query;
+
   if (error) {
-    console.error(`Errore nel caricamento da ${table}:`, error);
+    console.error(error);
     return [];
   }
-  return data;
+
+  // rimuove duplicati
+  return Array.from(
+    new Map(data.map(item => [item.oid, item])).values()
+  );
 };
 
 watch(selectedElement, (newValue) => {
-  emit('selected', newValue);
-  
+  emit("selected", newValue);
 });
 watch(
   () => props.refreshToken,
   async () => {
-    await loadData()
+    await loadData();
   },
-  { immediate: true }
-)
-
+  { immediate: true },
+);
 </script>
 
 <template>
-
   <select v-model="selectedElement" required class="generic-input">
-    <option value=""> SELEZIONA</option>
+    <option value="">SELEZIONA</option>
     <option v-for="element in elements" :key="element.oid" :value="element.oid">
       {{ element.name }}
     </option>
   </select>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>
