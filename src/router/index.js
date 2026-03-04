@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
-import CatalogView from "../views/CatalogView.vue";
+import AudioView from "../views/AudioView.vue";
+import RicambiView from "../views/RicambiView.vue";
 import ProductView from "../views/ProductView.vue";
 import NotFoundView from "@/views/NotFoundView.vue";
 
@@ -13,9 +14,14 @@ const router = createRouter({
       component: HomeView,
     },
     {
-      path: "/catalogo",
-      name: "catalogo",
-      component: CatalogView,
+      path: "/audio",
+      name: "audio",
+      component: AudioView,
+    },
+    {
+      path: "/ricambi",
+      name: "ricambi",
+      component: RicambiView,
     },
     {
       path: "/prodotto/:id",

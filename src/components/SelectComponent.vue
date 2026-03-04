@@ -33,17 +33,12 @@ const getEntitiesByMacro = async (table, macroName = null) => {
     .select(`
       oid,
       name,
-      Products!inner (
-        macrocategory_id,
-        Macrocategories!inner (
-          name
-        )
-      )
+      macrocategory
     `)
     .order("name", { ascending: true });
 
   if (macroName) {
-    query = query.eq("Products.Macrocategories.name", macroName);
+    query = query.eq("macrocategory", macroName);
   }
 
   const { data, error } = await query;

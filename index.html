@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="it">
   <head>
     <!-- SEO base -->
@@ -52,7 +52,7 @@
       rel="preload"
       href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap"
       as="style"
-      onload="this.rel='stylesheet'"
+      onload="this.rel = 'stylesheet'"
     />
     <noscript>
       <link
@@ -115,9 +115,33 @@
           padding: 0 50px;
         }
       }
+      .no-script {
+        max-width: 480px;
+        margin: 2rem auto;
+        padding: 1.5rem 1.5rem;
+        border-radius: 12px;
+        text-align: center;
+        font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        line-height: 1.5;
+        font-size: 16px;
+        transition:
+          background-color 0.3s,
+          color 0.3s;
+        background-color: #3b1f1f;
+        color: #ffbebe;
+        border: 1px solid #5c2b2b;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+      }
     </style>
   </head>
   <body>
+    <noscript>
+      <div class="no-script">
+        Sembra che JavaScript sia disattivato sul tuo browser. Senza di esso,
+        questo sito non può venir visualizzato!!
+        <br />
+      </div>
+    </noscript>
     <main id="app" class="supermain"></main>
     <script type="module" src="/src/main.js"></script>
   </body>

@@ -53,15 +53,14 @@ const getProducts = async () => {
       datetime,
       category_id,
       manufacturer_id,
-      Categories(name),
-      Manufacturers(name),
-      Macrocategories!inner(name),
+      Categories(name, macrocategory),
+      Manufacturers(name, macrocategory),
       id,
       available
     `,
     { count: "exact" },
   );
-  query = query.eq("Macrocategories.name", macroName.value);
+  query = query.eq("Categories.macrocategory", macroName.value);
   if (search.value) {
     query = query.or(
       `name.ilike.%${search.value}%,description.ilike.%${search.value}%`,
