@@ -12,7 +12,7 @@
                 </div>
                 <a href="https://maps.app.goo.gl/2vtuVn9tbHBYb1tY8" class="footer-row">
                     <img src="../icons/location.svg" alt="Posizione" />
-                    <label class="footer-text">Via Cadorna 55 Buscate Mi</label>
+                    <label class="footer-text link">Via Cadorna 55 Buscate Mi</label>
                 </a>
             </div>
         </div>
@@ -21,11 +21,11 @@
             <div class="footer-list">
                 <a href="tel:+393421263387" class="footer-row">
                     <img src="../icons/phone.svg" alt="Telefono" />
-                    <label class="footer-text">+39 342 126 3387</label>
+                    <label class="footer-text link">+39 342 126 3387</label>
                 </a>
                 <a class="footer-row" href="mailto:kilowatts.industries@gmail.com">
                     <img src="../icons/mail.svg" alt="Mail" />
-                    <label class="footer-text"> kilowatts.industries@gmail.com </label>
+                    <label class="footer-text link"> kilowatts.industries@gmail.com </label>
                 </a>
             </div>
         </div>
@@ -70,11 +70,11 @@
 }
 
 .footer-row img,
-.footer-row label {
+.footer-row .link {
     cursor: pointer;
 }
 
-.footer-row:hover label {
+.footer-row:hover .link {
     text-decoration: underline;
 }
 

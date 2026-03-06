@@ -15,6 +15,7 @@ const sortBy = ref("0");
 const total = ref(0);
 const page = ref(1);
 const pageSize = 12;
+const showFilters = ref(false);
 const macroName = ref("Audio");
 const productData = ref({
   name: "",
@@ -53,7 +54,7 @@ const getProducts = async () => {
       datetime,
       category_id,
       manufacturer_id,
-      Categories(name, macrocategory),
+      Categories!inner(name, macrocategory),
       Manufacturers(name, macrocategory),
       id,
       available
@@ -120,7 +121,7 @@ const getImagesForProduct = async (productOid) => {
     console.error(`Errore caricando immagini per ${productOid}:`, error);
     alert(
       "Si e' verficato un errore. Fai una foto a questo messaggio e inviala allo sviluppatore. " +
-        error,
+      error,
     );
     return [];
   }
@@ -155,6 +156,13 @@ const totalPages = computed(() => Math.ceil(total.value / pageSize));
 
 watch(page, loadData);
 
+watch(page, () => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  })
+})
+
 onMounted(loadData);
 </script>
 
@@ -179,12 +187,7 @@ onMounted(loadData);
     <div class="input-group desktop-only">
       <label>Cerca parole chiave</label>
       <div class="input-sub-group">
-        <input
-          class="generic-input"
-          type="text"
-          v-model="search"
-          placeholder="Cerca..."
-        />
+        <input class="generic-input" type="text" v-model="search" placeholder="Cerca..." />
         <img class="search-icon" src="../images/lens.svg" alt="Search" />
       </div>
     </div>
@@ -202,43 +205,23 @@ onMounted(loadData);
 
     <div class="input-group">
       <label>Prezzo massimo</label>
-      <input
-        class="generic-input"
-        v-model.number="productData.price"
-        type="number"
-        step="0.01"
-        min="0"
-        placeholder="Max"
-      />
+      <input class="generic-input" v-model.number="productData.price" type="number" step="0.01" min="0"
+        placeholder="Max" />
     </div>
 
     <div class="input-group">
       <label>Brand</label>
-      <SelectComponent
-        tableName="Manufacturers"
-        label="Produttore"
-        :refreshToken="refreshToken"
-        @selected="productData.manufacturer_id = $event"
-        :macroName="macroName"
-      />
+      <SelectComponent tableName="Manufacturers" label="Produttore" :refreshToken="refreshToken"
+        @selected="productData.manufacturer_id = $event" :macroName="macroName" />
     </div>
 
     <div class="input-group">
       <label>Categoria</label>
-      <SelectComponent
-        tableName="Categories"
-        label="Categorie"
-        :refreshToken="refreshToken"
-        :macroName="macroName"
-        @selected="productData.category_id = $event"
-      />
+      <SelectComponent tableName="Categories" label="Categorie" :refreshToken="refreshToken" :macroName="macroName"
+        @selected="productData.category_id = $event" />
     </div>
 
-    <button
-      type="button"
-      class="apply-filters-mobile"
-      @click="showFilters = false"
-    >
+    <button type="button" class="apply-filters-mobile" @click="showFilters = false">
       Applica Filtri
     </button>
   </form>
@@ -257,17 +240,11 @@ onMounted(loadData);
           <img src="../images/no-found.webp" alt="" />
           <h2>Nessun prodotto trovato</h2>
         </div>
-        <ProductCard
-          v-for="product in products"
-          :key="product.oid"
-          :name="product.Manufacturers.name + ' - ' + product.name"
-          :price="product.price > 0 ? product.price : 0"
-          :description="product.description"
-          :category="product.Categories.name"
-          :image="product.images[0] || './img/no-image.png'"
-          @click="openDetails(product.id)"
-          :available="product.available"
-        />
+        <ProductCard v-for="product in products" :key="product.oid"
+          :name="product.Manufacturers.name + ' - ' + product.name" :price="product.price > 0 ? product.price : 0"
+          :description="product.description" :category="product.Categories.name"
+          :image="product.images[0] || './img/no-image.png'" @click="openDetails(product.id)"
+          :available="product.available" />
       </div>
 
       <div class="navigator">
@@ -275,11 +252,7 @@ onMounted(loadData);
           <img src="../icons/angle_left.svg" alt="Precedente" />
         </button>
         <label>Pagina {{ page }}</label>
-        <button
-          class="navbutton"
-          @click="page++"
-          :disabled="page >= totalPages"
-        >
+        <button class="navbutton" @click="page++" :disabled="page >= totalPages">
           <img src="../icons/angle_right.svg" alt="Successiva" />
         </button>
       </div>
@@ -287,36 +260,17 @@ onMounted(loadData);
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      showFilters: false,
-      search: "",
-      sortBy: "0",
-      page: 1,
-      totalPages: 10,
-      productData: {
-        price: null,
-        manufacturer_id: null,
-        category_id: null,
-      },
-      refreshToken: 0,
-      products: [],
-    };
-  },
-};
-</script>
-
 <style scoped>
 .not-found {
   text-align: center;
   color: var(--color-text);
 }
+
 .not-found img {
   width: 400px;
   margin-bottom: 20px;
 }
+
 @media (min-width: 601px) {
   .desktop-only {
     display: block !important;
@@ -335,10 +289,12 @@ export default {
   .desktop-only {
     display: none !important;
   }
+
   .not-found {
     text-align: center;
     color: var(--color-text);
   }
+
   .not-found img {
     width: 100%;
     margin-bottom: 20px;
@@ -370,6 +326,7 @@ export default {
   color: var(--color-text);
   border: 1px solid var(--color-container-border);
 }
+
 .search-bar input::placeholder {
   color: var(--color-text);
 }

@@ -24,5 +24,10 @@ import FooterComponent from "./components/FooterComponent.vue";
 .main-app{
   padding-top: 70px;
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 100vh;
 }
 </style>
