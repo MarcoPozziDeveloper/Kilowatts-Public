@@ -85,23 +85,107 @@ const getImagesForProduct = async (productOid) => {
       <p class="product-availability"
         :style="{ color: productData.available ? 'var(--color-green)' : 'var(--color-red)' }">
         {{ productData.available ? 'Disponibile' : 'Non Disponibile' }}</p>
+      <a class="mobile-filter-toggle"
+        :href="`https://wa.me/393421263387?text=${encodeURIComponent('Buongiorno, vorrei un\'informazione riguardo a questo prodotto:\n' + productData.Manufacturers.name + ' - ' + productData.name + '\nkilowattsindustries.it' + $route.fullPath)}`"
+        target="_blank" rel="noopener noreferrer">
+        <img src="../icons/whatsapp.svg" alt="Info" />
+        <span>Richiedi Info</span>
+      </a>
     </div>
   </div>
 </template>
-
 <style scoped>
+.carousel-image {
+  width: 100%;
+  max-height: 450px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+@media (min-width: 768px) {
+  .main-container {
+    flex-direction: row;
+    align-items: flex-start;
+    max-width: 1200px;
+    gap: 60px;
+    padding: 40px;
+  }
+
+  .carousel-wrapper {
+    flex: 1.2;
+    /* un po' più largo dei dettagli */
+    position: sticky;
+    top: 20px;
+  }
+
+  .product-details {
+    flex: 1;
+  }
+}
+
+.product-name {
+  font-size: 1.8rem;
+}
+
+.product-price {
+  font-size: 1.5rem;
+  color: var(--color-primary);
+}
+
+.product-description {
+  line-height: 1.8;
+}
+
+
+
+.mobile-filter-toggle {
+  margin-top: 30px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 15px 30px;
+  background-color: transparent;
+  border: 1.5px solid #25D366;
+  border-radius: 8px;
+  color: #25D366;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  letter-spacing: 0.3px;
+  text-decoration: none;
+  /* distanza dai testi sopra */
+}
+
+.mobile-filter-toggle:hover {
+  background-color: #25D366;
+  color: #000;
+}
+
+.mobile-filter-toggle:hover img {
+  filter: brightness(0);
+}
+
+.mobile-filter-toggle img {
+  width: 18px;
+  height: 18px;
+  filter: brightness(0) saturate(100%) invert(64%) sepia(61%) saturate(400%) hue-rotate(95deg) brightness(95%);
+  transition: filter 0.3s ease;
+}
+
 .main-container {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   padding: 20px;
-  max-width: 600px;
+  max-width: 900px;
+  /* più largo su desktop */
   margin: 0 auto;
 }
 
 .carousel-wrapper {
   width: 100%;
-  max-width: 400px;
+  /* niente più max-width, usa tutto */
   align-self: center;
 }
 
@@ -131,5 +215,19 @@ const getImagesForProduct = async (productOid) => {
 
 .product-category {
   font-weight: 600;
+}
+
+@media (min-width: 768px) {
+  .main-container {
+    padding: 40px;
+  }
+
+  .product-name {
+    font-size: 1.6rem;
+  }
+
+  .product-price {
+    font-size: 1.3rem;
+  }
 }
 </style>
