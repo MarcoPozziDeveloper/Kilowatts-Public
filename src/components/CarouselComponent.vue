@@ -105,7 +105,9 @@ watch(() => props.images, () => {
   overflow: hidden;
   border-radius: 12px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  max-height: 600px; /* ← limita l'altezza su desktop */
 }
+
 
 .carousel-track-container {
   overflow: hidden;
@@ -119,44 +121,17 @@ watch(() => props.images, () => {
   width: 100%;
 }
 
+
 .carousel-image {
   width: 100%;
-
+  max-height: 600px;  /* ← stesso valore */
   object-fit: contain;
   flex-shrink: 0;
 }
 
-/* Immagini laterali */
+/* Immagini laterali — nascoste su desktop */
 .side-image {
-  width: 120px;
-  height: 200px;
-  cursor: pointer;
-  border-radius: 8px;
-  overflow: hidden;
-  transition: all 0.3s ease;
-  opacity: 0.7;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-}
-
-.side-image:hover {
-  opacity: 1;
-  transform: scale(1.05);
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
-}
-
-.side-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.3s ease;
-}
-
-.left-image {
-  order: -1;
-}
-
-.right-image {
-  order: 1;
+  display: none;
 }
 
 /* Bottoni di navigazione */
@@ -164,12 +139,12 @@ watch(() => props.images, () => {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: rgba(0, 0, 0, 0.35);
   backdrop-filter: blur(10px);
   border: none;
   border-radius: 50%;
-  width: 48px;
-  height: 48px;
+  width: 56px;
+  height: 56px;
   cursor: pointer;
   z-index: 10;
   display: flex;
@@ -177,7 +152,7 @@ watch(() => props.images, () => {
   justify-content: center;
   transition: all 0.3s ease;
   color: #333;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
 }
 
 .carousel-btn svg {
@@ -186,7 +161,7 @@ watch(() => props.images, () => {
 
 .carousel-btn:hover {
   transform: translateY(-50%) scale(1.1);
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25);
 }
 
 .carousel-btn.left {
@@ -224,8 +199,6 @@ watch(() => props.images, () => {
   background: rgba(255, 255, 255, 0.8);
 }
 
-
-/* Responsive - Mobile */
 /* Responsive - Mobile */
 @media (max-width: 600px) {
   .carousel {
@@ -235,7 +208,6 @@ watch(() => props.images, () => {
     flex-direction: column;
   }
 
-  /* Nascondi le immagini laterali su mobile molto piccoli */
   .side-image {
     display: none;
   }
@@ -251,15 +223,6 @@ watch(() => props.images, () => {
   .carousel-track-container {
     border-radius: 0;
     width: 100%;
-  }
-
-  .carousel-track {
-    width: 100%;
-  }
-
-  .carousel-image {
-  
- 
   }
 
   .carousel-btn {

@@ -20,7 +20,7 @@
             <label class="footer-title">Contatti</label>
             <div class="footer-list">
                 <a href="tel:+393421263387" class="footer-row">
-                    <img src="../icons/phone.svg" alt="Telefono" />
+                    <img src="../icons/whatsapp.svg" alt="Telefono" />
                     <label class="footer-text link">+39 342 126 3387</label>
                 </a>
                 <a class="footer-row" href="mailto:kilowatts.industries@gmail.com">

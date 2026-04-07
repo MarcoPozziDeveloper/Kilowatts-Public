@@ -107,8 +107,9 @@ const openDetails = (id) => {
     <div class="hero-right">
       <h1>IMPIANTI STEREO AD HOC</h1>
       <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce fringilla
-        eleifend nisi, vitae dapibus nisi tristique vitae.
+        Realizziamo impianti audio ad alte prestazioni, anche estremi, progettati su misura per ogni auto. Vendiamo al
+        dettaglio prodotti selezionati. Installiamo radio CarPlay, retrocamere, dashcam e LED, lavorando sempre con il
+        cliente per migliorare prestazioni, comfort, tecnologia e sicurezza di guida quotidiana.
       </p>
       <a href="#servizi" class="btn">Scopri di più</a>
     </div>
@@ -150,36 +151,50 @@ const openDetails = (id) => {
         <p class="card-description">Radio Aftermarket</p>
       </div>
     </div>
+
   </div>
-  <div class="separator">
-    <label class="separator-text">I nostri lavori</label>
+  <div class="sez-ab">
+
+    <div class="separator">
+      <label class="separator-text">I nostri lavori</label>
+    </div>
+    <CarouselComponent :images="landingImages" />
+
   </div>
-  <CarouselComponent :images="landingImages" />
+
+
+
   <div class="separator">
     <label class="separator-text">Chi siamo</label>
   </div>
   <div class="sez-a">
     <div class="card-b">
       <div class="card-b-text-container">
-        <h2 class="card-b-title">La mission</h2>
+        <h2 class="card-b-title">Mission</h2>
         <p class="card-b-description">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce
-          fringilla eleifend nisi, vitae dapibus nisi tristique vitae. Integer
-          sed vehicula sem. Praesent volutpat, ipsum vitae lacinia mattis,
-          sapien ex cursus velit, ac ullamcorper enim justo ac lacus. Maecenas
-          porta diam.
+          Trasformiamo ogni auto in uno spazio più coinvolgente, potente e funzionale, realizzando impianti audio DJ
+          estremi e upgrade tecnologici su misura. Lavoriamo con passione e confronto diretto per offrire soluzioni
+          personalizzate adatte a ogni cliente.
         </p>
       </div>
     </div>
     <div class="card-b">
       <div class="card-b-text-container">
-        <h2 class="card-b-title">Riconoscimenti</h2>
+        <h2 class="card-b-title">Vision</h2>
         <p class="card-b-description">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce
-          fringilla eleifend nisi, vitae dapibus nisi tristique vitae. Integer
-          sed vehicula sem. Praesent volutpat, ipsum vitae lacinia mattis,
-          sapien ex cursus velit, ac ullamcorper enim justo ac lacus. Maecenas
-          porta diam.
+          Siamo un punto di riferimento nel car audio e nella personalizzazione automotive, offrendo soluzioni
+          innovative e su misura. Puntiamo a crescere insieme ai nostri clienti, unendo tecnologia, prestazioni e cura
+          dei dettagli in ogni progetto realizzato.
+        </p>
+      </div>
+    </div>
+    <div class="card-b">
+      <div class="card-b-text-container">
+        <h2 class="card-b-title">Collab</h2>
+        <p class="card-b-description">
+          Collaboriamo con partner specializzati per detailing, oscuramento vetri, wrapping, assetti regolabili, freni
+          sportivi e mappatura centralina su banco prova.
+          Dalla prima modifica alla preparazione più estrema, accompagniamo ogni progetto con competenza e passione.
         </p>
       </div>
     </div>
@@ -518,6 +533,9 @@ const openDetails = (id) => {
   bottom: 0;
   z-index: 2;
   /* sopra il gradiente */
+}
+.sez-ab{
+  width: 100%;
 }
 
 
