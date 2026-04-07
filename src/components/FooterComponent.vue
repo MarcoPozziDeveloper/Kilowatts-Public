@@ -19,7 +19,7 @@
         <div class="footer-element">
             <label class="footer-title">Contatti</label>
             <div class="footer-list">
-                <a href="tel:+393421263387" class="footer-row">
+                <a href="https://wa.me/message/NFCCXXO6KJOHA1" class="footer-row">
                     <img src="../icons/whatsapp.svg" alt="Telefono" />
                     <label class="footer-text link">+39 342 126 3387</label>
                 </a>
