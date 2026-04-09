@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onBeforeUnmount } from "vue";
 import { supabase } from "../lib/supabaseClient";
 
 const bucket = "pdf";
@@ -24,28 +24,34 @@ const openPdf = () => {
   isMenuOpen.value = false;
   if (!exists.value) return;
   const { data } = supabase.storage.from(bucket).getPublicUrl(fileName.value);
-
   window.open(data.publicUrl, "_blank");
 };
 
-onMounted(loadFile);
+// chiusura click esterno
+const handleClickOutside = (event) => {
+  const menu = document.querySelector(".sub-navbar");
+  const hamburger = document.querySelector(".hamburger");
+  if (isMenuOpen.value && !menu.contains(event.target) && !hamburger.contains(event.target)) {
+    isMenuOpen.value = false;
+  }
+};
+
+onMounted(() => {
+  loadFile();
+  document.addEventListener("click", handleClickOutside);
+});
+
+onBeforeUnmount(() => {
+  document.removeEventListener("click", handleClickOutside);
+});
 </script>
 
 <template>
   <div class="navbar">
     <router-link to="/">
-      <img
-        src="../images/KW_logo.png"
-        alt="Kilowatts Industries Logo"
-        class="logo"
-      />
+      <img src="../images/KW_logo.png" alt="Kilowatts Industries Logo" class="logo" />
     </router-link>
-    <button
-      class="hamburger"
-      @click="toggleMenu"
-      :class="{ active: isMenuOpen }"
-      aria-label="Menu"
-    >
+    <button class="hamburger" @click="toggleMenu" :class="{ active: isMenuOpen }" aria-label="Menu">
       <span></span>
       <span></span>
       <span></span>
@@ -54,23 +60,13 @@ onMounted(loadFile);
       <div class="links-sub-navbar">
         <router-link to="/" @click="isMenuOpen = false">Home</router-link>
         <a href="/#eventi" @click="isMenuOpen = false">Eventi</a>
-        <router-link to="/audio" @click="isMenuOpen = false"
-          >Audio</router-link
-        >
-        <router-link to="/ricambi" @click="isMenuOpen = false"
-          >Ricambi</router-link
-        >
+        <router-link to="/audio" @click="isMenuOpen = false">Audio</router-link>
+        <router-link to="/ricambi" @click="isMenuOpen = false">Ricambi</router-link>
         <a href="" v-if="exists" @click="openPdf">Classifiche</a>
       </div>
-      <img
-        src="../icons/vert_separator.svg"
-        alt="Separatore"
-        class="separator"
-      />
+      <img src="../icons/vert_separator.svg" alt="Separatore" class="separator" />
       <div class="icons-sub-navbar">
-        <a
-          href="https://www.facebook.com/p/Kilowatts-Industries-100083304311069/"
-        >
+        <a href="https://www.facebook.com/p/Kilowatts-Industries-100083304311069/">
           <img src="../icons/fb.svg" alt="Facebook" />
         </a>
         <a href="https://www.instagram.com/kilowatts.industries">
@@ -122,7 +118,8 @@ onMounted(loadFile);
   color: var(--color-highlight);
   text-decoration: none;
   font-size: 20px;
-  white-space: nowrap; /* FIX: impedisce il wrap del testo */
+  white-space: nowrap;
+  /* FIX: impedisce il wrap del testo */
 }
 
 .links-sub-navbar a:hover {
@@ -133,6 +130,7 @@ onMounted(loadFile);
 
   text-decoration: underline;
 }
+
 .hamburger {
   display: none;
   flex-direction: column;
@@ -211,9 +209,11 @@ onMounted(loadFile);
   .logo {
     max-width: 200px;
   }
+
   .navbar {
     padding: 0 15px;
   }
+
   .links-sub-navbar {
     gap: 10px;
   }

@@ -117,10 +117,10 @@ const openDetails = (id) => {
           cliente per migliorare prestazioni, comfort, tecnologia e sicurezza di guida quotidiana.
         </p>
       </transition>
-      <button class="btn" @click="scopri = !scopri">
-        <img  src="../icons/up.svg" v-if="scopri"/>
-        <img  src="../icons/down.svg" v-else/>
-        {{ scopri ? "Mostra di meno" : "Mostra di più" }}
+      <button " @click=" scopri = !scopri" :class="scopri ? 'btn-inverted' : 'btn'">
+        <img src="../icons/up.svg" v-if="scopri" />
+        <img src="../icons/down.svg" v-else />
+        {{ scopri ? "Comprimi" : "Espandi" }}
       </button>
     </div>
   </div>
@@ -230,9 +230,6 @@ const openDetails = (id) => {
   </div>
 </template>
 <style scoped>
-.btn{
-  gap: 10px;
-}
 .fade-slide-enter-active,
 .fade-slide-leave-active {
   transition: all 0.5s ease;
@@ -346,7 +343,7 @@ const openDetails = (id) => {
     background-position: center;
     background-repeat: no-repeat;
     position: relative;
-    height: calc(100vh - var(--top-appbar-height));
+    min-height: calc(100vh - var(--top-appbar-height));
   }
 
   .hero::before {
@@ -489,16 +486,15 @@ const openDetails = (id) => {
   line-height: 1.5;
 }
 
-.hero .btn {
-  background-color: #007bff;
-  color: white;
-  padding: 15px 30px;
-  font-size: 16px;
+.hero .btn,
+.hero .btn-inverted {
+  gap: 10px;
+  padding: 12px 20px;
+  font-size: 14px;
   border: none;
   border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
-  border: 2px solid transparent;
   text-transform: uppercase;
   transition: all 0.3s ease;
   display: flex;
@@ -508,11 +504,26 @@ const openDetails = (id) => {
   width: fit-content;
 }
 
-.hero .btn:hover {
+.hero .btn {
+  background-color: #007bff;
+  color: white;
+  border: 2px solid transparent;
+}
+
+.hero .btn:hover, .hero .btn-inverted {
   background-color: transparent;
   border: 2px solid #007bff;
   color: #007bff;
 }
+.hero .btn-inverted:hover, .hero .btn {
+  background-color: #007bff;
+  border: 2px solid transparent;
+  color: white;
+}
+
+
+
+
 
 .sez-a {
   display: flex;
