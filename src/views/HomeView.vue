@@ -4,6 +4,7 @@ import { supabase } from "../lib/supabaseClient";
 import CarouselComponent from "../components/CarouselComponent.vue";
 import ProductCard from "@/components/ProductCard.vue";
 import { useRouter } from "vue-router";
+const scopri = ref(false);
 const router = useRouter();
 const newProducts = ref([]);
 const images = ref([]);
@@ -102,16 +103,25 @@ const openDetails = (id) => {
 <template>
   <div class="hero">
     <div class="hero-left">
-      <img src="../images/hero-desktop.webp" alt="Meccanico che installa impianto stereo" />
+      <img src="../images/hero-desktop.webp" alt="Meccanico che installa impianto stereo" class="blur" />
     </div>
     <div class="hero-right">
       <h1>IMPIANTI STEREO AD HOC</h1>
       <p>
-        Realizziamo impianti audio ad alte prestazioni, anche estremi, progettati su misura per ogni auto. Vendiamo al
-        dettaglio prodotti selezionati. Installiamo radio CarPlay, retrocamere, dashcam e LED, lavorando sempre con il
-        cliente per migliorare prestazioni, comfort, tecnologia e sicurezza di guida quotidiana.
+        Realizziamo impianti audio ad alte prestazioni, anche estremi, progettati su misura per ogni auto.
       </p>
-      <a href="#servizi" class="btn">Scopri di più</a>
+      <transition name="fade-slide">
+        <p v-if="scopri">
+          Vendiamo al
+          dettaglio prodotti selezionati. Installiamo radio CarPlay, retrocamere, dashcam e LED, lavorando sempre con il
+          cliente per migliorare prestazioni, comfort, tecnologia e sicurezza di guida quotidiana.
+        </p>
+      </transition>
+      <button class="btn" @click="scopri = !scopri">
+        <img  src="../icons/up.svg" v-if="scopri"/>
+        <img  src="../icons/down.svg" v-else/>
+        {{ scopri ? "Mostra di meno" : "Mostra di più" }}
+      </button>
     </div>
   </div>
   <div class="separator" id="servizi">
@@ -220,6 +230,25 @@ const openDetails = (id) => {
   </div>
 </template>
 <style scoped>
+.btn{
+.fade-slide-leave-active {
+  transition: all 0.5s ease;
+}
+
+.fade-slide-enter-from,
+.fade-slide-leave-to {
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+}
+
+.fade-slide-enter-to,
+.fade-slide-leave-from {
+  opacity: 1;
+  max-height: 500px;
+  /* altezza massima stimata */
+}
+
 @media (min-width: 481px) {
   .not-found {
     display: flex;
@@ -310,6 +339,7 @@ const openDetails = (id) => {
     flex-direction: column;
     background-image: url("../images/hero.webp");
     background-size: cover;
+
     background-position: center;
     background-repeat: no-repeat;
     position: relative;
@@ -534,7 +564,8 @@ const openDetails = (id) => {
   z-index: 2;
   /* sopra il gradiente */
 }
-.sez-ab{
+
+.sez-ab {
   width: 100%;
 }
 
