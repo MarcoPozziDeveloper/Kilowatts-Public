@@ -231,6 +231,9 @@ const openDetails = (id) => {
 </template>
 <style scoped>
 .btn{
+  gap: 10px;
+}
+.fade-slide-enter-active,
 .fade-slide-leave-active {
   transition: all 0.5s ease;
 }
