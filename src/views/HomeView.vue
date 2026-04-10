@@ -101,10 +101,10 @@ const openDetails = (id) => {
 </script>
 
 <template>
-  <button class="fab">
+  <a class="fab" href="https://wa.me/message/NFCCXXO6KJOHA1">
     <img src="../icons/whatsapp.svg" alt="Filtri" />
 
-  </button>
+  </a>
   <div class="hero">
     <div class="hero-left">
       <img src="../images/hero-desktop.webp" alt="Meccanico che installa impianto stereo" class="blur" />
@@ -238,7 +238,7 @@ const openDetails = (id) => {
 </template>
 <style scoped>
 .fab {
-  display: none;
+  display: flex;
   position: fixed;
   bottom: 20px;
   right: 20px;
@@ -419,7 +419,7 @@ const openDetails = (id) => {
     font-size: 24px;
   }
 
- 
+
 
   .news {
     display: flex;
