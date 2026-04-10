@@ -7,7 +7,7 @@ const props = defineProps({
     default: () => []
   }
 });
-
+const placeholder = "./img/no-image.png";
 const currentIndex = ref(0);
 const track = ref(null);
 
@@ -70,7 +70,7 @@ watch(() => props.images, () => {
           <img v-for="(img, i) in images" :key="i" :src="img" :alt="`Image ${i + 1}`" class="carousel-image"
             :class="{ active: i === currentIndex }" v-if="images.length > 0" />
 
-          <img src="../../img/no-image.png" alt="Image" class="carousel-image active" v-else />
+          <img :src="placeholder" alt="Image" class="carousel-image active" v-else />
         </div>
       </div>
 
@@ -128,7 +128,7 @@ watch(() => props.images, () => {
 .carousel-image {
   width: 100%;
   max-height: 600px;
-  /* ← stesso valore */
+
   object-fit: contain;
   flex-shrink: 0;
 }

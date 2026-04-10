@@ -442,7 +442,6 @@ const openDetails = (id) => {
     flex-direction: column;
     gap: 20px;
     width: 100%;
-    max-height: auto;
   }
 
   .card-b-text-container {
