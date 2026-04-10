@@ -242,7 +242,7 @@ const openDetails = (id) => {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  background-color: var(--color-whatsapp);
+  background-color: var(--color-primary);
   color: white;
   border: none;
   border-radius: 50px;
