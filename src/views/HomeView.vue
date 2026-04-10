@@ -182,7 +182,7 @@ const openDetails = (id) => {
 
 
   <div class="separator">
-    <label class="separator-text">Chi siamo</label>
+    <label class="separator-text">Su di noi</label>
   </div>
   <div class="sez-a">
     <div class="card-b">
