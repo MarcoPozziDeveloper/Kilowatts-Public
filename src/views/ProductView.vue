@@ -1,9 +1,10 @@
 <script setup>
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { ref, onMounted } from "vue";
 import { supabase } from "../lib/supabaseClient";
 import CarouselComponent from "@/components/CarouselComponent.vue";
 const route = useRoute();
+const router = useRouter();
 const id = route.params.id;
 const productData = ref({
   oid: "",
@@ -24,11 +25,26 @@ onMounted(async () => {
   productData.value = await getProduct(id);
   images.value = await getImagesForProduct(productData.value.oid);
 });
+
 const getProduct = async (id) => {
+  const { data: exists, error: rpcError } = await supabase.rpc(
+    "product_exists",
+    { p_id: id }
+  );
+
+  if (rpcError) {
+    console.error("RPC error:", rpcError);
+    return {};
+  }
+
+  if (exists !== true) {
+    router.push("/not-found");
+    return {};
+  }
+
   const { data, error } = await supabase
     .from("Products")
-    .select(
-      `
+    .select(`
       oid,
       name,
       description,
@@ -40,15 +56,16 @@ const getProduct = async (id) => {
       Manufacturers(name),
       id,
       available
-    `
-    )
+    `)
     .eq("id", id)
-    .single();
+    .maybeSingle();
+
   if (error) {
     console.error("Errore nel caricamento del prodotto:", error);
     return {};
   }
-  return data;
+
+  return data ?? {};
 };
 const getImagesForProduct = async (productOid) => {
   const { data, error } = await supabase.storage
@@ -79,16 +96,19 @@ const getImagesForProduct = async (productOid) => {
     </div>
     <div class="product-details">
       <h2 class="product-name">{{ productData.Manufacturers.name }} - {{ productData.name }}</h2>
-      <p class="product-category">Categoria: {{ productData.Categories.name }}</p>
-      <p class="product-price">{{ productData.price > 0 ? '€' + productData.price.toFixed(2) : 'Prezzo: ??' }}</p>
-      <p class="product-description">{{ productData.description }}</p>
+
+
+      <p class="product-price">{{ productData.price > 0 ? '€' + productData.price.toFixed(2) : '0 €' }}</p>
       <p class="product-availability"
         :style="{ color: productData.available ? 'var(--color-green)' : 'var(--color-red)' }">
         {{ productData.available ? 'Disponibile' : 'Non Disponibile' }}</p>
+      <p class="product-description">{{ productData.description }}</p>
+      <p class="product-category">Categoria: {{ productData.Categories.name }}</p>
       <a class="mobile-filter-toggle"
         :href="`https://wa.me/393421263387?text=${encodeURIComponent('Buongiorno, vorrei un\'informazione riguardo a questo prodotto:\n' + productData.Manufacturers.name + ' - ' + productData.name + '\nkilowattsindustries.it' + $route.fullPath)}`"
         target="_blank" rel="noopener noreferrer">
         <img src="../icons/whatsapp.svg" alt="Info" />
+
         <span>Richiedi Info</span>
       </a>
     </div>
@@ -129,7 +149,7 @@ const getImagesForProduct = async (productOid) => {
 
 .product-price {
   font-size: 1.5rem;
-  color: var(--color-primary);
+  color: var(--color-text);
 }
 
 .product-description {
@@ -145,9 +165,9 @@ const getImagesForProduct = async (productOid) => {
   gap: 8px;
   padding: 15px 30px;
   background-color: transparent;
-  border: 1.5px solid #25D366;
+  border: 1.5px solid var(--color-whatsapp);
   border-radius: 8px;
-  color: #25D366;
+  color: var(--color-whatsapp);
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
@@ -158,7 +178,7 @@ const getImagesForProduct = async (productOid) => {
 }
 
 .mobile-filter-toggle:hover {
-  background-color: #25D366;
+  background-color: var(--color-whatsapp);
   color: #000;
 }
 
@@ -200,7 +220,7 @@ const getImagesForProduct = async (productOid) => {
 
 .product-name {
   font-size: 1.25rem;
-  color: var(--color-primary);
+  color: var(--color-primary-light);
 }
 
 .product-price {

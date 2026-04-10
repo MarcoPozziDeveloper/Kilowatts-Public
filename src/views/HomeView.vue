@@ -101,6 +101,10 @@ const openDetails = (id) => {
 </script>
 
 <template>
+  <button class="fab">
+    <img src="../icons/whatsapp.svg" alt="Filtri" />
+
+  </button>
   <div class="hero">
     <div class="hero-left">
       <img src="../images/hero-desktop.webp" alt="Meccanico che installa impianto stereo" class="blur" />
@@ -168,7 +172,10 @@ const openDetails = (id) => {
     <div class="separator">
       <label class="separator-text">I nostri lavori</label>
     </div>
-    <CarouselComponent :images="landingImages" />
+    <div class="carousel-padder">
+      <CarouselComponent :images="landingImages" />
+    </div>
+
 
   </div>
 
@@ -230,6 +237,38 @@ const openDetails = (id) => {
   </div>
 </template>
 <style scoped>
+.fab {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: var(--color-whatsapp);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 15px 15px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  z-index: 999;
+
+  align-items: center;
+  gap: 8px;
+  transition: transform 0.2s;
+}
+
+.fab:active {
+  transform: scale(0.95);
+}
+
+.fab img {
+  width: 30px;
+  height: 30px;
+  filter: brightness(0) invert(1);
+}
+
+
 .fade-slide-enter-active,
 .fade-slide-leave-active {
   transition: all 0.5s ease;
@@ -314,6 +353,18 @@ const openDetails = (id) => {
   }
 }
 
+@media (max-width: 1000px) {
+  .sez-a {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 600px) {
+  .hero-right {
+    padding: 10px;
+  }
+}
+
 @media (max-width: 970px) {
   .not-found {
     display: flex;
@@ -330,9 +381,7 @@ const openDetails = (id) => {
     margin-bottom: 20px;
   }
 
-  .sez-a {
-    flex-direction: column;
-  }
+
 
   .hero {
     padding: 0;
@@ -370,9 +419,7 @@ const openDetails = (id) => {
     font-size: 24px;
   }
 
-  .card-b-description {
-    font-size: 18px;
-  }
+ 
 
   .news {
     display: flex;
@@ -381,10 +428,7 @@ const openDetails = (id) => {
     justify-content: center;
   }
 
-  .sez-a {
-    padding: 0;
-    flex-direction: column;
-  }
+
 
   .hero-left {
     display: none;
@@ -408,8 +452,7 @@ const openDetails = (id) => {
     padding: 30px;
     bottom: 0;
     z-index: 2;
-    text-align: justify;
-    text-justify: inter-word;
+
   }
 
   .card-b-title {
@@ -420,7 +463,10 @@ const openDetails = (id) => {
 
   .card-b-description {
     color: var(--color-text);
-    font-size: 20px;
+    font-size: 18px;
+    text-align: left;
+    line-height: 1.6;
+    word-break: normal;
   }
 
   .card-title {
@@ -434,6 +480,10 @@ const openDetails = (id) => {
     color: var(--color-text);
     font-size: 20px;
   }
+}
+
+.carousel-padder {
+  padding: 0 20px;
 }
 
 .news {
@@ -470,7 +520,8 @@ const openDetails = (id) => {
   display: flex;
   flex-direction: column;
   gap: 30px;
-  max-width: 500px;
+
+
 }
 
 .hero h1 {
@@ -505,20 +556,23 @@ const openDetails = (id) => {
 }
 
 .hero .btn {
-  background-color: #007bff;
-  color: white;
+  background-color: var(--color-primary);
+  color: var(--color-on-primary);
   border: 2px solid transparent;
 }
 
-.hero .btn:hover, .hero .btn-inverted {
+.hero .btn:hover,
+.hero .btn-inverted {
   background-color: transparent;
-  border: 2px solid #007bff;
-  color: #007bff;
+  border: 2px solid var(--color-primary);
+  color: var(--color-on-primary);
 }
-.hero .btn-inverted:hover, .hero .btn {
-  background-color: #007bff;
+
+.hero .btn-inverted:hover,
+.hero .btn {
+  background-color: var(--color-primary);
   border: 2px solid transparent;
-  color: white;
+  color: var(--color-on-primary);
 }
 
 

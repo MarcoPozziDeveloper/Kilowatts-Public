@@ -1,6 +1,8 @@
 :root {
   --left-pannel-width: 300px;
   --top-appbar-height: 80px;
+  --max-mobile-width: 970px;
+  --min-desktop-width: 971px;
 }
 .card {
   background-color: var(--color-container);

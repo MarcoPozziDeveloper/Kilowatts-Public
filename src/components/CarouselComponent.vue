@@ -68,7 +68,9 @@ watch(() => props.images, () => {
       <div class="carousel-track-container">
         <div class="carousel-track" ref="track">
           <img v-for="(img, i) in images" :key="i" :src="img" :alt="`Image ${i + 1}`" class="carousel-image"
-            :class="{ active: i === currentIndex }" />
+            :class="{ active: i === currentIndex }" v-if="images.length > 0" />
+
+          <img src="../../img/no-image.png" alt="Image" class="carousel-image active" v-else />
         </div>
       </div>
 
@@ -105,7 +107,8 @@ watch(() => props.images, () => {
   overflow: hidden;
   border-radius: 12px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  max-height: 600px; /* ← limita l'altezza su desktop */
+  max-height: 600px;
+  /* ← limita l'altezza su desktop */
 }
 
 
@@ -124,7 +127,8 @@ watch(() => props.images, () => {
 
 .carousel-image {
   width: 100%;
-  max-height: 600px;  /* ← stesso valore */
+  max-height: 600px;
+  /* ← stesso valore */
   object-fit: contain;
   flex-shrink: 0;
 }

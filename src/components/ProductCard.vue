@@ -26,7 +26,7 @@ defineProps({
       <div class="info">
         <h2 class="product-name">{{ name }}</h2>
 
-        <p class="product-price">{{ price > 0 ? '€' + price.toFixed(2) : 'Prezzo: ??' }}</p>
+        <p class="product-price">{{ price > 0 ? '€' + price.toFixed(2) : '0 €' }}</p>
 
         <p class="product-description">{{ description }}
         </p>
