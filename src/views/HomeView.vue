@@ -4,6 +4,7 @@ import { supabase } from "../lib/supabaseClient";
 import CarouselComponent from "../components/CarouselComponent.vue";
 import ProductCard from "@/components/ProductCard.vue";
 import { useRouter } from "vue-router";
+import ShowCardComponent from "@/components/ShowCardComponent.vue";
 const scopri = ref(false);
 const router = useRouter();
 const newProducts = ref([]);
@@ -124,7 +125,7 @@ const openDetails = (id) => {
       <button " @click=" scopri = !scopri" :class="scopri ? 'btn-inverted' : 'btn'">
         <img src="../icons/up.svg" v-if="scopri" />
         <img src="../icons/down.svg" v-else />
-        {{ scopri ? "Comprimi" : "Espandi" }}
+        {{ scopri ? "Comprimi" : "Leggi di più" }}
       </button>
     </div>
   </div>
@@ -132,39 +133,17 @@ const openDetails = (id) => {
     <label class="separator-text">Cosa offriamo</label>
   </div>
 
-  <div class="sez-a">
-    <div class="card">
-      <div class="image-container">
-        <img src="../images/audio.webp" alt="Audio" />
-      </div>
+  <div class="sez-a-card">
+    <ShowCardComponent title="Preparazione" description="Impianti audio"
+      fullDescription="Offriamo servizi di preparazione per impianti audio ad alte prestazioni, progettati su misura per ogni auto."
+      image="./img/audio.webp" />
+    <ShowCardComponent title="Illuminazione" description="Abitacolo e interni"
+      fullDescription="Realizziamo soluzioni di illuminazione personalizzate per abitacolo e interni, migliorando l'estetica e il comfort di guida."
+      image="./img/light.webp" />
+    <ShowCardComponent title="Installazione" description="Radio Aftermarket"
+      fullDescription="Installiamo radio CarPlay, retrocamere, dashcam e LED, lavorando sempre con il cliente per migliorare prestazioni, comfort, tecnologia e sicurezza di guida quotidiana."
+      image="./img/radio.webp" />
 
-      <div class="card-text-container">
-        <h2 class="card-title">Preparazione</h2>
-        <p class="card-description">Impianti audio</p>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="image-container">
-        <img src="../images/light.webp" alt="Audio" />
-      </div>
-
-      <div class="card-text-container">
-        <h2 class="card-title">Illuminazione</h2>
-        <p class="card-description">Abitacolo e interni</p>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="image-container">
-        <img src="../images/radio.webp" alt="Audio" />
-      </div>
-
-      <div class="card-text-container">
-        <h2 class="card-title">Installazione</h2>
-        <p class="card-description">Radio Aftermarket</p>
-      </div>
-    </div>
 
   </div>
   <div class="sez-ab">
@@ -184,7 +163,7 @@ const openDetails = (id) => {
   <div class="separator">
     <label class="separator-text">Su di noi</label>
   </div>
-  <div class="sez-a">
+  <div class="sez-a-card">
     <div class="card-b">
       <div class="card-b-text-container">
         <h2 class="card-b-title">Mission</h2>
@@ -312,7 +291,8 @@ const openDetails = (id) => {
     flex-direction: column;
     gap: 20px;
     width: 100%;
-    max-height: 400px;
+    flex: 1 1 300px;
+
   }
 
   .card-b-text-container {
@@ -327,30 +307,23 @@ const openDetails = (id) => {
 
   .card-b-title {
     color: var(--color-primary-light);
-    font-size: 32px;
+    font-size: 28px;
     font-weight: 600;
   }
 
   .card-b-description {
     color: var(--color-text);
-    font-size: 24px;
+    font-size: 22px;
   }
 
-  .card-title {
-    color: var(--color-primary-light);
-    font-size: 32px;
-    font-weight: 600;
-  }
+
 
   .card:hover {
     transform: scale(1.02);
     transition: transform 0.3s ease;
   }
 
-  .card-description {
-    color: var(--color-text);
-    font-size: 24px;
-  }
+
 }
 
 @media (max-width: 1000px) {
@@ -475,10 +448,7 @@ const openDetails = (id) => {
   }
 
 
-  .card-description {
-    color: var(--color-text);
-    font-size: 20px;
-  }
+
 }
 
 .carousel-padder {
@@ -577,49 +547,26 @@ const openDetails = (id) => {
 
 
 
-
-.sez-a {
+.sez-a,
+.sez-a-card {
   display: flex;
-  align-items: center;
+
   justify-content: space-between;
   gap: 20px;
   width: 100%;
   padding: 20px;
 }
 
-.card {
-  background-color: var(--color-container);
-  border: 1px solid var(--color-container-border);
-  border-radius: 16px;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  gap: 20px;
-  position: relative;
-  flex: 1;
+.sez-a {
+  align-items: center;
 }
 
-.image-container {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  max-height: 400px;
+.sez-a-card {
+  align-items: stretch;
+  flex-wrap: wrap;
 }
 
-.image-container img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
 
-.image-container::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, black 100%);
-  z-index: 1;
-}
 
 .card-text-container {
   display: flex;

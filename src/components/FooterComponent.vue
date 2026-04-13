@@ -3,31 +3,36 @@
 
 <template>
     <div class="footer">
-        <div class="footer-element">
-            <label class="footer-title"> Come ci trovi</label>
-            <div class="footer-list">
-                <div class="footer-row">
-                    <img src="../icons/clock.svg" alt="Orario" />
-                    <label class="footer-text">14:00-19:00 | Lunedì-Sabato</label>
+        <div class="footer-sez">
+            <div class="footer-element">
+                <label class="footer-title"> Come ci trovi</label>
+                <div class="footer-list">
+                    <div class="footer-row">
+                        <img src="../icons/clock.svg" alt="Orario" />
+                        <label class="footer-text">14:00-19:00 | Lunedì-Sabato</label>
+                    </div>
+                    <a href="https://maps.app.goo.gl/2vtuVn9tbHBYb1tY8" class="footer-row">
+                        <img src="../icons/location.svg" alt="Posizione" />
+                        <label class="footer-text link">Via Cadorna 55 Buscate Mi</label>
+                    </a>
                 </div>
-                <a href="https://maps.app.goo.gl/2vtuVn9tbHBYb1tY8" class="footer-row">
-                    <img src="../icons/location.svg" alt="Posizione" />
-                    <label class="footer-text link">Via Cadorna 55 Buscate Mi</label>
-                </a>
+            </div>
+            <div class="footer-element">
+                <label class="footer-title">Contatti</label>
+                <div class="footer-list">
+                    <a href="https://wa.me/message/NFCCXXO6KJOHA1" class="footer-row">
+                        <img src="../icons/whatsapp.svg" alt="Telefono" />
+                        <label class="footer-text link">+39 342 126 3387</label>
+                    </a>
+                    <a class="footer-row" href="mailto:kilowatts.industries@gmail.com">
+                        <img src="../icons/mail.svg" alt="Mail" />
+                        <label class="footer-text link"> kilowatts.industries@gmail.com </label>
+                    </a>
+                </div>
             </div>
         </div>
-        <div class="footer-element">
-            <label class="footer-title">Contatti</label>
-            <div class="footer-list">
-                <a href="https://wa.me/message/NFCCXXO6KJOHA1" class="footer-row">
-                    <img src="../icons/whatsapp.svg" alt="Telefono" />
-                    <label class="footer-text link">+39 342 126 3387</label>
-                </a>
-                <a class="footer-row" href="mailto:kilowatts.industries@gmail.com">
-                    <img src="../icons/mail.svg" alt="Mail" />
-                    <label class="footer-text link"> kilowatts.industries@gmail.com </label>
-                </a>
-            </div>
+        <div class="footer-sez iva">
+            P.IVA 12174130968
         </div>
     </div>
 </template>
@@ -37,11 +42,25 @@
     margin-top: 30px;
     border-top: 1px solid var(--color-container-border);
     display: flex;
-    justify-content: space-around;
+    flex-direction: column;
     align-items: center;
     padding: 30px 20px;
     background-color: var(--color-bg);
     width: 100%;
+    gap: 45px;
+}
+
+.footer-sez {
+    
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+}
+.footer-sez.iva {
+    justify-content: center;
+    color: var(--color-text-secondary);
+    font-size: 14px;
 }
 
 .footer-element {
@@ -81,10 +100,15 @@
 /* Media Query per Tablet */
 @media (max-width: 768px) {
     .footer {
-        flex-direction: column;
-        gap: 30px;
-        padding: 30px 16px;
+      
+       
         align-items: flex-start;
+    }
+    .footer-sez{
+        flex-direction: column;
+        
+        align-items: flex-start;
+        gap: 30px;
     }
 
     .footer-element {
@@ -111,7 +135,9 @@
         padding: 20px 16px;
         gap: 25px;
     }
-
+.footer-sez {
+        gap: 20px;
+    }
     .footer-element {
         gap: 12px;
     }
