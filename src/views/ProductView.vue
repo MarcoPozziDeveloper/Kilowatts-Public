@@ -134,7 +134,7 @@ const getImagesForProduct = async (productOid) => {
   .carousel-wrapper {
     flex: 1.2;
     /* un po' più largo dei dettagli */
-    position: sticky;
+
     top: 20px;
   }
 
