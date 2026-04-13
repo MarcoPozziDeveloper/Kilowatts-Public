@@ -145,11 +145,22 @@ watch(
     () => productData.value.price,
     () => productData.value.category_id,
     () => productData.value.manufacturer_id,
+    page
   ],
   () => {
-    page.value = 1;
+    router.replace({
+      query: {
+        search: search.value || undefined,
+        sortBy: sortBy.value || undefined,
+        price: productData.value.price || undefined,
+        category_id: productData.value.category_id || undefined,
+        manufacturer_id: productData.value.manufacturer_id || undefined,
+        page: page.value !== 1 ? page.value : undefined,
+      },
+    });
+
     loadData();
-  },
+  }
 );
 
 const totalPages = computed(() => Math.ceil(total.value / pageSize));
@@ -163,7 +174,18 @@ watch(page, () => {
   })
 })
 
-onMounted(loadData);
+onMounted(() => {
+  const q = router.currentRoute.value.query;
+
+  search.value = q.search || "";
+  sortBy.value = q.sortBy || "0";
+  productData.value.price = q.price ? Number(q.price) : null;
+  productData.value.category_id = q.category_id || "";
+  productData.value.manufacturer_id = q.manufacturer_id || "";
+  page.value = q.page ? Number(q.page) : 1;
+
+  loadData();
+});
 </script>
 
 <template>
