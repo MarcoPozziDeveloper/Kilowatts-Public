@@ -237,7 +237,7 @@ onMounted(loadData);
     <div class="content-area">
       <div class="products">
         <div class="not-found" v-if="total == 0">
-          <img src="../images/no-found.webp" alt="" />
+          <img src="../images/no-found.webp" alt="non trovata" />
           <h2>Nessun prodotto trovato</h2>
         </div>
         <ProductCard v-for="product in products" :key="product.oid"

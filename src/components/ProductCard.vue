@@ -99,7 +99,7 @@ defineProps({
 
 .product-price {
   font-size: 1.1rem;
-  color: var(--color-primary);
+  color: var(--color-primary-light);
 }
 
 .product-description {

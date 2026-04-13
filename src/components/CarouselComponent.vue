@@ -70,7 +70,7 @@ watch(() => props.images, () => {
           <img v-for="(img, i) in images" :key="i" :src="img" :alt="`Image ${i + 1}`" class="carousel-image"
             :class="{ active: i === currentIndex }" v-if="images.length > 0" />
 
-          <img :src="placeholder" alt="Image" class="carousel-image active" v-else />
+          <img :src="placeholder" alt="Image carousel" class="carousel-image active" v-else />
         </div>
       </div>
 

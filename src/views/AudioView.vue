@@ -190,7 +190,7 @@ onMounted(() => {
 
 <template>
   <button class="mobile-filter-toggle" @click="showFilters = !showFilters">
-    <img src="../icons/filter.svg" alt="Filtri" v-if="!showFilters" />
+    <img src="../icons/filter.svg" alt="Filtri" v-if="!showFilters"/>
     <span v-if="!showFilters">Filtri</span>
     <span v-else>✕ Chiudi</span>
   </button>
@@ -259,7 +259,7 @@ onMounted(() => {
     <div class="content-area">
       <div class="products">
         <div class="not-found" v-if="total == 0">
-          <img src="../images/no-found.webp" alt="" />
+          <img src="../images/no-found.webp" alt="Nessun prodotto trovato" />
           <h2>Nessun prodotto trovato</h2>
         </div>
         <ProductCard v-for="product in products" :key="product.oid"

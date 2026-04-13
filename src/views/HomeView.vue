@@ -10,12 +10,12 @@ const router = useRouter();
 const newProducts = ref([]);
 const images = ref([]);
 const landingImages = ref([
-  "../carousel/l3.jpg",
-  "../carousel/l1.jpg",
-  "../carousel/l2.jpg",
-  "../carousel/l4.jpg",
-  "../carousel/l5.jpg",
-  "../carousel/l6.jpg",
+  "../carousel/l3.webp",
+  "../carousel/l1.webp",
+  "../carousel/l2.webp",
+  "../carousel/l4.webp",
+  "../carousel/l5.webp",
+  "../carousel/l6.webp",
 ]);
 onMounted(async () => {
   const { data: files, error } = await supabase.storage
@@ -103,12 +103,12 @@ const openDetails = (id) => {
 
 <template>
   <a class="fab" href="https://wa.me/message/NFCCXXO6KJOHA1">
-    <img src="../icons/whatsapp.svg" alt="Filtri" />
+    <img src="../icons/whatsapp.svg" alt="Whatsapp" />
 
   </a>
   <div class="hero">
     <div class="hero-left">
-      <img src="../images/hero-desktop.webp" alt="Meccanico che installa impianto stereo" class="blur" />
+      <img src="../images/hero-desktop.webp" alt="Meccanico" class="blur" />
     </div>
     <div class="hero-right">
       <h1>IMPIANTI STEREO AD HOC</h1>
@@ -123,8 +123,8 @@ const openDetails = (id) => {
         </p>
       </transition>
       <button " @click=" scopri = !scopri" :class="scopri ? 'btn-inverted' : 'btn'">
-        <img src="../icons/up.svg" v-if="scopri" />
-        <img src="../icons/down.svg" v-else />
+        <img src="../icons/up.svg" v-if="scopri" alt="comprimi"/>
+        <img src="../icons/down.svg" v-else alt="leggi di più"/>
         {{ scopri ? "Comprimi" : "Leggi di più" }}
       </button>
     </div>
@@ -209,7 +209,7 @@ const openDetails = (id) => {
   </div>
   <div class="sez-a">
     <div class="not-found" v-if="images.length == 0">
-      <img src="../images/no-events.webp" alt="" />
+      <img src="../images/no-events.webp" alt="nessun evento" />
       <h2>Non ci sono eventi in programma</h2>
     </div>
     <CarouselComponent :images="images" v-else />
