@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
-import AudioView from "../views/AudioView.vue";
-import RicambiView from "../views/RicambiView.vue";
+import CatalogView from "../views/CatalogView.vue";
 import ProductView from "../views/ProductView.vue";
 import NotFoundView from "@/views/NotFoundView.vue";
 
@@ -20,13 +19,11 @@ const router = createRouter({
 
   routes: [
     { path: "/", name: "home", component: HomeView },
-    { path: "/audio", name: "audio", component: AudioView },
-    { path: "/ricambi", name: "ricambi", component: RicambiView },
+    { path: "/catalogo/:id", name: "catalogo", component: CatalogView },
     {
       path: "/prodotto/:id",
       name: "prodotto",
       component: ProductView,
-      meta: { requiresAuth: true },
     },
     { path: "/:pathMatch(.*)*", name: "NotFound", component: NotFoundView },
     { path: "/not-found", name: "NotFound", component: NotFoundView },

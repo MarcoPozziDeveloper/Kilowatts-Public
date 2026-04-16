@@ -38,7 +38,7 @@ const getEntitiesByMacro = async (table, macroName = null) => {
     .order("name", { ascending: true });
 
   if (macroName) {
-    query = query.eq("macrocategory", macroName);
+    query = query.ilike("macrocategory", macroName);
   }
 
   const { data, error } = await query;

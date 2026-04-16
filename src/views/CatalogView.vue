@@ -1,11 +1,13 @@
 <script setup>
 import { ref, onMounted, computed, watch } from "vue";
 import { supabase } from "../lib/supabaseClient";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import ProductCard from "@/components/ProductCard.vue";
 import SelectComponent from "@/components/SelectComponent.vue";
 
 const router = useRouter();
+const route = useRoute();
+const macroName = route.params.id;
 const categories = ref([]);
 const manufacturers = ref([]);
 const products = ref([]);
@@ -16,7 +18,6 @@ const total = ref(0);
 const page = ref(1);
 const pageSize = 12;
 const showFilters = ref(false);
-const macroName = ref("Audio");
 const productData = ref({
   name: "",
   description: "",
@@ -44,7 +45,6 @@ const loadData = async () => {
 const getProducts = async () => {
   const from = (page.value - 1) * pageSize;
   const to = from + pageSize - 1;
-
   let query = supabase.from("Products").select(
     `
       oid,
@@ -61,7 +61,7 @@ const getProducts = async () => {
     `,
     { count: "exact" },
   );
-  query = query.eq("Categories.macrocategory", macroName.value);
+  query = query.ilike("Categories.macrocategory", macroName);
   if (search.value) {
     query = query.or(
       `name.ilike.%${search.value}%,description.ilike.%${search.value}%`,
@@ -97,7 +97,7 @@ const getProducts = async () => {
     case "4": // Produttore
       query = query.order("manufacturer_id", { ascending: true });
       break;
-    default:
+      def1lt:
       query = query.order("datetime", { ascending: false });
   }
 
@@ -190,7 +190,7 @@ onMounted(() => {
 
 <template>
   <button class="mobile-filter-toggle" @click="showFilters = !showFilters">
-    <img src="../icons/filter.svg" alt="Filtri" v-if="!showFilters"/>
+    <img src="../icons/filter.svg" alt="Filtri" v-if="!showFilters" />
     <span v-if="!showFilters">Filtri</span>
     <span v-else>✕ Chiudi</span>
   </button>
@@ -500,7 +500,7 @@ onMounted(() => {
   flex-direction: column;
   gap: 40px;
   background-color: var(--color-container);
-  z-index: 100;
+  z-index: 10;
 }
 
 .content-area {
