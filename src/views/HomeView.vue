@@ -10,12 +10,15 @@ const router = useRouter();
 const newProducts = ref([]);
 const images = ref([]);
 const landingImages = ref([
-  "../carousel/l3.webp",
   "../carousel/l1.webp",
   "../carousel/l2.webp",
   "../carousel/l4.webp",
   "../carousel/l5.webp",
   "../carousel/l6.webp",
+  "../carousel/l7.webp",
+  "../carousel/l8.webp",
+  "../carousel/l9.webp",
+  "../carousel/l10.webp",
 ]);
 onMounted(async () => {
   const { data: files, error } = await supabase.storage
@@ -123,8 +126,8 @@ const openDetails = (id) => {
         </p>
       </transition>
       <button " @click=" scopri = !scopri" :class="scopri ? 'btn-inverted' : 'btn'">
-        <img src="../icons/up.svg" v-if="scopri" alt="comprimi"/>
-        <img src="../icons/down.svg" v-else alt="leggi di più"/>
+        <img src="../icons/up.svg" v-if="scopri" alt="comprimi" />
+        <img src="../icons/down.svg" v-else alt="leggi di più" />
         {{ scopri ? "Comprimi" : "Leggi di più" }}
       </button>
     </div>
