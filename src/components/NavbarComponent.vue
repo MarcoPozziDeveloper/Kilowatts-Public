@@ -60,8 +60,7 @@ onBeforeUnmount(() => {
       <div class="links-sub-navbar">
         <router-link to="/" @click="isMenuOpen = false">Home</router-link>
         <router-link :to="{ name: 'catalogo', params: { id: 'audio' } }" @click="isMenuOpen = false">Audio</router-link>
-        <router-link :to="{ name: 'catalogo', params: { id: 'tuning' } }"
-          @click="isMenuOpen = false">Tuning</router-link>
+        <router-link :to="{ name: 'catalogo', params: { id: 'tuning' } }"@click="isMenuOpen = false">Tuning</router-link>
         <router-link :to="{ name: 'catalogo', params: { id: 'merchandising' } }"
           @click="isMenuOpen = false">Merchandising</router-link>
         <a href="" v-if="exists" @click="openPdf">Classifiche</a>
