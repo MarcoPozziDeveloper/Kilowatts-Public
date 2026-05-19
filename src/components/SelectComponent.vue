@@ -64,11 +64,18 @@ watch(
   },
   { immediate: true },
 );
+watch(
+  () => props.defaultSelectedId,
+  (newValue) => {
+    selectedElement.value = newValue || "";
+  },
+  { immediate: true }
+);
 </script>
 
 <template>
   <select v-model="selectedElement" required class="generic-input">
-    <option value="">SELEZIONA</option>
+    <option value="">TUTTI</option>
     <option v-for="element in elements" :key="element.oid" :value="element.oid">
       {{ element.name }}
     </option>

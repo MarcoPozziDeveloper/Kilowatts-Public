@@ -59,11 +59,13 @@ onBeforeUnmount(() => {
     <div class="sub-navbar" :class="{ open: isMenuOpen }">
       <div class="links-sub-navbar">
         <router-link to="/" @click="isMenuOpen = false">Home</router-link>
-        <a href="/#eventi" @click="isMenuOpen = false">Eventi</a>
         <router-link :to="{ name: 'catalogo', params: { id: 'audio' } }" @click="isMenuOpen = false">Audio</router-link>
-        <router-link :to="{ name: 'catalogo', params: { id: 'ricambi' } }" @click="isMenuOpen = false">Ricambi</router-link>
+        <router-link :to="{ name: 'catalogo', params: { id: 'tuning' } }"
+          @click="isMenuOpen = false">Tuning</router-link>
+        <router-link :to="{ name: 'catalogo', params: { id: 'merchandising' } }"
+          @click="isMenuOpen = false">Merchandising</router-link>
         <a href="" v-if="exists" @click="openPdf">Classifiche</a>
-        
+
       </div>
       <img src="../icons/vert_separator.svg" alt="Separatore" class="separator" />
       <div class="icons-sub-navbar">
@@ -202,7 +204,7 @@ onBeforeUnmount(() => {
   }
 
   .icons-sub-navbar {
-   padding-top: 10px;
+    padding-top: 10px;
   }
 }
 

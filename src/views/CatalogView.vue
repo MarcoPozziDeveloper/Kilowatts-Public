@@ -85,10 +85,10 @@ const getProducts = async () => {
     case "0": // Nome
       query = query.order("name", { ascending: true });
       break;
-    case "1": // Prezzo Decrescente
+    case "2": // Prezzo Decrescente
       query = query.order("price", { ascending: false });
       break;
-    case "2": // Prezzo Crescente
+    case "1": // Prezzo Crescente
       query = query.order("price", { ascending: true });
       break;
     case "3": // Categoria
@@ -160,6 +160,7 @@ watch(
     });
 
     loadData();
+    page.value = 1; // Resetta alla prima pagina quando cambiano i filtri
   }
 );
 
@@ -218,8 +219,8 @@ onMounted(() => {
       <label>Ordina per</label>
       <select class="generic-input" v-model="sortBy">
         <option value="0">Nome</option>
-        <option value="1">Prezzo Decrescente</option>
-        <option value="2">Prezzo Crescente</option>
+        <option value="1">Prezzo Crescente</option>
+        <option value="2">Prezzo Decrescente</option>
         <option value="3">Categoria</option>
         <option value="4">Brand</option>
       </select>
@@ -233,14 +234,14 @@ onMounted(() => {
 
     <div class="input-group">
       <label>Brand</label>
-      <SelectComponent tableName="Manufacturers" label="Produttore" :refreshToken="refreshToken"
-        @selected="productData.manufacturer_id = $event" :macroName="macroName" />
+      <SelectComponent tableName="Manufacturers" label="Produttore" :refreshToken="refreshToken" :macroName="macroName"
+        :defaultSelectedId="productData.manufacturer_id" @selected="productData.manufacturer_id = $event" />
     </div>
 
     <div class="input-group">
       <label>Categoria</label>
       <SelectComponent tableName="Categories" label="Categorie" :refreshToken="refreshToken" :macroName="macroName"
-        @selected="productData.category_id = $event" />
+        :defaultSelectedId="productData.category_id" @selected="productData.category_id = $event" />
     </div>
 
     <button type="button" class="apply-filters-mobile" @click="showFilters = false">
@@ -273,7 +274,7 @@ onMounted(() => {
         <button class="navbutton" @click="page--" :disabled="page === 1">
           <img src="../icons/angle_left.svg" alt="Precedente" />
         </button>
-        <label>Pagina {{ page }}</label>
+        <label>Pagina {{ page }} di {{ totalPages }}</label>
         <button class="navbutton" @click="page++" :disabled="page >= totalPages">
           <img src="../icons/angle_right.svg" alt="Successiva" />
         </button>
