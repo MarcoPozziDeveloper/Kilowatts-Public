@@ -3,6 +3,7 @@ import { useRoute, useRouter } from "vue-router";
 import { ref, onMounted } from "vue";
 import { supabase } from "../lib/supabaseClient";
 import CarouselComponent from "@/components/CarouselComponent.vue";
+import noImage from "../images/no-image.png";
 const route = useRoute();
 const router = useRouter();
 const id = route.params.id;
@@ -92,7 +93,7 @@ const getImagesForProduct = async (productOid) => {
 <template>
   <div class="main-container">
     <div class="carousel-wrapper">
-      <CarouselComponent :images="images" id="Foto" />
+      <CarouselComponent :images="images.length ? images : [noImage]" id="Foto" />
     </div>
     <div class="product-details">
       <h2 class="product-name">{{ productData.Manufacturers.name }} - {{ productData.name }}</h2>

@@ -5,6 +5,7 @@ import CarouselComponent from "../components/CarouselComponent.vue";
 import ProductCard from "@/components/ProductCard.vue";
 import { useRouter } from "vue-router";
 import ShowCardComponent from "@/components/ShowCardComponent.vue";
+import noImage from "../images/no-image.png";
 const scopri = ref(false);
 const router = useRouter();
 const newProducts = ref([]);
@@ -205,7 +206,7 @@ const openDetails = (id) => {
     <ProductCard v-for="product in newProducts" :key="product.oid"
       :name="product.Manufacturers.name + ' - ' + product.name" :price="product.price > 0 ? product.price : 0"
       :description="product.description" :category="product.Categories.name" :available="product.available"
-      :image="product.images[0] || './img/no-image.png'" @click="openDetails(product.id)" />
+          :image="product.images?.[0] || noImage" @click="openDetails(product.id)" />
   </div>
   <div class="separator">
     <label class="separator-text" id="eventi">Prossimi eventi</label>

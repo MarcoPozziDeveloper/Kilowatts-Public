@@ -266,7 +266,8 @@ onMounted(() => {
         <ProductCard v-for="product in products" :key="product.oid"
           :name="product.Manufacturers.name + ' - ' + product.name" :price="product.price > 0 ? product.price : 0"
           :description="product.description" :category="product.Categories.name"
-          :image="product.images[0] || noImage" @click="openDetails(product.id)"
+          :image="product.images?.[0] || noImage"
+          @click="openDetails(product.id)"
           :available="product.available" />
       </div>
 
