@@ -4,7 +4,7 @@ import { supabase } from "../lib/supabaseClient";
 
 const props = defineProps({
   tableName: String,
-  macroName: {
+  catalogName: {
     type: String,
     default: null,
   },
@@ -23,22 +23,22 @@ const emit = defineEmits(["selected"]);
 const elements = ref([]);
 const selectedElement = ref("");
 const loadData = async () => {
-  elements.value = await getEntitiesByMacro(props.tableName, props.macroName);
+  elements.value = await getEntitiesByMacro(props.tableName, props.catalogName);
 };
 onMounted(loadData);
 
-const getEntitiesByMacro = async (table, macroName = null) => {
+const getEntitiesByMacro = async (table, catalogName = null) => {
   let query = supabase
     .from(table)
     .select(`
       oid,
       name,
-      macrocategory
+      catalog
     `)
     .order("name", { ascending: true });
 
-  if (macroName) {
-    query = query.ilike("macrocategory", macroName);
+  if (catalogName) {
+    query = query.ilike("catalog", catalogName);
   }
 
   const { data, error } = await query;

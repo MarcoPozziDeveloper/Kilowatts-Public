@@ -7,7 +7,7 @@ import SelectComponent from "@/components/SelectComponent.vue";
 import noImage from "../images/no-image.png";
 const router = useRouter();
 const route = useRoute();
-const macroName = route.params.id;
+const catalogName = route.params.id;
 const categories = ref([]);
 const manufacturers = ref([]);
 const products = ref([]);
@@ -54,14 +54,14 @@ const getProducts = async () => {
       datetime,
       category_id,
       manufacturer_id,
-      Categories!inner(name, macrocategory),
-      Manufacturers(name, macrocategory),
+      Categories!inner(name, catalog),
+      Manufacturers(name, catalog),
       id,
       available
     `,
     { count: "exact" },
   );
-  query = query.ilike("Categories.macrocategory", macroName);
+  query = query.ilike("Categories.catalog", catalogName);
   if (search.value) {
     query = query.or(
       `name.ilike.%${search.value}%,description.ilike.%${search.value}%`,
@@ -234,13 +234,13 @@ onMounted(() => {
 
     <div class="input-group">
       <label>Brand</label>
-      <SelectComponent tableName="Manufacturers" label="Produttore" :refreshToken="refreshToken" :macroName="macroName"
+      <SelectComponent tableName="Manufacturers" label="Produttore" :refreshToken="refreshToken" :catalogName="catalogName"
         :defaultSelectedId="productData.manufacturer_id" @selected="productData.manufacturer_id = $event" />
     </div>
 
     <div class="input-group">
       <label>Categoria</label>
-      <SelectComponent tableName="Categories" label="Categorie" :refreshToken="refreshToken" :macroName="macroName"
+      <SelectComponent tableName="Categories" label="Categorie" :refreshToken="refreshToken" :catalogName="catalogName"
         :defaultSelectedId="productData.category_id" @selected="productData.category_id = $event" />
     </div>
 
