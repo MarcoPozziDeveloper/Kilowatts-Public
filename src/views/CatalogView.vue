@@ -138,15 +138,20 @@ const openDetails = (id) => {
   router.push({ name: "prodotto", params: { id } });
 };
 
+
+const totalPages = computed(() => Math.ceil(total.value / pageSize));
+
+// Watch SOLO sui filtri: quando cambiano, torna a pagina 1
 watch(
-  [
-    search,
-    sortBy,
-    () => productData.value.price,
-    () => productData.value.category_id,
-    () => productData.value.manufacturer_id,
-    page
-  ],
+  [search, sortBy, () => productData.value.price, () => productData.value.category_id, () => productData.value.manufacturer_id],
+  () => {
+    page.value = 1;
+  }
+);
+
+// Watch SOLO sulla pagina + su tutto il resto per aggiornare URL e ricaricare
+watch(
+  [search, sortBy, () => productData.value.price, () => productData.value.category_id, () => productData.value.manufacturer_id, page],
   () => {
     router.replace({
       query: {
@@ -160,20 +165,8 @@ watch(
     });
 
     loadData();
-    page.value = 1; // Resetta alla prima pagina quando cambiano i filtri
   }
 );
-
-const totalPages = computed(() => Math.ceil(total.value / pageSize));
-
-watch(page, loadData);
-
-watch(page, () => {
-  window.scrollTo({
-    top: 0,
-    behavior: 'smooth'
-  })
-})
 
 onMounted(() => {
   const q = router.currentRoute.value.query;
