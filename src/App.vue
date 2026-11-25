@@ -23,7 +23,7 @@ import FooterComponent from "./components/FooterComponent.vue";
 @import url("./styles/index.css");
 
 .main-app {
-  padding-top: 70px;
+  padding-top: var(--top-appbar-height);
   width: 100%;
   display: flex;
   flex-direction: column;

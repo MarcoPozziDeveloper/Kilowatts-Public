@@ -31,7 +31,11 @@ const openPdf = () => {
 const handleClickOutside = (event) => {
   const menu = document.querySelector(".sub-navbar");
   const hamburger = document.querySelector(".hamburger");
-  if (isMenuOpen.value && !menu.contains(event.target) && !hamburger.contains(event.target)) {
+  if (
+    isMenuOpen.value &&
+    !menu.contains(event.target) &&
+    !hamburger.contains(event.target)
+  ) {
     isMenuOpen.value = false;
   }
 };
@@ -49,9 +53,18 @@ onBeforeUnmount(() => {
 <template>
   <div class="navbar">
     <router-link to="/">
-      <img src="../images/KW_logo.png" alt="Kilowatts Industries Logo" class="logo" />
+      <img
+        src="../images/KW_logo.png"
+        alt="Kilowatts Industries Logo"
+        class="logo"
+      />
     </router-link>
-    <button class="hamburger" @click="toggleMenu" :class="{ active: isMenuOpen }" aria-label="Menu">
+    <button
+      class="hamburger"
+      @click="toggleMenu"
+      :class="{ active: isMenuOpen }"
+      aria-label="Menu"
+    >
       <span></span>
       <span></span>
       <span></span>
@@ -59,16 +72,32 @@ onBeforeUnmount(() => {
     <div class="sub-navbar" :class="{ open: isMenuOpen }">
       <div class="links-sub-navbar">
         <router-link to="/" @click="isMenuOpen = false">Home</router-link>
-        <router-link :to="{ name: 'catalogo', params: { id: 'audio' } }" @click="isMenuOpen = false">Audio</router-link>
-        <router-link :to="{ name: 'catalogo', params: { id: 'tuning' } }"@click="isMenuOpen = false">Tuning</router-link>
-        <router-link :to="{ name: 'catalogo', params: { id: 'merchandising' } }"
-          @click="isMenuOpen = false">Merchandising</router-link>
+        <router-link
+          :to="{ name: 'catalogo', params: { id: 'audio' } }"
+          @click="isMenuOpen = false"
+          >Audio</router-link
+        >
+        <router-link
+          :to="{ name: 'catalogo', params: { id: 'tuning' } }"
+          @click="isMenuOpen = false"
+          >Tuning</router-link
+        >
+        <router-link
+          :to="{ name: 'catalogo', params: { id: 'merchandising' } }"
+          @click="isMenuOpen = false"
+          >Merchandising</router-link
+        >
         <a href="" v-if="exists" @click="openPdf">Classifiche</a>
-
       </div>
-      <img src="../icons/vert_separator.svg" alt="Separatore" class="separator" />
+      <img
+        src="../icons/vert_separator.svg"
+        alt="Separatore"
+        class="separator"
+      />
       <div class="icons-sub-navbar">
-        <a href="https://www.facebook.com/p/Kilowatts-Industries-100083304311069/">
+        <a
+          href="https://www.facebook.com/p/Kilowatts-Industries-100083304311069/"
+        >
           <img src="../icons/fb.svg" alt="Facebook" />
         </a>
         <a href="https://www.instagram.com/kilowatts.industries">
@@ -90,7 +119,7 @@ onBeforeUnmount(() => {
   width: 100%;
   background-color: var(--color-input-background);
   padding: 0 26px;
-  height: 70px;
+  height: var(--top-appbar-height);
 }
 
 .sub-navbar {
@@ -129,7 +158,6 @@ onBeforeUnmount(() => {
 }
 
 .links-sub-navbar a.router-link-active {
-
   text-decoration: underline;
 }
 
@@ -171,20 +199,26 @@ onBeforeUnmount(() => {
 
   .sub-navbar {
     position: fixed;
-    top: 70px;
+    top: var(--top-appbar-height);
     right: 0;
     left: 0;
     flex-direction: column;
     background: var(--color-input-background);
     padding: 20px;
     gap: 20px;
-    transform: translateX(100%);
-    transition: transform 0.3s ease;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateX(100%);
+    transition:
+      transform 0.3s ease,
+      visibility 0.3s ease;
   }
 
   .sub-navbar.open {
-    transform: translateX(0);
+    transform: translateY(0);
+    visibility: visible;
+    pointer-events: auto;
   }
 
   .links-sub-navbar {

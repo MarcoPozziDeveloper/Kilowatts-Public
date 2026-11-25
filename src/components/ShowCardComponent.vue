@@ -23,7 +23,7 @@ function toggle() {
 
     <div class="card-text-container" :class="{ hidden: open }">
       <h2 class="card-title">{{ title }}</h2>
-      <p class="card-description">{{ description }}</p>
+    <p class="card-description" lang="it">{{ description }}</p>
     </div>
 
     <div class="card-text-container" :class="{ hidden: !open }">
@@ -85,6 +85,8 @@ function toggle() {
 .card-description {
   color: var(--color-text);
   font-size: 22px;
+   text-align: justify;
+  hyphens: auto;
 }
 
 

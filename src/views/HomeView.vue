@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onBeforeUnmount } from "vue";
 import { supabase } from "../lib/supabaseClient";
 import CarouselComponent from "../components/CarouselComponent.vue";
 import ProductCard from "@/components/ProductCard.vue";
@@ -22,8 +22,38 @@ const landingImages = ref([
   "../carousel/l10.webp",
   "../carousel/l11.webp",
   "../carousel/l12.webp",
-
 ]);
+let lastWidth = 0;
+const MOBILE_QUERY = "(max-width: 970px)";
+const mql = window.matchMedia(MOBILE_QUERY);
+
+const isMobile = ref(mql.matches);
+
+const onChange = (e) => {
+  isMobile.value = e.matches;
+  scopri.value = !e.matches; // desktop = aperto, mobile = chiuso
+};
+
+onMounted(() => mql.addEventListener("change", onChange));
+onBeforeUnmount(() => mql.removeEventListener("change", onChange));
+const setAppHeight = () => {
+  if (lastWidth !== 0 && window.innerWidth === lastWidth) return;
+  lastWidth = window.innerWidth;
+  document.documentElement.style.setProperty(
+    "--app-height",
+    `${window.innerHeight}px`,
+  );
+};
+
+onMounted(() => {
+  setAppHeight();
+  window.addEventListener("resize", setAppHeight);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener("resize", setAppHeight);
+});
+
 onMounted(async () => {
   const { data: files, error } = await supabase.storage
     .from("posters")
@@ -43,7 +73,7 @@ onMounted(async () => {
     rawProducts.map(async (product) => {
       const images = await getImagesForProduct(product.oid);
       return { ...product, images };
-    })
+    }),
   );
 });
 
@@ -63,7 +93,7 @@ const getProducts = async () => {
         Manufacturers(name),
         id,
         available 
-      `
+      `,
     )
     .order("datetime", { ascending: false })
     .limit(3);
@@ -71,7 +101,7 @@ const getProducts = async () => {
     console.error(`Errore nel caricamento da dati:`, error);
     alert(
       "Si e' verficato un errore. Fai una foto a questo messaggio e inviala allo sviluppatore.\n\nHomeView/getProducts\n" +
-      error.details
+        error.details,
     );
     return [];
   }
@@ -91,7 +121,7 @@ const getImagesForProduct = async (productOid) => {
     console.error(`Errore caricando immagini per ${productOid}:`, error);
     alert(
       "Si e' verficato un errore. Fai una foto a questo messaggio e inviala allo sviluppatore. " +
-      error
+        error,
     );
     return [];
   }
@@ -100,7 +130,7 @@ const getImagesForProduct = async (productOid) => {
     (file) =>
       supabase.storage
         .from("productimages")
-        .getPublicUrl(`${productOid}/${file.name}`).data.publicUrl
+        .getPublicUrl(`${productOid}/${file.name}`).data.publicUrl,
   );
 };
 const openDetails = (id) => {
@@ -111,7 +141,6 @@ const openDetails = (id) => {
 <template>
   <a class="fab" href="https://wa.me/message/NFCCXXO6KJOHA1">
     <img src="../icons/whatsapp.svg" alt="Whatsapp" />
-
   </a>
   <div class="hero">
     <div class="hero-left">
@@ -120,16 +149,22 @@ const openDetails = (id) => {
     <div class="hero-right">
       <h1>INSTALLAZIONI PERSONALIZZATE</h1>
       <p>
-        Realizziamo impianti audio ad alte prestazioni, anche estremi, progettati su misura per ogni auto.
+        Realizziamo impianti audio ad alte prestazioni, anche estremi,
+        progettati su misura per ogni auto.
       </p>
       <transition name="fade-slide">
-        <p v-if="scopri">
-          Vendiamo al
-          dettaglio prodotti selezionati. Installiamo radio CarPlay, retrocamere, dashcam e LED, lavorando sempre con il
-          cliente per migliorare prestazioni, comfort, tecnologia e sicurezza di guida quotidiana.
+        <p v-if="scopri || !isMobile">
+          Vendiamo al dettaglio prodotti selezionati. Installiamo radio CarPlay,
+          retrocamere, dashcam e LED, lavorando sempre con il cliente per
+          migliorare prestazioni, comfort, tecnologia e sicurezza di guida
+          quotidiana.
         </p>
       </transition>
-      <button @click="scopri = !scopri" :class="scopri ? 'btn-inverted' : 'btn'">
+      <button
+        v-if="isMobile"
+        @click="scopri = !scopri"
+        :class="scopri ? 'btn-inverted' : 'btn'"
+      >
         <img src="../icons/up.svg" v-if="scopri" alt="comprimi" />
         <img src="../icons/down.svg" v-else alt="leggi di più" />
         {{ scopri ? "Comprimi" : "Leggi di più" }}
@@ -141,31 +176,33 @@ const openDetails = (id) => {
   </div>
 
   <div class="sez-a-card">
-    <ShowCardComponent title="Realizzazione" description="Impianti audio"
+    <ShowCardComponent
+      title="Realizzazione"
+      description="Impianti audio"
       fullDescription="Offriamo servizi di preparazione per impianti audio ad alte prestazioni, progettati su misura per ogni auto."
-      image="./img/audio.webp" />
-    <ShowCardComponent title="Illuminazione" description="Abitacolo e interni"
+      image="./img/audio.webp"
+    />
+    <ShowCardComponent
+      title="Illuminazione"
+      description="Abitacolo e interni"
       fullDescription="Realizziamo soluzioni di illuminazione personalizzate per abitacolo e interni, migliorando l'estetica e il comfort di guida."
-      image="./img/light.webp" />
-    <ShowCardComponent title="Installazione" description="Radio Aftermarket"
+      image="./img/light.webp"
+    />
+    <ShowCardComponent
+      title="Installazione"
+      description="Radio Aftermarket"
       fullDescription="Installiamo radio CarPlay, retrocamere, dashcam e LED, lavorando sempre con il cliente per migliorare prestazioni, comfort, tecnologia e sicurezza di guida quotidiana."
-      image="./img/radio.webp" />
-
-
+      image="./img/radio.webp"
+    />
   </div>
   <div class="sez-ab">
-
     <div class="separator">
       <label class="separator-text">I nostri lavori</label>
     </div>
     <div class="carousel-padder">
       <CarouselComponent :images="landingImages" />
     </div>
-
-
   </div>
-
-
 
   <div class="separator">
     <label class="separator-text">Su di noi</label>
@@ -175,9 +212,10 @@ const openDetails = (id) => {
       <div class="card-b-text-container">
         <h2 class="card-b-title">Mission</h2>
         <p class="card-b-description">
-          Trasformiamo ogni auto in uno spazio più coinvolgente, potente e funzionale, realizzando impianti audio DJ
-          estremi e upgrade tecnologici su misura. Lavoriamo con passione e confronto diretto per offrire soluzioni
-          personalizzate adatte a ogni cliente.
+          Trasformiamo ogni auto in uno spazio più coinvolgente, potente e
+          funzionale, realizzando impianti audio DJ estremi e upgrade
+          tecnologici su misura. Lavoriamo con passione e confronto diretto per
+          offrire soluzioni personalizzate adatte a ogni cliente.
         </p>
       </div>
     </div>
@@ -185,9 +223,10 @@ const openDetails = (id) => {
       <div class="card-b-text-container">
         <h2 class="card-b-title">Vision</h2>
         <p class="card-b-description">
-          Siamo un punto di riferimento nel car audio e nella personalizzazione automotive, offrendo soluzioni
-          innovative e su misura. Puntiamo a crescere insieme ai nostri clienti, unendo tecnologia, prestazioni e cura
-          dei dettagli in ogni progetto realizzato.
+          Siamo un punto di riferimento nel car audio e nella personalizzazione
+          automotive, offrendo soluzioni innovative e su misura. Puntiamo a
+          crescere insieme ai nostri clienti, unendo tecnologia, prestazioni e
+          cura dei dettagli in ogni progetto realizzato.
         </p>
       </div>
     </div>
@@ -195,9 +234,10 @@ const openDetails = (id) => {
       <div class="card-b-text-container">
         <h2 class="card-b-title">Collab</h2>
         <p class="card-b-description">
-          Collaboriamo con partner specializzati per detailing, oscuramento vetri, wrapping, assetti regolabili, freni
-          sportivi e mappatura centralina su banco prova.
-          Dalla prima modifica alla preparazione più estrema, accompagniamo ogni progetto con competenza e passione.
+          Collaboriamo con partner specializzati per detailing, oscuramento
+          vetri, wrapping, assetti regolabili, freni sportivi e mappatura
+          centralina su banco prova. Dalla prima modifica alla preparazione più
+          estrema, accompagniamo ogni progetto con competenza e passione.
         </p>
       </div>
     </div>
@@ -206,10 +246,17 @@ const openDetails = (id) => {
     <label class="separator-text">Novità</label>
   </div>
   <div class="news">
-    <ProductCard v-for="product in newProducts" :key="product.oid"
-      :name="product.Manufacturers.name + ' - ' + product.name" :price="product.price > 0 ? product.price : 0"
-      :description="product.description" :category="product.Categories.name" :available="product.available"
-          :image="product.images?.[0] || noImage" @click="openDetails(product.id)" />
+    <ProductCard
+      v-for="product in newProducts"
+      :key="product.oid"
+      :name="product.Manufacturers.name + ' - ' + product.name"
+      :price="product.price > 0 ? product.price : 0"
+      :description="product.description"
+      :category="product.Categories.name"
+      :available="product.available"
+      :image="product.images?.[0] || noImage"
+      @click="openDetails(product.id)"
+    />
   </div>
   <div class="separator">
     <label class="separator-text" id="eventi">Prossimi eventi</label>
@@ -301,7 +348,7 @@ const openDetails = (id) => {
 
 .hero-left img {
   width: 100%;
-  max-height: 500px;
+  max-height: 900px;
   border-radius: 12px;
   object-fit: cover;
   display: block;
@@ -450,6 +497,10 @@ const openDetails = (id) => {
 .card-b-description {
   color: var(--color-text);
   font-size: 22px;
+   text-align: justify;
+  hyphens: none;
+  overflow-wrap: normal;
+  word-break: normal;
 }
 
 /* ---------- Nessun evento ---------- */
@@ -471,13 +522,25 @@ const openDetails = (id) => {
 
 /* ---------- Animazioni ---------- */
 @keyframes slideInLeft {
-  from { transform: translateX(-100px); opacity: 0; }
-  to   { transform: translateX(0); opacity: 1; }
+  from {
+    transform: translateX(-100px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 
 @keyframes slideInRight {
-  from { transform: translateX(100px); opacity: 0; }
-  to   { transform: translateX(0); opacity: 1; }
+  from {
+    transform: translateX(100px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 
 /* =========================================================
@@ -492,22 +555,24 @@ const openDetails = (id) => {
 @media (max-width: 970px) {
   .hero {
     position: relative;
+    box-sizing: border-box;
     flex-direction: column;
+    justify-content: center;
     gap: 0;
     padding: 0;
-    min-height: calc(100vh - var(--top-appbar-height));
-    min-height: calc(100dvh - var(--top-appbar-height));
+    overflow: hidden;
+    min-height: calc(100vh - var(--top-appbar-height, 70px));
+    min-height: calc(100svh - var(--top-appbar-height, 70px));
     background-image: url("../images/hero.webp");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
   }
-
   .hero::before {
     content: "";
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.78);
     z-index: 1;
   }
 
@@ -518,7 +583,8 @@ const openDetails = (id) => {
   .hero-right {
     position: relative;
     z-index: 2;
-    padding: 40px 20px;
+    padding: 30px 20px;
+    gap: 20px;
   }
 
   .news {
