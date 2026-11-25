@@ -25,7 +25,7 @@ const router = createRouter({
       name: "prodotto",
       component: ProductView,
     },
-    { path: "/:pathMatch(.*)*", name: "NotFound", component: NotFoundView },
+    { path: "/:pathMatch(.*)*", name: "NotFoundmatch", component: NotFoundView },
     { path: "/not-found", name: "NotFound", component: NotFoundView },
   ],
 });
