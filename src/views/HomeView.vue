@@ -20,6 +20,9 @@ const landingImages = ref([
   "../carousel/l8.webp",
   "../carousel/l9.webp",
   "../carousel/l10.webp",
+  "../carousel/l11.webp",
+  "../carousel/l12.webp",
+
 ]);
 onMounted(async () => {
   const { data: files, error } = await supabase.storage
@@ -115,7 +118,7 @@ const openDetails = (id) => {
       <img src="../images/hero-desktop.webp" alt="Meccanico" class="blur" />
     </div>
     <div class="hero-right">
-      <h1>IMPIANTI STEREO AD HOC</h1>
+      <h1>INSTALLAZIONI PERSONALIZZATE</h1>
       <p>
         Realizziamo impianti audio ad alte prestazioni, anche estremi, progettati su misura per ogni auto.
       </p>
@@ -126,7 +129,7 @@ const openDetails = (id) => {
           cliente per migliorare prestazioni, comfort, tecnologia e sicurezza di guida quotidiana.
         </p>
       </transition>
-      <button " @click=" scopri = !scopri" :class="scopri ? 'btn-inverted' : 'btn'">
+      <button @click="scopri = !scopri" :class="scopri ? 'btn-inverted' : 'btn'">
         <img src="../icons/up.svg" v-if="scopri" alt="comprimi" />
         <img src="../icons/down.svg" v-else alt="leggi di più" />
         {{ scopri ? "Comprimi" : "Leggi di più" }}
@@ -138,7 +141,7 @@ const openDetails = (id) => {
   </div>
 
   <div class="sez-a-card">
-    <ShowCardComponent title="Preparazione" description="Impianti audio"
+    <ShowCardComponent title="Realizzazione" description="Impianti audio"
       fullDescription="Offriamo servizi di preparazione per impianti audio ad alte prestazioni, progettati su misura per ogni auto."
       image="./img/audio.webp" />
     <ShowCardComponent title="Illuminazione" description="Abitacolo e interni"
@@ -220,22 +223,22 @@ const openDetails = (id) => {
   </div>
 </template>
 <style scoped>
+/* ---------- FAB ---------- */
 .fab {
   display: flex;
   position: fixed;
-  bottom: 20px;
-  right: 20px;
+  bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+  right: calc(20px + env(safe-area-inset-right, 0px));
   background-color: var(--color-primary);
   color: white;
   border: none;
   border-radius: 50px;
-  padding: 15px 15px;
+  padding: 15px;
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   z-index: 999;
-
   align-items: center;
   gap: 8px;
   transition: transform 0.2s;
@@ -251,7 +254,7 @@ const openDetails = (id) => {
   filter: brightness(0) invert(1);
 }
 
-
+/* ---------- Transizione testo hero ---------- */
 .fade-slide-enter-active,
 .fade-slide-leave-active {
   transition: all 0.5s ease;
@@ -268,210 +271,21 @@ const openDetails = (id) => {
 .fade-slide-leave-from {
   opacity: 1;
   max-height: 500px;
-  /* altezza massima stimata */
 }
 
-@media (min-width: 481px) {
-  .not-found {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    text-align: center;
-    width: 100%;
-    color: var(--color-text);
-  }
-
-  .not-found img {
-    width: 400px;
-    margin-bottom: 20px;
-  }
-
-  .card-b {
-    background-color: var(--color-container);
-    border: 1px solid var(--color-container-border);
-    border-radius: 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    width: 100%;
-    flex: 1 1 300px;
-
-  }
-
-  .card-b-text-container {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    padding: 40px;
-    bottom: 0;
-    z-index: 2;
-    /* sopra il gradiente */
-  }
-
-  .card-b-title {
-    color: var(--color-primary-light);
-    font-size: 28px;
-    font-weight: 600;
-  }
-
-  .card-b-description {
-    color: var(--color-text);
-    font-size: 22px;
-  }
-
-
-
-  .card:hover {
-    transform: scale(1.02);
-    transition: transform 0.3s ease;
-  }
-
-
-}
-
-@media (max-width: 1000px) {
-  .sez-a {
-    flex-direction: column;
-  }
-}
-
-@media (max-width: 600px) {
-  .hero-right {
-    padding: 10px;
-  }
-}
-
-@media (max-width: 970px) {
-  .not-found {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    text-align: center;
-    width: 100%;
-    color: var(--color-text);
-  }
-
-  .not-found img {
-    width: 250px;
-    margin-bottom: 20px;
-  }
-
-
-
-  .hero {
-    padding: 0;
-    flex-direction: column;
-    background-image: url("../images/hero.webp");
-    background-size: cover;
-
-    background-position: center;
-    background-repeat: no-repeat;
-    position: relative;
-    min-height: calc(100vh - var(--top-appbar-height));
-  }
-
-  .hero::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.6);
-    z-index: 1;
-  }
-
-  .hero-left {
-    display: none;
-  }
-
-  .hero-right {
-    position: relative;
-    z-index: 2;
-  }
-
-  .card-b-title {
-    font-size: 24px;
-  }
-
-
-
-  .news {
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    justify-content: center;
-  }
-
-
-
-  .hero-left {
-    display: none;
-  }
-
-  .card-b {
-    background-color: var(--color-container);
-    border: 1px solid var(--color-container-border);
-    border-radius: 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    width: 100%;
-  }
-
-  .card-b-text-container {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    padding: 30px;
-    bottom: 0;
-    z-index: 2;
-
-  }
-
-  .card-b-title {
-    color: var(--color-primary-light);
-    font-size: 28px;
-    font-weight: 600;
-  }
-
-  .card-b-description {
-    color: var(--color-text);
-    font-size: 18px;
-    text-align: left;
-    line-height: 1.6;
-    word-break: normal;
-  }
-
-  .card-title {
-    color: var(--color-primary-light);
-    font-size: 28px;
-    font-weight: 600;
-  }
-
-
-
-}
-
-.carousel-padder {
-  padding: 0 20px;
-}
-
-.news {
-  display: flex;
-  gap: 20px;
-  align-items: center;
-  justify-content: center;
-}
-
+/* ---------- Hero ---------- */
 .hero {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 50px;
   padding: 80px 50px;
+  box-sizing: border-box;
+}
+
+.hero-left,
+.hero-right {
+  min-width: 0;
 }
 
 .hero-left {
@@ -479,27 +293,22 @@ const openDetails = (id) => {
 }
 
 .hero-right {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
   animation: slideInRight 1s ease-out forwards;
 }
 
 .hero-left img {
   width: 100%;
+  max-height: 500px;
   border-radius: 12px;
   object-fit: cover;
-  max-height: 500px;
-}
-
-.hero-right {
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-
-
+  display: block;
 }
 
 .hero h1 {
   color: var(--color-text);
-  font-size: 48px;
   font-weight: 700;
   line-height: 1.2;
 }
@@ -512,53 +321,56 @@ const openDetails = (id) => {
 
 .hero .btn,
 .hero .btn-inverted {
-  gap: 10px;
-  padding: 12px 20px;
-  font-size: 14px;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  text-transform: uppercase;
-  transition: all 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  text-decoration: none;
+  gap: 10px;
   width: fit-content;
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 8px;
+  cursor: pointer;
+  color: var(--color-on-primary);
+  transition: all 0.3s ease;
 }
 
+/* pieno */
 .hero .btn {
   background-color: var(--color-primary);
-  color: var(--color-on-primary);
   border: 2px solid transparent;
 }
 
-.hero .btn:hover,
+/* contorno */
 .hero .btn-inverted {
   background-color: transparent;
   border: 2px solid var(--color-primary);
-  color: var(--color-on-primary);
 }
 
-.hero .btn-inverted:hover,
-.hero .btn {
-  background-color: var(--color-primary);
-  border: 2px solid transparent;
-  color: var(--color-on-primary);
+/* hover solo su dispositivi con mouse */
+@media (hover: hover) {
+  .hero .btn:hover {
+    background-color: transparent;
+    border-color: var(--color-primary);
+  }
+
+  .hero .btn-inverted:hover {
+    background-color: var(--color-primary);
+    border-color: transparent;
+  }
 }
 
-
-
-
+/* ---------- Sezioni ---------- */
 .sez-a,
 .sez-a-card {
   display: flex;
-
   justify-content: space-between;
   gap: 20px;
   width: 100%;
   padding: 20px;
+  box-sizing: border-box;
 }
 
 .sez-a {
@@ -570,24 +382,23 @@ const openDetails = (id) => {
   flex-wrap: wrap;
 }
 
-
-
-.card-text-container {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 40px;
-  position: absolute;
-  bottom: 0;
-  z-index: 2;
-  /* sopra il gradiente */
-}
-
 .sez-ab {
   width: 100%;
 }
 
+.carousel-padder {
+  padding: 0 20px;
+}
 
+.news {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---------- Separator ---------- */
 .separator {
   display: flex;
   align-items: center;
@@ -609,27 +420,134 @@ const openDetails = (id) => {
   color: var(--color-text);
 }
 
-@keyframes slideInLeft {
-  from {
-    transform: translateX(-100px);
-    opacity: 0;
-  }
+/* ---------- Card Mission / Vision / Collab ---------- */
+.card-b {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  flex: 1 1 300px;
+  box-sizing: border-box;
+  background-color: var(--color-container);
+  border: 1px solid var(--color-container-border);
+  border-radius: 16px;
+}
 
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
+.card-b-text-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 40px;
+  z-index: 2;
+}
+
+.card-b-title {
+  color: var(--color-primary-light);
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.card-b-description {
+  color: var(--color-text);
+  font-size: 22px;
+}
+
+/* ---------- Nessun evento ---------- */
+.not-found {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+  color: var(--color-text);
+}
+
+.not-found img {
+  width: 400px;
+  max-width: 100%;
+  margin-bottom: 20px;
+}
+
+/* ---------- Animazioni ---------- */
+@keyframes slideInLeft {
+  from { transform: translateX(-100px); opacity: 0; }
+  to   { transform: translateX(0); opacity: 1; }
 }
 
 @keyframes slideInRight {
-  from {
-    transform: translateX(100px);
-    opacity: 0;
+  from { transform: translateX(100px); opacity: 0; }
+  to   { transform: translateX(0); opacity: 1; }
+}
+
+/* =========================================================
+   RESPONSIVE (dal breakpoint più grande al più piccolo)
+   ========================================================= */
+@media (max-width: 1000px) {
+  .sez-a {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 970px) {
+  .hero {
+    position: relative;
+    flex-direction: column;
+    gap: 0;
+    padding: 0;
+    min-height: calc(100vh - var(--top-appbar-height));
+    min-height: calc(100dvh - var(--top-appbar-height));
+    background-image: url("../images/hero.webp");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
   }
 
-  to {
-    transform: translateX(0);
-    opacity: 1;
+  .hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 1;
+  }
+
+  .hero-left {
+    display: none;
+  }
+
+  .hero-right {
+    position: relative;
+    z-index: 2;
+    padding: 40px 20px;
+  }
+
+  .news {
+    flex-direction: column;
+  }
+
+  .card-b-text-container {
+    padding: 30px;
+  }
+
+  .card-b-description {
+    font-size: 18px;
+    line-height: 1.6;
+    text-align: left;
+    word-break: normal;
+  }
+
+  .not-found img {
+    width: 250px;
+  }
+}
+
+@media (max-width: 600px) {
+  .hero h1 {
+    font-size: 32px;
+  }
+
+  .hero-right {
+    padding: 40px 10px;
   }
 }
 </style>

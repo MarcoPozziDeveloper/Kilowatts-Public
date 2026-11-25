@@ -9,7 +9,7 @@
                 <div class="footer-list">
                     <div class="footer-row">
                         <img src="../icons/clock.svg" alt="Orario" />
-                        <label class="footer-text">14:00-19:00 | Lunedì-Sabato</label>
+                        <label class="footer-text">15:00-19:00 | Lunedì-Sabato | PREVIO APPUNTAMENTO</label>
                     </div>
                     <a href="https://maps.app.goo.gl/2vtuVn9tbHBYb1tY8" class="footer-row">
                         <img src="../icons/location.svg" alt="Posizione" />
