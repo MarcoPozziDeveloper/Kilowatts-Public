@@ -1,4 +1,4 @@
 User-agent: *
 Disallow: 
 Disallow: /cgi-bin/
-Sitemap: https://kilowatts-public-dev.netlify.app/sitemap.xml
+Sitemap: https://kilowattsindustries.it/sitemap.xml

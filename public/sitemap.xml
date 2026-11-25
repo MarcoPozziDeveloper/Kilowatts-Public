@@ -3,27 +3,34 @@
 
   <url>
     <loc>https://www.kilowattsindustries.it/</loc>
-    <lastmod>2026-01-15</lastmod>
+    <lastmod>2026-11-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
 
   <url>
-    <loc>https://www.kilowattsindustries.it/audio</loc>
-    <lastmod>2026-01-15</lastmod>
+    <loc>https://kilowattsindustries.it/catalogo/merchandising</loc>
+    <lastmod>2026-11-25</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://kilowattsindustries.it/catalogo/tuning</loc>
+    <lastmod>2026-11-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
 
     <url>
-    <loc>https://www.kilowattsindustries.it/ricambi</loc>
-    <lastmod>2026-01-15</lastmod>
+    <loc>https://kilowattsindustries.it/catalogo/audio</loc>
+    <lastmod>2026-11-25 </lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
     <url>
-    <loc>https://www.kilowattsindustries.it/#eventi</loc>
-    <lastmod>2026-01-15</lastmod>
+    <loc>https://kilowattsindustries.it/</loc>
+    <lastmod>2026-11-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
