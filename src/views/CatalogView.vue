@@ -119,10 +119,10 @@ const getImagesForProduct = async (productOid) => {
 
   if (error) {
     console.error(`Errore caricando immagini per ${productOid}:`, error);
-    alert(
+    /*alert(
       "Si e' verficato un errore. Fai una foto a questo messaggio e inviala allo sviluppatore. " +
       error,
-    );
+    );*/
     return [];
   }
 
