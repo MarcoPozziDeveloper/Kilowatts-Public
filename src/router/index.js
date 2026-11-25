@@ -3,6 +3,7 @@ import HomeView from "../views/HomeView.vue";
 import CatalogView from "../views/CatalogView.vue";
 import ProductView from "../views/ProductView.vue";
 import NotFoundView from "@/views/NotFoundView.vue";
+import RedirectHomeView from "@/views/RedirectHomeView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -19,6 +20,7 @@ const router = createRouter({
 
   routes: [
     { path: "/", name: "home", component: HomeView },
+    { path: "/kw", name: "redirecthome", component: RedirectHomeView },
     { path: "/catalogo/:id", name: "catalogo", component: CatalogView },
     {
       path: "/prodotto/:id",
