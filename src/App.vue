@@ -11,18 +11,12 @@ import FooterComponent from "./components/FooterComponent.vue";
       <RouterView :key="$route.params.id" />
       <FooterComponent />
     </div>
-
   </div>
-
-
-
 </template>
 
 <style>
-@import url("./styles/themes.css");
-@import url("./styles/index.css");
-
 .main-app {
+  @import url("./styles/main.css");
   padding-top: var(--top-appbar-height);
   width: 100%;
   display: flex;

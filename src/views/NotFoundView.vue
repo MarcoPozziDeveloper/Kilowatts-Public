@@ -15,7 +15,7 @@ const goHome = () => {
       <p>La pagina che stai cercando non esiste.</p>
     </div>
 
-    <img src="../images/404.webp" alt="404" />
+    <img src="/img/404.webp" alt="404" />
 
     <button @click="goHome" class="input-default">Torna alla home</button>
   </div>

@@ -613,7 +613,7 @@ const openDetails = (id) => {
   }
 
   .hero-right {
-    padding: 40px 10px;
+    padding: 40px 20px;
   }
 }
 </style>
