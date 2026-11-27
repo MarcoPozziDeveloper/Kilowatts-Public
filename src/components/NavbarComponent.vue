@@ -54,7 +54,7 @@ onBeforeUnmount(() => {
   <div class="navbar">
     <router-link to="/">
       <img
-        src="/img/KW_logo.png"
+        src="../images/KW_logo.png"
         alt="Kilowatts Industries Logo"
         class="logo"
       />
