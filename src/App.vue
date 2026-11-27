@@ -9,13 +9,9 @@ import FooterComponent from "./components/FooterComponent.vue";
     <NavbarComponent />
     <div class="main-app">
       <RouterView :key="$route.params.id" />
-      <FooterComponent />
     </div>
-
   </div>
-
-
-
+  <FooterComponent />
 </template>
 
 <style>

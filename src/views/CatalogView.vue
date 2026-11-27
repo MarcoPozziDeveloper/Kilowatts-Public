@@ -14,6 +14,7 @@ const products = ref([]);
 const refreshToken = ref(0);
 const search = ref("");
 const sortBy = ref("0");
+const loading = ref(false);
 const total = ref(0);
 const page = ref(1);
 const pageSize = 12;
@@ -28,6 +29,8 @@ const productData = ref({
 
 const loadData = async () => {
   refreshToken.value++;
+  loading.value = true;
+  checkCatalog();
   const rawProducts = await getProducts();
   categories.value = productData.Categories;
   manufacturers.value = productData.Manufacturers;
@@ -40,6 +43,7 @@ const loadData = async () => {
   );
 
   products.value = productsWithImages;
+  loading.value = false;
 };
 
 const getProducts = async () => {
@@ -97,8 +101,7 @@ const getProducts = async () => {
     case "4": // Produttore
       query = query.order("manufacturer_id", { ascending: true });
       break;
-      def1lt:
-      query = query.order("datetime", { ascending: false });
+      def1lt: query = query.order("datetime", { ascending: false });
   }
 
   const { data, error, count } = await query.range(from, to);
@@ -107,7 +110,22 @@ const getProducts = async () => {
   total.value = count;
   return data;
 };
+const checkCatalog = async () => {
+  // ilike tratta % e _ come wildcard, quindi li escapo
+  const safeName = catalogName.replace(/[%_\\]/g, "\\$&");
 
+  const { data, error } = await supabase
+    .from("Catalogs")
+    .select("name")
+    .ilike("name", safeName)
+    .maybeSingle();
+
+  // console.log("Checking catalog:", catalogName, data, error);
+
+  if (error || !data) {
+    router.push({ name: "NotFound" });
+  }
+};
 const getImagesForProduct = async (productOid) => {
   const { data, error } = await supabase.storage
     .from("productimages")
@@ -138,20 +156,32 @@ const openDetails = (id) => {
   router.push({ name: "prodotto", params: { id } });
 };
 
-
 const totalPages = computed(() => Math.ceil(total.value / pageSize));
 
 // Watch SOLO sui filtri: quando cambiano, torna a pagina 1
 watch(
-  [search, sortBy, () => productData.value.price, () => productData.value.category_id, () => productData.value.manufacturer_id],
+  [
+    search,
+    sortBy,
+    () => productData.value.price,
+    () => productData.value.category_id,
+    () => productData.value.manufacturer_id,
+  ],
   () => {
     page.value = 1;
-  }
+  },
 );
 
 // Watch SOLO sulla pagina + su tutto il resto per aggiornare URL e ricaricare
 watch(
-  [search, sortBy, () => productData.value.price, () => productData.value.category_id, () => productData.value.manufacturer_id, page],
+  [
+    search,
+    sortBy,
+    () => productData.value.price,
+    () => productData.value.category_id,
+    () => productData.value.manufacturer_id,
+    page,
+  ],
   () => {
     router.replace({
       query: {
@@ -165,12 +195,11 @@ watch(
     });
 
     loadData();
-  }
+  },
 );
 
 onMounted(() => {
   const q = router.currentRoute.value.query;
-
   search.value = q.search || "";
   sortBy.value = q.sortBy || "0";
   productData.value.price = q.price ? Number(q.price) : null;
@@ -203,7 +232,12 @@ onMounted(() => {
     <div class="input-group desktop-only">
       <label>Cerca parole chiave</label>
       <div class="input-sub-group">
-        <input class="generic-input" type="text" v-model="search" placeholder="Cerca..." />
+        <input
+          class="generic-input"
+          type="text"
+          v-model="search"
+          placeholder="Cerca..."
+        />
         <img class="search-icon" src="../images/lens.svg" alt="Search" />
       </div>
     </div>
@@ -221,23 +255,45 @@ onMounted(() => {
 
     <div class="input-group">
       <label>Prezzo massimo</label>
-      <input class="generic-input" v-model.number="productData.price" type="number" step="0.01" min="0"
-        placeholder="Max" />
+      <input
+        class="generic-input"
+        v-model.number="productData.price"
+        type="number"
+        step="0.01"
+        min="0"
+        placeholder="Max"
+      />
     </div>
 
     <div class="input-group">
       <label>Brand</label>
-      <SelectComponent tableName="Manufacturers" label="Produttore" :refreshToken="refreshToken" :catalogName="catalogName"
-        :defaultSelectedId="productData.manufacturer_id" @selected="productData.manufacturer_id = $event" />
+      <SelectComponent
+        tableName="Manufacturers"
+        label="Produttore"
+        :refreshToken="refreshToken"
+        :catalogName="catalogName"
+        :defaultSelectedId="productData.manufacturer_id"
+        @selected="productData.manufacturer_id = $event"
+      />
     </div>
 
     <div class="input-group">
       <label>Categoria</label>
-      <SelectComponent tableName="Categories" label="Categorie" :refreshToken="refreshToken" :catalogName="catalogName"
-        :defaultSelectedId="productData.category_id" @selected="productData.category_id = $event" />
+      <SelectComponent
+        tableName="Categories"
+        label="Categorie"
+        :refreshToken="refreshToken"
+        :catalogName="catalogName"
+        :defaultSelectedId="productData.category_id"
+        @selected="productData.category_id = $event"
+      />
     </div>
 
-    <button type="button" class="apply-filters-mobile" @click="showFilters = false">
+    <button
+      type="button"
+      class="apply-filters-mobile"
+      @click="showFilters = false"
+    >
       Applica Filtri
     </button>
   </form>
@@ -250,18 +306,24 @@ onMounted(() => {
   <div class="page-container">
     <!-- Products Grid -->
 
-    <div class="content-area">
+    <div class="content-area" v-if="!loading">
       <div class="products">
-        <div class="not-found" v-if="total == 0">
+        <div class="not-found" v-if="total == 0 && loading == false">
           <img src="../images/no-found.webp" alt="Nessun prodotto trovato" />
           <h2>Nessun prodotto trovato</h2>
         </div>
-        <ProductCard v-for="product in products" :key="product.oid"
-          :name="product.Manufacturers.name + ' - ' + product.name" :price="product.price > 0 ? product.price : 0"
-          :description="product.description" :category="product.Categories.name"
+
+        <ProductCard
+          v-for="product in products"
+          :key="product.oid"
+          :name="product.Manufacturers.name + ' - ' + product.name"
+          :price="product.price > 0 ? product.price : 0"
+          :description="product.description"
+          :category="product.Categories.name"
           :image="product.images?.[0] || noImage"
           @click="openDetails(product.id)"
-          :available="product.available" />
+          :available="product.available"
+        />
       </div>
 
       <div class="navigator">
@@ -269,15 +331,60 @@ onMounted(() => {
           <img src="../icons/angle_left.svg" alt="Precedente" />
         </button>
         <label>Pagina {{ page }} di {{ totalPages }}</label>
-        <button class="navbutton" @click="page++" :disabled="page >= totalPages">
+        <button
+          class="navbutton"
+          @click="page++"
+          :disabled="page >= totalPages"
+        >
           <img src="../icons/angle_right.svg" alt="Successiva" />
         </button>
       </div>
+    </div>
+    <div class="loaderarea" v-else>
+      <div class="loader"></div>
+      <h3>Caricamento prodotti...</h3>
     </div>
   </div>
 </template>
 
 <style scoped>
+/* ============ Variabili locali ============ */
+.left-pannel,
+.content-area {
+  --panel-w: 280px;
+}
+
+/* ============ Loader ============ */
+.loaderarea {
+  gap: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 90px 0;
+}
+
+.loader {
+  width: 50px;
+  padding: 8px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--color-primary);
+  --_m: conic-gradient(#0000 10%, #000), linear-gradient(#000 0 0) content-box;
+  -webkit-mask: var(--_m);
+  mask: var(--_m);
+  -webkit-mask-composite: source-out;
+  mask-composite: subtract;
+  animation: l3 1s infinite linear;
+}
+
+@keyframes l3 {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+/* ============ Nessun risultato ============ */
 .not-found {
   text-align: center;
   color: var(--color-text);
@@ -285,59 +392,23 @@ onMounted(() => {
 
 .not-found img {
   width: 400px;
+  max-width: 100%;
   margin-bottom: 20px;
 }
 
-@media (min-width: 601px) {
-  .desktop-only {
-    display: block !important;
-  }
-
-  .mobile-only {
-    display: none !important;
-  }
-}
-
-@media (max-width: 600px) {
-  .mobile-only {
-    display: block !important;
-  }
-
-  .desktop-only {
-    display: none !important;
-  }
-
-  .not-found {
-    text-align: center;
-    color: var(--color-text);
-  }
-
-  .not-found img {
-    width: 100%;
-    margin-bottom: 20px;
-  }
-}
-
+/* ============ Barra di ricerca (mobile) ============ */
 .search-bar {
-  left: 0;
-  right: 0;
   display: flex;
   flex-direction: column;
-  padding: 20px 20px;
+  padding: 20px;
   background-color: var(--color-input-background);
   width: 100%;
-}
-
-.sub-search-bar .search-icon {
-  width: 20px;
-  height: 20px;
 }
 
 .search-bar input {
   width: 100%;
   padding: 8px 34px 8px 12px;
   font-size: 18px;
-  border: none;
   border-radius: 50px;
   background-color: transparent;
   color: var(--color-text);
@@ -353,162 +424,22 @@ onMounted(() => {
   border-color: var(--color-primary);
 }
 
+/* ============ Layout ============ */
 .page-container {
   position: relative;
   width: 100%;
 }
 
-.mobile-filter-toggle {
-  display: none;
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background-color: var(--color-primary);
-  color: white;
-  border: none;
-  border-radius: 50px;
-  padding: 12px 20px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  z-index: 999;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  transition: transform 0.2s;
-}
-
-.mobile-filter-toggle:active {
-  transform: scale(0.95);
-}
-
-.mobile-filter-toggle img {
-  width: 20px;
-  height: 20px;
-  filter: brightness(0) invert(1);
-}
-
-.overlay {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 998;
-}
-
-.filter-header {
-  display: none;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.filter-header h3 {
-  margin: 0;
-  font-size: 20px;
-}
-
-.close-filters {
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-  color: var(--color-text);
-  padding: 0;
-  width: 30px;
-  height: 30px;
-}
-
-.apply-filters-mobile {
-  display: none;
-  width: 100%;
-  padding: 12px;
-  background-color: var(--color-primary);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  margin-top: 20px;
-}
-
-.input-sub-group,
-.sub-search-bar {
-  display: flex;
-  position: relative;
-}
-
-.input-group {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.generic-input {
-  border: none;
-  border-bottom: 1px solid var(--color-text);
-  background-color: var(--color-input-background);
-  font-size: 16px;
-  padding: 6px 32px 6px 6px;
-  color: var(--color-text);
-  width: 100%;
-}
-
-.input-sub-group .search-icon {
-  width: 18px;
-  height: 18px;
-}
-
-.search-icon {
-  position: absolute;
-  right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  pointer-events: none;
-}
-
-.generic-input:focus {
-  outline: none;
-  border-bottom: 2px solid var(--color-primary);
-}
-
-.input-group label {
-  padding-left: 6px;
-  font-weight: 500;
-}
-
-.left-pannel {
-  position: fixed;
-  top: 70px;
-  left: 0;
-  bottom: 0;
-  height: calc(100vh - var(--top-appbar-height));
-  width: var(--left-pannel-width);
-  padding: 50px 20px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 40px;
-  background-color: var(--color-container);
-  z-index: 10;
-}
-
 .content-area {
-  margin-left: var(--left-pannel-width);
-  width: calc(100% - var(--left-pannel-width));
+  margin-left: var(--panel-w);
 }
 
 .products {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 20px;
-  padding: 20px;
+  gap: 15px;
+  padding: 15px;
 }
 
 .navigator {
@@ -542,28 +473,153 @@ onMounted(() => {
   height: 24px;
 }
 
-/* Responsive Styles */
-@media (min-width: 601px) {
-  .left-pannel {
-    width: 280px;
-  }
+/* ============ Pannello filtri ============ */
+.left-pannel {
+  position: fixed;
+  top: var(--top-appbar-height, 70px);
+  left: 0;
+  width: var(--panel-w);
+  padding: 50px 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+   background-color: var(--color-container);
 
-  .content-area {
-    margin-left: 280px;
-    width: calc(100% - 280px);
-  }
 
-  .products {
-    gap: 15px;
-    padding: 15px;
-  }
-
-  .mobile-filter-toggle {
-    display: none;
-  }
+  bottom: 0;
+  z-index: 10;
 }
 
-@media (max-width: 600px) {
+.filter-header {
+  display: none; /* visibile solo su mobile */
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.filter-header h3 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.close-filters {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: var(--color-text);
+  padding: 0;
+  width: 30px;
+  height: 30px;
+}
+
+.apply-filters-mobile {
+  display: none; /* visibile solo su mobile */
+  width: 100%;
+  padding: 12px;
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+/* ============ Input ============ */
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.input-group label {
+  padding-left: 6px;
+  font-weight: 500;
+}
+
+.input-sub-group,
+.sub-search-bar {
+  display: flex;
+  position: relative;
+}
+
+.generic-input {
+  border: none;
+  border-bottom: 1px solid var(--color-text);
+  background-color: var(--color-input-background);
+  font-size: 16px;
+  padding: 6px 32px 6px 6px;
+  color: var(--color-text);
+  width: 100%;
+}
+
+.generic-input:focus {
+  outline: none;
+  border-bottom: 2px solid var(--color-primary);
+}
+
+.search-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.input-sub-group .search-icon {
+  width: 18px;
+  height: 18px;
+}
+
+.sub-search-bar .search-icon {
+  width: 20px;
+  height: 20px;
+}
+
+/* ============ Bottone filtri mobile + overlay ============ */
+.mobile-filter-toggle {
+  display: none; /* visibile solo su mobile */
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 12px 20px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  z-index: 999;
+  transition: transform 0.2s;
+}
+
+.mobile-filter-toggle:active {
+  transform: scale(0.95);
+}
+
+.mobile-filter-toggle img {
+  width: 20px;
+  height: 20px;
+  filter: brightness(0) invert(1);
+}
+
+.overlay {
+  display: none; /* visibile solo su mobile */
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 998;
+}
+
+/* ============ Mobile (≤ 970px) ============ */
+@media (max-width: 970px) {
   .mobile-filter-toggle {
     display: flex;
   }
@@ -581,13 +637,9 @@ onMounted(() => {
   }
 
   .left-pannel {
-    position: fixed;
     top: 0;
-    left: 0;
-    bottom: 0;
     width: 85%;
     max-width: 350px;
-    height: 100vh;
     padding: 20px;
     transform: translateX(-100%);
     transition: transform 0.3s ease-in-out;
@@ -601,11 +653,9 @@ onMounted(() => {
 
   .content-area {
     margin-left: 0;
-    width: 100%;
   }
 
   .products {
-    gap: 15px;
     padding: 0 20px;
   }
 
@@ -617,8 +667,13 @@ onMounted(() => {
   .navigator label {
     font-size: 14px;
   }
+
+  .not-found img {
+    width: 100%;
+  }
 }
 
+/* ============ Mobile piccolo (≤ 480px) ============ */
 @media (max-width: 480px) {
   .left-pannel {
     width: 90%;
@@ -654,6 +709,21 @@ onMounted(() => {
   .navbutton img {
     width: 20px;
     height: 20px;
+  }
+}
+
+/* ============ Helper di visibilità (tenere IN FONDO) ============
+   Stessa specificità di .search-bar / .input-group, ma vincono per ordine:
+   niente !important necessario. */
+@media (min-width: 971px) {
+  .mobile-only {
+    display: none;
+  }
+}
+
+@media (max-width: 970px) {
+  .desktop-only {
+    display: none;
   }
 }
 </style>

@@ -39,6 +39,8 @@
 
 <style scoped>
 .footer {
+    position: relative;
+    z-index: 10;
     margin-top: 30px;
     border-top: 1px solid var(--color-container-border);
     display: flex;
