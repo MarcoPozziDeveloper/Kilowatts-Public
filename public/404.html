@@ -6,7 +6,7 @@
     <meta name="robots" content="noindex" />
     <title>Pagina non trovata</title>
     <style>
-       @font-face {
+      @font-face {
         font-family: "Outfit";
         src: url("/fonts/Outfit.ttf") format("truetype");
         font-weight: 100 900;
@@ -24,8 +24,8 @@
       }
 
       body {
-        background-color: var(--color-bg);
-        color: var(--color-text);
+        background-color: hsl(0, 0%, 8%);
+        color: hsl(0, 0%, 76%);
 
         display: flex;
         flex-direction: column;
@@ -36,7 +36,7 @@
 
       .not-found {
         width: 100%;
-        margin-top: var(--top-appbar-height);
+
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -68,23 +68,43 @@
 
       .home-button {
         display: inline-block;
-        background-color: var(--color-primary);
-        color: var(--color-on-primary);
+        background-color: #006dda;
+        color: #ffffff;
         text-decoration: none;
         padding: 10px 20px;
         border-radius: 8px;
         cursor: pointer;
       }
+      .logobar {
+        position: fixed;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        padding: 16px;
+      }
+      .logobar img {
+        max-width: 500px;
+        width: 100%;
+        height: auto;
+      }
     </style>
   </head>
   <body>
+    <div class="logobar">
+      <a href="/">
+        <img
+          src="img/KW_logo.png"
+          alt="Kilowatts Industries Logo"
+          class="logo"
+      /></a>
+    </div>
     <div class="not-found">
       <div class="overlay">
         <h1>404</h1>
         <p>La pagina che stai cercando non esiste.</p>
       </div>
 
-      <img src="/images/404.webp" alt="404" />
+      <img src="/img/404.webp" alt="404" />
 
       <a href="/" class="home-button">Torna alla home</a>
     </div>
