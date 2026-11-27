@@ -99,7 +99,7 @@ const getProducts = async () => {
     .limit(3);
   if (error) {
     console.error(`Errore nel caricamento da dati:`, error);
-   /* alert(
+    /* alert(
       "Si e' verficato un errore. Fai una foto a questo messaggio e inviala allo sviluppatore.\n\nHomeView/getProducts\n" +
         error.details,
     );*/
@@ -119,7 +119,7 @@ const getImagesForProduct = async (productOid) => {
 
   if (error) {
     console.error(`Errore caricando immagini per ${productOid}:`, error);
- /*   alert(
+    /*   alert(
       "Si e' verficato un errore. Fai una foto a questo messaggio e inviala allo sviluppatore. " +
         error,
     );*/
@@ -144,7 +144,16 @@ const openDetails = (id) => {
   </a>
   <div class="hero">
     <div class="hero-left">
-      <img src="../images/hero-desktop.webp" alt="Meccanico" class="blur" />
+      <picture>
+        <source media="(max-width: 970px)" srcset="../images/hero.webp" />
+        <img
+          src="../images/hero-desktop.webp"
+          alt="Meccanico"
+          class="blur"
+          fetchpriority="high"
+          decoding="sync"
+        />
+      </picture>
     </div>
     <div class="hero-right">
       <h1>INSTALLAZIONI PERSONALIZZATE</h1>
@@ -335,15 +344,10 @@ const openDetails = (id) => {
   min-width: 0;
 }
 
-.hero-left {
-  animation: slideInLeft 1s ease-out forwards;
-}
-
 .hero-right {
   display: flex;
   flex-direction: column;
   gap: 30px;
-  animation: slideInRight 1s ease-out forwards;
 }
 
 .hero-left img {
@@ -497,7 +501,7 @@ const openDetails = (id) => {
 .card-b-description {
   color: var(--color-text);
   font-size: 22px;
-   text-align: justify;
+  text-align: justify;
   hyphens: none;
   overflow-wrap: normal;
   word-break: normal;
@@ -563,7 +567,6 @@ const openDetails = (id) => {
     overflow: hidden;
     min-height: calc(100vh - var(--top-appbar-height, 70px));
     min-height: calc(100svh - var(--top-appbar-height, 70px));
-    background-image: url("../images/hero.webp");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -577,7 +580,18 @@ const openDetails = (id) => {
   }
 
   .hero-left {
-    display: none;
+    display: block; /* Non più none */
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  .hero-left picture,
+  .hero-left img {
+    width: 100%;
+    height: 100%;
+    max-height: none;
+    border-radius: 0;
+    object-fit: cover;
   }
 
   .hero-right {
