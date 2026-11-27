@@ -6,15 +6,32 @@
     <meta name="robots" content="noindex" />
     <title>Pagina non trovata</title>
     <style>
-      :root {
-        --top-appbar-height: 0px;
-        --color-primary: #1a73e8;
-        --color-on-primary: #ffffff;
+       @font-face {
+        font-family: "Outfit";
+        src: url("/fonts/Outfit.ttf") format("truetype");
+        font-weight: 100 900;
+        font-style: normal;
+        font-display: swap;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Outfit", sans-serif;
       }
 
       body {
-        margin: 0;
-        font-family: system-ui, sans-serif;
+        background-color: var(--color-bg);
+        color: var(--color-text);
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        transition: all 0.3s ease;
       }
 
       .not-found {
