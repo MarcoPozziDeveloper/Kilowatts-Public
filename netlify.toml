@@ -1,12 +1,17 @@
-
 [build]
   publish = "dist"
 
-[[edge_functions]]
-  function = "handle-404"
-  path = "/*"
+[[redirects]]
+  from = "/kw"
+  to = "/index.html"
+  status = 200
 
 [[redirects]]
-  from = "/*"
+  from = "/catalogo/*"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/prodotto/*"
   to = "/index.html"
   status = 200
