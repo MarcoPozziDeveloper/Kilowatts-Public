@@ -1,35 +1,18 @@
-// netlify/edge-functions/handle-404.js
 export default async (request, context) => {
-  const url = new URL(request.url);
-  const path = url.pathname;
+  const path = new URL(request.url).pathname;
 
   const validRoutes = [
     /^\/$/,
     /^\/kw\/?$/,
     /^\/catalogo\/[^/]+\/?$/,
     /^\/prodotto\/[^/]+\/?$/,
-    /^\/not-found\/?$/,
   ];
 
-  // Rotte Vue valide
-  if (validRoutes.some((route) => route.test(path))) {
-    return; // continua normalmente
-  }
+  if (validRoutes.some((r) => r.test(path))) return;
+  if (/\.[a-zA-Z0-9]+$/.test(path)) return; // file statici, incluso /404.html
 
-  // Risorse statiche: file con estensione o cartelle note
-  if (
-    path.startsWith("/assets/") ||
-    path.startsWith("/fonts/") ||
-    path.startsWith("/images/") ||
-    /\.[a-zA-Z0-9]+$/.test(path) // qualsiasi file con estensione (js, css, ico, png, ...)
-  ) {
-    return;
-  }
-
-  // Rotta non valida: prendi l'index.html della SPA e cambia lo status
-  const response = await context.next();
-
-  return new Response(response.body, {
+  const res = await context.rewrite("/404.html");
+  return new Response(res.body, {
     status: 404,
     headers: {
       "Content-Type": "text/html; charset=utf-8",
@@ -38,6 +21,4 @@ export default async (request, context) => {
   });
 };
 
-export const config = {
-  path: "/*",
-};
+export const config = { path: "/*" };
