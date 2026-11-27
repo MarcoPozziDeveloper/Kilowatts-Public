@@ -1,34 +1,36 @@
-const VALID_ROUTES = [
-  /^\/$/,
-  /^\/kw\/?$/,
-  /^\/catalogo\/[^/]+\/?$/,
-  /^\/prodotto\/[^/]+\/?$/,
-];
 
 export default async (request) => {
   const url = new URL(request.url);
-  const path = decodeURIComponent(url.pathname);
+  const path = url.pathname;
 
-  // Lascia passare le rotte Vue valide
-  if (VALID_ROUTES.some((route) => route.test(path))) {
+  const validRoutes = [
+    /^\/$/,
+    /^\/kw\/?$/,
+    /^\/catalogo\/[^/]+\/?$/,
+    /^\/prodotto\/[^/]+\/?$/,
+  ];
+
+  // Rotte Vue valide
+  if (validRoutes.some((route) => route.test(path))) {
     return;
   }
 
-  // Lascia gestire a Netlify le risorse statiche
+  // Risorse statiche
   if (
     path.startsWith("/assets/") ||
     path.startsWith("/fonts/") ||
     path.startsWith("/images/") ||
-    path.startsWith("/favicon")
+    path === "/favicon.ico"
   ) {
     return;
   }
 
-  const response = await fetch(new URL("/index.html", request.url));
+  // Recupera l'HTML originale
+  const response = await fetch(
+    new URL("/index.html", request.url)
+  );
 
-  const html = await response.text();
-
-  return new Response(html, {
+  return new Response(await response.text(), {
     status: 404,
     headers: {
       "Content-Type": "text/html; charset=utf-8",
@@ -40,3 +42,4 @@ export default async (request) => {
 export const config = {
   path: "/*",
 };
+ 
