@@ -1,4 +1,3 @@
-
 const VALID_ROUTES = [
   /^\/$/,
   /^\/kw\/?$/,
@@ -25,12 +24,16 @@ export default async (request) => {
     return;
   }
 
-  // Recupera index.html per visualizzare NotFoundView
   const response = await fetch(new URL("/index.html", request.url));
 
-  return new Response(response.body, {
+  const html = await response.text();
+
+  return new Response(html, {
     status: 404,
-    headers: response.headers,
+    headers: {
+      "Content-Type": "text/html; charset=utf-8",
+      "Cache-Control": "no-cache",
+    },
   });
 };
 
